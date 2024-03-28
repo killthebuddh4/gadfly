@@ -14,7 +14,7 @@ When we think of how a programming language executes, a common way to start is b
 
 In Gadfly we do things a little bit differently. We think of _natural language user input_ as a program's ultimate source code. When execution begins, i.e. at the moment the input is received, the parse tree doesn't exist. When execution begins, data flows _downward_ from the root, _generating the parse tree_ just in time.
 
-[Gadfly Parse Tree](./assets/gadfly-parse-tree.png)
+![Gadfly Parse Tree](./assets/gadfly-parse-tree.png)
 
 _N.B. It's kind of confusing and good to remember that analytic nodes operate on synthetic data and synthetic nodes operate on analytic data._
 
