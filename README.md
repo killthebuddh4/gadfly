@@ -1,4 +1,4 @@
-> Note: This project began as a highly exploratory [go project](https://github.com/killtheuddh4/gadfly-go). We ended up with a much clearer picture of what we wanted to build and also the realized that golang is not the right tool for the job.
+> Note: This project began as a highly exploratory [go project](https://github.com/killthebuddh4/gadfly-go). We ended up with a much clearer picture of what we wanted to build and also the realized that golang is not the right tool for the job.
 
 ## Overview
 
