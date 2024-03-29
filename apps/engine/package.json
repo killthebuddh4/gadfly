@@ -1,0 +1,38 @@
+{
+  "name": "engine",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "dev": "npm run build:watch",
+    "test": "mocha build/**/*.test.js",
+    "lint": "eslint .",
+    "format": "prettier --check .",
+    "types": "tsc --noEmit",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "check": "npm run lint && npm run format && npm run types && npm run build && npm run test"
+  },
+  "dependencies": {
+    "@dqbd/tiktoken": "^1.0.13",
+    "@supabase/supabase-js": "^2.39.8",
+    "express": "^4.19.1",
+    "openai": "^4.30.0",
+    "supabase": "^1.150.0",
+    "zod": "^3.22.4",
+    "@repo/core": "*"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/mocha": "^10.0.3",
+    "@types/node": "^20.8.10",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.53.0",
+    "mocha": "^10.2.0",
+    "nodemon": "^3.0.1",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2",
+    "@repo/tsconfig": "*"
+  }
+}

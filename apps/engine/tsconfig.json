@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "outDir": "./build",
+    "allowJs": true
+  },
+  "extends": "@repo/tsconfig/base.json",
+  "include": ["src/**/*.ts", "src/**/*.js"]
+}

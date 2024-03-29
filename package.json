@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@killthebuddha/gadfly",
+  "name": "gadfly",
   "packageManager": "npm@9.5.0",
   "workspaces": [
     "packages/*",
@@ -9,5 +9,8 @@
   "devDependencies": {
     "turbo": "^1.10.16",
     "turborepo": "^0.0.1"
+  },
+  "scripts": {
+    "dev": "turbo run dev"
   }
 }

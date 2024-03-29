@@ -1,0 +1,25 @@
+{
+  "name": "@repo/core",
+  "exports": {
+    "./*.js": "./build/*.js"
+  },
+  "scripts": {
+    "dev": "npm run build:watch",
+    "test": "mocha build/**/*.test.js",
+    "test:e2e": "mocha build/**/*.e2e.test.js",
+    "lint": "eslint .",
+    "format": "prettier --check .",
+    "types": "tsc --noEmit",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "check": "npm run lint && npm run format && npm run types && npm run build && npm run test"
+  },
+  "devDependencies": {
+    "eslint": "^8.53.0",
+    "mocha": "^10.2.0",
+    "nodemon": "^3.0.1",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2",
+    "@repo/tsconfig": "*"
+  }
+}
