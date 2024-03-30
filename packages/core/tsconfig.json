@@ -3,6 +3,6 @@
     "module": "nodenext",
     "outDir": "./build"
   },
-  "extends": "tsconfig/base.json",
+  "extends": "@repo/tsconfig/base.json",
   "include": ["src/**/*.ts"]
 }

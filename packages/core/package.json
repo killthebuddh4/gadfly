@@ -15,11 +15,14 @@
     "check": "npm run lint && npm run format && npm run types && npm run build && npm run test"
   },
   "devDependencies": {
+    "@repo/tsconfig": "*",
     "eslint": "^8.53.0",
     "mocha": "^10.2.0",
     "nodemon": "^3.0.1",
     "prettier": "^3.0.3",
-    "typescript": "^5.2.2",
-    "@repo/tsconfig": "*"
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
   }
 }

@@ -42,3 +42,17 @@ The Gadfly language includes the following keywords (used in the analytic mode):
 Gadfly agents write programs by "inlining everything". There's no names, variables, closures, etc. Every request results in a brand new parse tree. We think that this will be fine in the near term because of the kinds of real-world problems we're targeting. We do think that eventually these limitations will start to matter for basically the same reasons we humans don't write code this way. We envision two features that will go a very long way, _subtree parameterization_ and _named subtrees_. Subtree parameterization is basically function definitions applied to the analytic mode. Named subtrees are like traditional variables but accessible from anywhere deeper in the tree without needing to hoist the definitions.
 
 Gadfly doesn't include loops but we think that's probably fine. When you're authoring a program you're not really writing the same function over and over again until some condition is met.
+
+## Notes
+
+2024-03-30
+
+Think about some structured ways you could change the prompts:
+
+- Use a system message vs include in convo
+- You vs we
+- Markdown vs plaintext
+- Re-ordering the documentation for functions (or explicitly tell it to prefer one)
+- Using less-overloaded phrases (like FUNCTION)
+- Instead of saying "what technique to start?" we could use "What technique should we apply?"
+- Trying more than one solution and then selecting the best outcome.
