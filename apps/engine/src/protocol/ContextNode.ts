@@ -1,7 +1,8 @@
+import { AnalysisNode } from "./AnalysisNode.js";
 import { SyntheticNode } from "./SyntheticNode.js";
 
 export type ContextNode = {
-  source: SyntheticNode;
-  target: SyntheticNode;
+  analysis: AnalysisNode;
+  synthetic: SyntheticNode;
   reasoning: string;
 };

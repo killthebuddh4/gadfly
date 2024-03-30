@@ -45,7 +45,7 @@ Gadfly doesn't include loops but we think that's probably fine. When you're auth
 
 ## Notes
 
-2024-03-30
+2024-03-30-00
 
 Think about some structured ways you could change the prompts:
 
@@ -56,3 +56,13 @@ Think about some structured ways you could change the prompts:
 - Using less-overloaded phrases (like FUNCTION)
 - Instead of saying "what technique to start?" we could use "What technique should we apply?"
 - Trying more than one solution and then selecting the best outcome.
+
+2024-03-30-01
+
+What are the different ways to generate the next serial problem? What are the different states the tree could be in?
+
+- generate whole series at once
+- generate next given root and previous problem
+- generate next given root and previous problem and previous problem's solution
+
+_NOTE TO SELF_ Remember to keep thinking about everything in terms of operations on a tree. By always framing things in terms of tree operations, we can maintain some invariants and program the tree. We have to continuously map _semantic operations_ onto tree operations.
