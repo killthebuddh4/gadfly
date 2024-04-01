@@ -4,7 +4,7 @@ import { ContextNode } from "./ContextNode.js";
 export type AnalysisNode = {
   parent: SyntheticNode;
   classification: {
-    class: "switch" | "parallel" | "serial" | "function";
+    type: "switch" | "parallel" | "serial";
     reasoning: string;
   };
   contexts: ContextNode[];

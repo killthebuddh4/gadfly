@@ -66,3 +66,63 @@ What are the different ways to generate the next serial problem? What are the di
 - generate next given root and previous problem and previous problem's solution
 
 _NOTE TO SELF_ Remember to keep thinking about everything in terms of operations on a tree. By always framing things in terms of tree operations, we can maintain some invariants and program the tree. We have to continuously map _semantic operations_ onto tree operations.
+
+2024-04-01-00
+
+- request user input
+- try something new
+- respond to signals
+
+synthetic node:
+
+- problem
+- supervisor
+- history
+  - hypothesis
+    - analysis
+    - synthesizer
+  - conclusion
+  - analytic node
+  - children
+
+synthetic edge
+
+- source
+- target
+- reasoning
+
+context
+
+node
+  classification
+  analysis
+  synthesis
+  children
+
+
+2024-04-01-01
+
+Ok so I think I have a pretty strong starting point for the general architecture of the engine.
+
+What we have is a _synthetic program_ that is being continuously compiled into an _analytic program_. A synthetic node is a node with a natural language problem statement and without a script that implements a solution. An analytic node is a way to pull data from the synthetic program, execute it as a computer program, and then return the results to the synthetic program. An analytic program is a synthetic program where every leaf node is an analytic node. It's like a synthetic program that has been "solved" or "implemented".
+
+Visually:
+
+![Synthetic Program](./assets/synthetic-program.png)
+![Analytic Program](./assets/analytic-program.png)
+
+A synthetic program has a kind of ordering to it. A synthetic node is at the root, representing a problem. An analysis is generated which classifies the problem and determines a high-level strategy. The root problem and strategy are then used to derive some context for each sub problem the strategy requires. Each problem is a synthetic node. And so on. Sometimes the strategy is "analytic" which means that we decide to solve the problem directly using a program written in a general purpose programming language. Generation terminates when all leaf nodes are "analytic".
+
+An "analytic node" is direct solution to a problem. It's basically a script that's executed inside a kind of framework which binds the script to the synthetic program. It looks like this:
+
+![Analytic Node](./assets/analytic-node.png)
+
+Now, every node in the synthetic program is not "really" a node, it's an enitre history of node versions called an _evolution_. Every evolution, like a synthetic program, has an ordering to it. It goes node -> review -> patch -> node. Visually:
+
+![Evolution](./assets/node-evolution.png)
+
+Every evolution has a _supervisor_ which is responsible for controlling the evolution. It conducts reviews and applies patches.
+
+__NEXT__
+
+I'm still thinking about exactly how to structure the relationship between a node and an evolution. Is a supervisor part of a node, and an evolution part of a node? Is there two trees, a node tree and an evolution tree, that have to be synchronized all the time? Does a node see its children's evolutions? Or does a node see its own evolutions? These are all questions that I'll need to think about. It doesn't have to be perfect right away, but I at least need to get to a point where I have a structure in my head that intuitively makes sense to me.
