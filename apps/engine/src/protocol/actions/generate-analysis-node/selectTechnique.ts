@@ -1,4 +1,4 @@
-import { SyntheticNode } from "../../SyntheticNode.js";
+import { Synthetic } from "../../nodes/Synthetic.js";
 import { openai } from "../../../lib/openai/openai.js";
 import { selectTechniqueMessages } from "./selectTechniqueMessages.js";
 import { selectTechniqueCallTools } from "./selectTechniqueCallTools.js";
@@ -8,7 +8,7 @@ import { z } from "zod";
 export const selectTechnique = async ({
   synthetic,
 }: {
-  synthetic: SyntheticNode;
+  synthetic: Synthetic;
 }) => {
   const messages = selectTechniqueMessages({ problem: synthetic.problem });
 

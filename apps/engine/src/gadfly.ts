@@ -1,24 +1,31 @@
 import { z } from "zod";
 import { readFile } from "fs/promises";
-import { analyze } from "./protocol/actions/analyze/analyze.js";
+import express from "express";
+import * as GenerateAnalysisNode from "./protocol/actions/generate-analysis-node/action.js";
+import { v4 as uuidv4 } from "uuid";
 
-const zRequest = z.object({
-  birthday: z.string(),
-  thanks: z.string(),
-});
+const app = express();
 
-export const gadfly = async () => {
-  const request = await readFile("./request.json", "utf-8").then((data) => {
-    return zRequest.parse(JSON.parse(data));
+app.use(express.json());
+
+app.get("/gadfly", async (req, res) => {
+  const zRequest = z.object({
+    problem: z.string(),
   });
 
-  const result = await analyze({
-    synthetic: {
-      problem: request.thanks,
-      analysis: null,
-      incoming: null,
+  const request = zRequest.parse(req.query);
+
+  const result = await GenerateAnalysisNode.action({
+    parent: {
+      id: uuidv4(),
+      problem: request.problem,
+      type: "Synthetic",
     },
   });
 
-  return result;
-};
+  res.json({ ok: true, data: result });
+});
+
+app.listen(9999, () => {
+  console.log("Server is running on port 9999");
+});

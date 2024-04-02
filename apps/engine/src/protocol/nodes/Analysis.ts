@@ -1,6 +1,12 @@
+import { Context } from "./Context.js";
+import { Synthetic } from "./Synthetic.js";
+
 export type Analysis = {
+  id: string;
+  type: "Analysis";
+  parent: Synthetic;
+  children: Context[];
   classification: {
-    type: "switch" | "parallel" | "serial";
-    reasoning: string;
+    type: "SWITCH" | "PARALLEL" | "SERIAL";
   };
 };

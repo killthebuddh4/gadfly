@@ -146,3 +146,97 @@ So I was working through this idea of a node's evolution and it led me to thinki
 ![Process Control](./assets/process-control.png)
 
 One hangup I have with the above diagram is that it only allows for synthetic nodes to emit events. I'm not sure that's not ok, but I'm not sure it's ok either. I need to keep thinking this through.
+
+2024-04-02-00
+
+So we have a 
+
+- signal (definition, spec)
+- o
+  
+
+So every node has a 
+
+governor, controller, and supervisor
+
+
+
+
+the controller is responsible for interpreting feedback
+
+
+controller's responsibility is generating patches
+supervisor's responsibility is handling errors (generate a patch or propagate?)
+governor's responsibility is generating feedback
+
+governor generates feedback, only inside synthetic nodes
+supervisor generates feedback, only inside analysis nodes
+hypervisor maintains system-wide invariants
+
+evaluate
+QA (target, result) -> delta
+feedback
+ENGR (target, result, delta) -> feedback
+patch
+SUPERVISOR (history, feedback) -> patch
+iterate
+TECHNICIAN (node, patch) -> next node
+
+
+throw errors
+catch errors
+
+
+governor
+supervisor
+controller
+hypervisor
+
+
+every edge
+every node
+
+in general, nodes can _only_ talk to their children
+
+governor -> a node can generate feedback and send it to all children
+controller -> the child receives feedback and then generates a patch
+agent -> a patch is then applied to the node to create a new node
+
+
+Analysis might sometimes be a lossy operation. We need some kind of a mechanism to rehydrate child nodes.
+
+Governors are responsible for multi-hop loss management related to specific details of the synthetic data. This is like the synthetic cybernetic flow.
+
+Hypervisors are responsible for maintaining system-wide invariants, invariants are properties that do not change as synthetic data changes.
+
+Supervisors are responsible for failure management, in some sense. Supervisors are more about execution and analytic stuff.
+
+Controllers take in patches and output new nodes.
+
+feedback -> patch -> node
+
+
+Every node has a controller which is responsible for iterating on the node
+
+_The most important thing, which I'm thinking about very very very indirectly, is how to keep the context windows small. I think if you can keep context windows from blowing up, you can build something insane._
+
+
+The governor is responsibe for defining the target signal.
+
+The supervisor's role is for keeping the thing running.
+
+The controller's role is to integrate feedback into new versions.
+
+The hypervisor's role is to maintain system invariants.
+
+2024-04-02-01
+
+Ok so I think it's too early get too caught up in the cybernetic components. I've settled on four decisions that I think are future-proof and enough to keep moving:
+
+I need _something_ that has visibility to the overall _reference signal derivation_ process.
+
+I need _something_ that has visibility to the overall _real signal generation_ process.
+
+I need _something_ that maintains generic invariants in certain parts of the systm
+
+I need _something_ that is only and fully responsible for a single node's history.
