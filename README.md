@@ -126,3 +126,23 @@ Every evolution has a _supervisor_ which is responsible for controlling the evol
 __NEXT__
 
 I'm still thinking about exactly how to structure the relationship between a node and an evolution. Is a supervisor part of a node, and an evolution part of a node? Is there two trees, a node tree and an evolution tree, that have to be synchronized all the time? Does a node see its children's evolutions? Or does a node see its own evolutions? These are all questions that I'll need to think about. It doesn't have to be perfect right away, but I at least need to get to a point where I have a structure in my head that intuitively makes sense to me.
+
+...
+
+2024-04-01-02
+
+restart policy
+
+top-down vs bottom-up design
+
+Where would a node need to get feedback from?
+
+- parent
+- child
+- 
+
+So I was working through this idea of a node's evolution and it led me to thinking about the events which would trigger an iteration. Now I'm thinking about the evolution as a series of event -> patch -> new node. The system for generating events (feedback and signals) is something like this:
+
+![Process Control](./assets/process-control.png)
+
+One hangup I have with the above diagram is that it only allows for synthetic nodes to emit events. I'm not sure that's not ok, but I'm not sure it's ok either. I need to keep thinking this through.

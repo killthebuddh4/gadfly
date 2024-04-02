@@ -1,7 +1,7 @@
 import { Node } from "./Node.js";
 
 export type Evolution = {
-  node: Node;
+  node: () => Node;
   parent: Evolution | null;
-  children: Evolution[];
+  chilren: Evolution[];
 };
