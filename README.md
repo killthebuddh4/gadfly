@@ -240,3 +240,7 @@ I need _something_ that has visibility to the overall _real signal generation_ p
 I need _something_ that maintains generic invariants in certain parts of the systm
 
 I need _something_ that is only and fully responsible for a single node's history.
+
+2024-04-02-02
+
+One of the "first high-level programming languages" was explicitly a "planning language" [Konrad Zue Plankalkul](https://en.wikipedia.org/wiki/Plankalk%C3%BCl)
