@@ -1,6 +1,7 @@
 import { Analysis } from "../../nodes/Analysis.js";
 import { Context } from "../../nodes/Context.js";
-import { v4 as uuidv4 } from "uuid";
+import { generateForParallel } from "./generateForParallel.js";
+import { generateForSerial } from "./generateForSerial.js";
 
 export const action = async ({
   parent,
@@ -17,30 +18,4 @@ export const action = async ({
         "Unknown classification type " + parent.classification.type,
       );
   }
-};
-
-export const generateForParallel = async ({
-  parent,
-}: {
-  parent: Analysis;
-}): Promise<Context> => {
-  return {
-    id: uuidv4(),
-    type: "Context",
-    parent,
-    children: null,
-  };
-};
-
-export const generateForSerial = async ({
-  parent,
-}: {
-  parent: Analysis;
-}): Promise<Context> => {
-  return {
-    id: uuidv4(),
-    type: "Context",
-    parent,
-    children: null,
-  };
 };
