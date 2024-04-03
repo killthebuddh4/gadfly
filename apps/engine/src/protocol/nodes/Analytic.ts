@@ -1,9 +1,9 @@
-import { Context } from "./Context.js";
+import { Synthetic } from "./Synthetic.js";
 import { Parser } from "./Parser.js";
 
 export type Analytic = {
   id: string;
   type: "Analytic";
-  parent: Context;
+  parent: Synthetic;
   children: Parser | null;
 };

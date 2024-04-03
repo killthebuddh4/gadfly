@@ -1,5 +1,5 @@
 import { Analysis } from "../../nodes/Analysis.js";
-import { Context } from "../../nodes/Context.js";
+import { Synthetic } from "../../nodes/Synthetic.js";
 import { generateForParallel } from "./generateForParallel.js";
 import { generateForSerial } from "./generateForSerial.js";
 
@@ -7,7 +7,7 @@ export const action = async ({
   parent,
 }: {
   parent: Analysis;
-}): Promise<Context> => {
+}): Promise<Synthetic[]> => {
   switch (parent.classification.type) {
     case "SERIAL":
       return await generateForSerial({ parent });

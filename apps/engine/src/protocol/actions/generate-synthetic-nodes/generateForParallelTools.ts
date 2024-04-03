@@ -10,7 +10,7 @@ type Tool = {
   };
 };
 
-export const selectTechniqueCallTools: Tool[] = [
+export const generateForParallelTools: Tool[] = [
   {
     type: "function",
     function: {
@@ -25,11 +25,14 @@ export const selectTechniqueCallTools: Tool[] = [
           },
           subProblems: {
             type: "array",
+            items: {
+              type: "string",
+            },
             description:
               "An array of strings where each string is a detailed description of a sub-problem",
           },
         },
-        required: ["problems"],
+        required: ["rootProblem", "subProblems"],
       },
     },
   },

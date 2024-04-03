@@ -1,5 +1,6 @@
 import { Synthetic } from "../../nodes/Synthetic.js";
 import { openai } from "../../../lib/openai/openai.js";
+import { logger } from "../../../lib/openai/logger.js";
 import { selectTechniqueMessages } from "./selectTechniqueMessages.js";
 import { selectTechniqueCallTools } from "./selectTechniqueCallTools.js";
 import { selectTechniqueCallMessages } from "./selectTechniqueCallMessages.js";
@@ -24,7 +25,7 @@ export const selectTechnique = async ({
     throw new Error("No reasoning in OpenAI chat completions response!");
   }
 
-  console.log("SELECT TECHNIQUE REASONING", reasoning);
+  logger("SELECT TECHNIQUE REASONING", reasoning);
 
   const callTechniqueMessages = selectTechniqueCallMessages({ reasoning });
   const callTechniqueTools = selectTechniqueCallTools;
@@ -35,6 +36,8 @@ export const selectTechnique = async ({
     messages: callTechniqueMessages,
     tools: callTechniqueTools,
   });
+
+  logger("SELECT TECHNIQUE CALL", callResponse.choices[0]);
 
   const toolCalls = callResponse.choices[0].message.tool_calls;
 

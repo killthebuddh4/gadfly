@@ -6,7 +6,7 @@ describe("Gadfly", () => {
       `http://localhost:9999/gadfly?problem=${problem}`,
     );
     const json = await response.json();
-    console.log(json);
+    console.log(JSON.stringify(json, null, 2));
   });
 
   it("Thanks request", async function () {
@@ -16,6 +16,6 @@ describe("Gadfly", () => {
       `http://localhost:9999/gadfly?problem=${problem}`,
     );
     const json = await response.json();
-    console.log(json);
+    console.log(JSON.stringify(json, null, 2));
   });
 });

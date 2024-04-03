@@ -5,6 +5,7 @@ import { zJsonString } from "@repo/core/zJsonString.js";
 const configSchema = zJsonString.pipe(
   z.object({
     OPENAI_API_KEY: z.string(),
+    OPENAI_LOG_DIR: z.string(),
   }),
 );
 
