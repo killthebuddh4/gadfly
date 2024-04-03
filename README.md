@@ -244,3 +244,7 @@ I need _something_ that is only and fully responsible for a single node's histor
 2024-04-02-02
 
 One of the "first high-level programming languages" was explicitly a "planning language" [Konrad Zue Plankalkul](https://en.wikipedia.org/wiki/Plankalk%C3%BCl)
+
+2024-04-02-03
+
+If you only have switch, parallel, and serial, and you fix the number of arguments for each at 10, then a 10 depth tree has 400 trillion leaves. I.e. there's 600 trillion ways to contstruct a 10 depth plan. And that is if we don't include the choices for arguments. So obviously we can't explore all paths. So obviously we aren't exploring all paths. That's where the language model comes in.
