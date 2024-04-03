@@ -1,7 +1,9 @@
-import { Controller } from "./Controller.js";
-import { Manager } from "./Manager.js";
+import { Agent } from "./Agent.js";
 
-export type Supervisor = {
-  manager: Manager;
-  controller: Controller;
-};
+export type Supervisor = ({
+  sender,
+  receiver,
+}: {
+  sender: Agent;
+  receiver: Agent;
+}) => Promise<Agent>;
