@@ -1,9 +1,9 @@
-import { Network } from "../substrate/Network.js";
-import { Actor } from "../substrate/Actor.js";
-import { Selector } from "../substrate/Selector.js";
-import { Message } from "../substrate/Message.js";
+import { Network } from "../network/Network.js";
+import { Actor } from "../network/Actor.js";
+import { Selector } from "../network/Selector.js";
+import { Message } from "../network/Message.js";
 import { v4 as uuidv4 } from "uuid";
-import { Proxy } from "../substrate/Proxy.js";
+import { Proxy } from "../network/Proxy.js";
 import { logger } from "../../lib/openai/logger.js";
 
 export const createNetwork = (): Network => {

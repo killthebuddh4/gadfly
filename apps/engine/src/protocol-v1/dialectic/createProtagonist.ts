@@ -1,6 +1,6 @@
-import { Actor } from "../substrate/Actor.js";
-import { Message } from "../substrate/Message.js";
-import { Network } from "../substrate/Network.js";
+import { Actor } from "../network/Actor.js";
+import { Message } from "../network/Message.js";
+import { Network } from "../network/Network.js";
 import { openai } from "../../lib/openai/openai.js";
 
 type LlmMessage = {
