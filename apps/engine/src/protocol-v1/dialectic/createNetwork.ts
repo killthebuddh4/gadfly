@@ -4,6 +4,7 @@ import { Selector } from "../substrate/Selector.js";
 import { Message } from "../substrate/Message.js";
 import { v4 as uuidv4 } from "uuid";
 import { Supervisor } from "../substrate/Supervisor.js";
+import { logger } from "../../lib/openai/logger.js";
 
 export const createNetwork = (): Network => {
   const actors: Actor[] = [];
@@ -30,6 +31,8 @@ export const createNetwork = (): Network => {
   };
 
   const publish = async ({ message }: { message: Message }) => {
+    logger(message.source, message.text);
+
     const receiver = actors.find((a) => a.id === message.destination);
 
     if (receiver === undefined) {

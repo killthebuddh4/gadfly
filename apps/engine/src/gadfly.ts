@@ -5,10 +5,25 @@ import * as GenerateSyntheticNodes from "./protocol-v0/actions/generate-syntheti
 import { v4 as uuidv4 } from "uuid";
 import { Synthetic } from "./protocol-v0/nodes/Synthetic.js";
 import { Node } from "./protocol-v0/nodes/Node.js";
+import { dialectic } from "./protocol-v1/dialectic/dialectic.js";
 
 const app = express();
 
 app.use(express.json());
+
+app.get("/dialectic", async (req, res) => {
+  const assertion = `
+    Hello, I believe that the correct answer to the trolley problem is to divert
+    the trolley.
+  `
+    .replace(/\n/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  dialectic({ assertion });
+
+  res.json({ ok: true, data: {} });
+});
 
 app.get("/gadfly", async (req, res) => {
   const zRequest = z.object({

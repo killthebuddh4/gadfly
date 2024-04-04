@@ -8,10 +8,16 @@ type LlmMessage = {
   content: string;
 };
 
-export const createProtagonist = ({ network }: { network: Network }): Actor => {
+export const createProtagonist = ({
+  network,
+  init,
+}: {
+  network: Network;
+  init: Message;
+}): Actor => {
   const id = "protagonist";
 
-  const messages: Message[] = [];
+  const messages: Message[] = [init];
 
   const receive = async ({ message }: { message: Message }) => {
     messages.push(message);
@@ -24,7 +30,7 @@ export const createProtagonist = ({ network }: { network: Network }): Actor => {
     });
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview",
+      model: "gpt-3.5-turbo",
       messages: [
         { role: "system", content: PROTAGONIST_PROMPT },
         ...llmMessages,
@@ -42,7 +48,7 @@ export const createProtagonist = ({ network }: { network: Network }): Actor => {
         id: response.id,
         text,
         source: id,
-        destination: "protagonist",
+        destination: "antagonist",
       },
     });
   };
@@ -52,7 +58,7 @@ export const createProtagonist = ({ network }: { network: Network }): Actor => {
 
 const PROTAGONIST_PROMPT = `
   You and a good friend of yours are engaged in a dialectical conversation in the style of
-  a Platonic dialogue. You are playing the role of the antagonist. That is, you make positive
+  a Platonic dialogue. You are playing the role of the protagonist. That is, you make positive
   assertions and defend them against your friend's questioning, analysis, and refutation. Your
   goal is to help your friend arrive at a more nuanced understanding of the topic at hand.
 `
