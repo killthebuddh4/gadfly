@@ -1,10 +1,10 @@
 import { z } from "zod";
 import express from "express";
-import * as GenerateAnalysisNode from "./protocol/actions/generate-analysis-node/action.js";
-import * as GenerateSyntheticNodes from "./protocol/actions/generate-synthetic-nodes/action.js";
+import * as GenerateAnalysisNode from "./protocol-v0/actions/generate-analysis-node/action.js";
+import * as GenerateSyntheticNodes from "./protocol-v0/actions/generate-synthetic-nodes/action.js";
 import { v4 as uuidv4 } from "uuid";
-import { Synthetic } from "./protocol/nodes/Synthetic.js";
-import { Node } from "./protocol/nodes/Node.js";
+import { Synthetic } from "./protocol-v0/nodes/Synthetic.js";
+import { Node } from "./protocol-v0/nodes/Node.js";
 
 const app = express();
 
