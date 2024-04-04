@@ -81,17 +81,17 @@ export const createNetwork = (): Network => {
 
     proxies.push({ id, actor, selector });
 
-    return id;
-  };
+    const release = async () => {
+      const found = proxies.find((p) => p.id === id);
 
-  const release = async ({ proxy }: { proxy: string }) => {
-    const found = proxies.find((p) => p.id === proxy);
+      if (!found) {
+        throw new Error(`Proxy ${proxy} not found. Was it already released?`);
+      }
 
-    if (!found) {
-      throw new Error(`Proxy ${proxy} not found`);
-    }
+      proxies.splice(proxies.indexOf(found), 1);
+    };
 
-    proxies.splice(proxies.indexOf(found), 1);
+    return { release };
   };
 
   return {
@@ -101,6 +101,5 @@ export const createNetwork = (): Network => {
     publish,
     forward,
     proxy,
-    release,
   };
 };

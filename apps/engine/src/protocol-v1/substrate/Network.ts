@@ -14,6 +14,5 @@ export type Network = {
   }: {
     selector: Selector;
     actor: Actor;
-  }) => Promise<string>;
-  release: ({ proxy }: { proxy: string }) => Promise<void>;
+  }) => Promise<{ release: () => Promise<void> }>;
 };
