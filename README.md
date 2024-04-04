@@ -260,3 +260,11 @@ AnalyticEdges
 2024-04-03-01
 
 An agent is not a long-lived thing. An agent is an autonomous generator function.
+
+2024-04-00
+
+Ok so I have a really, really nice network substrate to build on top of. I did a lot of tinkering with the high-level architecture in the last few days. It was a productive few days in terms of developing my intuitions about the problem, but in the end I realized that I was trying to think about too many problems at once. On the one hand, there's the messaging architecture, on the other hand there's the logical architecture. It's kind of like there's an execution layer, or something like that. An execution engine or medium. And there's the semantic layer.
+
+Eventually what happened was I happened into a _really, really_ (I think) promising execution layer made up networks, actors, and proxies. It's just a super basic message hub kind of thing with the ability to intercept messages and forward them. Actors are the core messaging element. Then there's an _agent_ which is like the entry point to a nested network of actors. An agent is like an encapsulate cluster of actors. Being able to encapsulate clusters I think is going to be the way we're able to test dialectical patterns, or somethign like that. I got a basic dialectic flow working, actually.
+
+I'm not 100% sure what I need to do next. I'm not sure if I need to write some PoC tools for working with the networks/clusters or if I'm ready to start testing the hierarchical dialectical process. _Actually I think I need to just write down exactly what that hierarchical process looks like._
