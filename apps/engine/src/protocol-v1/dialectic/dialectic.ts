@@ -8,7 +8,7 @@ export const dialectic = ({ assertion }: { assertion: string }) => {
   const init = {
     id: uuid(),
     source: "protagonist",
-    destination: "protagonist",
+    destination: "antagonist",
     text: assertion,
   };
 
@@ -21,13 +21,13 @@ export const dialectic = ({ assertion }: { assertion: string }) => {
   network.join({ actor: antagonist });
   network.join({ actor: arbiter });
 
-  network.supervise({
-    supervisor: protagonist,
+  network.proxy({
+    actor: arbiter,
     selector: async ({ message }) => {
       if (message.source === arbiter.id) {
-        return true;
-      } else {
         return false;
+      } else {
+        return true;
       }
     },
   });

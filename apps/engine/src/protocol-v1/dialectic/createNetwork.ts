@@ -3,12 +3,12 @@ import { Actor } from "../substrate/Actor.js";
 import { Selector } from "../substrate/Selector.js";
 import { Message } from "../substrate/Message.js";
 import { v4 as uuidv4 } from "uuid";
-import { Supervisor } from "../substrate/Supervisor.js";
+import { Proxy } from "../substrate/Proxy.js";
 import { logger } from "../../lib/openai/logger.js";
 
 export const createNetwork = (): Network => {
   const actors: Actor[] = [];
-  const supervisors: Supervisor[] = [];
+  const proxies: Proxy[] = [];
 
   const join = async ({ actor }: { actor: Actor }) => {
     const found = actors.find((a) => a.id === actor.id);
@@ -31,7 +31,16 @@ export const createNetwork = (): Network => {
   };
 
   const publish = async ({ message }: { message: Message }) => {
-    logger(message.source, message.text);
+    logger(
+      message.source,
+      (() => {
+        try {
+          return JSON.parse(message.text);
+        } catch {
+          return message.text;
+        }
+      })(),
+    );
 
     const receiver = actors.find((a) => a.id === message.destination);
 
@@ -39,7 +48,7 @@ export const createNetwork = (): Network => {
       throw new Error(`Actor ${message.destination} not found`);
     }
 
-    for (const { actor, selector } of Object.values(supervisors)) {
+    for (const { actor, selector } of Object.values(proxies)) {
       const match = await selector({ message });
 
       if (match) {
@@ -51,28 +60,38 @@ export const createNetwork = (): Network => {
     receiver.receive({ message });
   };
 
-  const supervise = async ({
+  const forward = async ({ message }: { message: Message }) => {
+    const receiver = actors.find((a) => a.id === message.destination);
+
+    if (receiver === undefined) {
+      throw new Error(`Actor ${message.destination} not found`);
+    }
+
+    receiver.receive({ message });
+  };
+
+  const proxy = async ({
     selector,
-    supervisor,
+    actor,
   }: {
     selector: Selector;
-    supervisor: Actor;
+    actor: Actor;
   }) => {
     const id = uuidv4();
 
-    supervisors.push({ id, actor: supervisor, selector });
+    proxies.push({ id, actor, selector });
 
     return id;
   };
 
-  const release = async ({ selector }: { selector: string }) => {
-    const found = supervisors.find((s) => s.id === selector);
+  const release = async ({ proxy }: { proxy: string }) => {
+    const found = proxies.find((p) => p.id === proxy);
 
     if (!found) {
-      throw new Error(`Supervisor ${selector} not found`);
+      throw new Error(`Proxy ${proxy} not found`);
     }
 
-    supervisors.splice(supervisors.indexOf(found), 1);
+    proxies.splice(proxies.indexOf(found), 1);
   };
 
   return {
@@ -80,7 +99,8 @@ export const createNetwork = (): Network => {
     join,
     leave,
     publish,
-    supervise,
+    forward,
+    proxy,
     release,
   };
 };

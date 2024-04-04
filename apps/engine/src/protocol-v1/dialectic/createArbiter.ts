@@ -2,6 +2,7 @@ import { Actor } from "../substrate/Actor.js";
 import { Message } from "../substrate/Message.js";
 import { Network } from "../substrate/Network.js";
 import { openai } from "../../lib/openai/openai.js";
+import { logger } from "../../lib/openai/logger.js";
 
 type LlmMessage = {
   role: "user" | "assistant";
@@ -46,6 +47,19 @@ export const createArbiter = ({ network }: { network: Network }): Actor => {
     if (text === null) {
       throw new Error("No text in arbiter's chat completions response!");
     }
+
+    logger(
+      "arbiter",
+      (() => {
+        try {
+          return JSON.parse(text);
+        } catch {
+          return text;
+        }
+      })(),
+    );
+
+    network.forward({ message });
   };
 
   return { id, network, messages, receive };

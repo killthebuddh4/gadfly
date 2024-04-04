@@ -7,12 +7,13 @@ export type Network = {
   join: ({ actor }: { actor: Actor }) => Promise<void>;
   leave: ({ actor }: { actor: Actor }) => Promise<void>;
   publish: ({ message }: { message: Message }) => Promise<void>;
-  supervise: ({
+  forward: ({ message }: { message: Message }) => Promise<void>;
+  proxy: ({
     selector,
-    supervisor,
+    actor,
   }: {
     selector: Selector;
-    supervisor: Actor;
+    actor: Actor;
   }) => Promise<string>;
-  release: ({ selector }: { selector: string }) => Promise<void>;
+  release: ({ proxy }: { proxy: string }) => Promise<void>;
 };
