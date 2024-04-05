@@ -1,3 +1,3 @@
-import { Message } from "./Message.js";
+import { Message } from "../message/Message.js";
 
 export type Selector = ({ message }: { message: Message }) => Promise<boolean>;

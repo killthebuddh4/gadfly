@@ -1,4 +1,4 @@
-import { Actor } from "./Actor.js";
+import { Actor } from "../actor/Actor.js";
 
 export type Node = {
   actor: Actor;

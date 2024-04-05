@@ -1,6 +1,6 @@
-import { Selector } from "./Selector.js";
-import { Message } from "./Message.js";
-import { Actor } from "./Actor.js";
+import { Selector } from "../selector/Selector.js";
+import { Message } from "../message/Message.js";
+import { Actor } from "../actor/Actor.js";
 
 export type Network = {
   id: string;

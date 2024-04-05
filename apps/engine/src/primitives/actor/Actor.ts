@@ -1,5 +1,5 @@
-import { Network } from "./Network.js";
-import { Message } from "./Message.js";
+import { Network } from "../network/Network.js";
+import { Message } from "../message/Message.js";
 
 export type Actor = {
   id: string;

@@ -1,6 +1,9 @@
-import { Actor } from "../primitives/Actor.js";
+import { Agent } from "../primitives/agent/Agent.js";
+import { Handler as MessageHandler } from "../primitives/message/Handler.js";
 
 export type Synthetic = {
-  actor: Actor;
-  engine: Actor;
+  agent: Agent;
+  onMessageFromParent: MessageHandler;
+  onMessageFromChild: MessageHandler;
+  onMessageFromEngine: MessageHandler;
 };

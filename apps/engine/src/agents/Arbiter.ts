@@ -1,10 +1,9 @@
 import { Agent } from "../primitives/agent/Agent.js";
 import { Handler as MessageHandler } from "../primitives/message/Handler.js";
 
-export type Analytic = {
+export type Arbiter = {
   agent: Agent;
-  onMessageFromParent: MessageHandler;
-  onMessageFromChild: MessageHandler;
-  onMessageFromExecutor: MessageHandler;
+  onMessageFromAntagonist: MessageHandler;
+  onMessageFromProtagonist: MessageHandler;
   onMessageFromEngine: MessageHandler;
 };

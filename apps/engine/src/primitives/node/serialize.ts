@@ -1,6 +1,6 @@
 import { Node } from "./Node.js";
 
-export const nodeSerialize = ({ node }: { node: Node }) => {
+export const serialize = ({ node }: { node: Node }) => {
   return JSON.parse(
     JSON.stringify(node, (key: string, value: Node | null) => {
       if (key !== "parent") {

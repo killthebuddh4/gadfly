@@ -1,9 +1,9 @@
-import { Network } from "../../primitives/Network.js";
-import { Actor } from "../../primitives/Actor.js";
-import { Selector } from "../../primitives/Selector.js";
-import { Message } from "../../primitives/Message.js";
+import { Network } from "../../primitives/network/Network.js";
+import { Actor } from "../../primitives/actor/Actor.js";
+import { Selector } from "../../primitives/selector/Selector.js";
+import { Message } from "../../primitives/message/Message.js";
 import { v4 as uuidv4 } from "uuid";
-import { Proxy } from "../../primitives/Proxy.js";
+import { Proxy } from "../../primitives/proxy/Proxy.js";
 import { logger } from "../../lib/openai/logger.js";
 
 export const createNetwork = (): Network => {
