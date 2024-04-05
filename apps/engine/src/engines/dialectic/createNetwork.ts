@@ -1,9 +1,9 @@
-import { Network } from "../network/Network.js";
-import { Actor } from "../network/Actor.js";
-import { Selector } from "../network/Selector.js";
-import { Message } from "../network/Message.js";
+import { Network } from "../../primitives/Network.js";
+import { Actor } from "../../primitives/Actor.js";
+import { Selector } from "../../primitives/Selector.js";
+import { Message } from "../../primitives/Message.js";
 import { v4 as uuidv4 } from "uuid";
-import { Proxy } from "../network/Proxy.js";
+import { Proxy } from "../../primitives/Proxy.js";
 import { logger } from "../../lib/openai/logger.js";
 
 export const createNetwork = (): Network => {
@@ -60,7 +60,7 @@ export const createNetwork = (): Network => {
     receiver.receive({ message });
   };
 
-  const forward = async ({ message }: { message: Message }) => {
+  const whisper = async ({ message }: { message: Message }) => {
     const receiver = actors.find((a) => a.id === message.destination);
 
     if (receiver === undefined) {
@@ -99,7 +99,7 @@ export const createNetwork = (): Network => {
     join,
     leave,
     publish,
-    forward,
+    whisper,
     proxy,
   };
 };
