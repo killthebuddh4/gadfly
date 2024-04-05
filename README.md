@@ -278,3 +278,7 @@ An analytic node is a general purpose program that solves the problem.
 ![Analytic Leaves](./assets/analytic-leaves.png)
 
 Thinking about it this way makes a lot more sense I think. It makes the relationships between natural language objects more obvious and it makes the relationships between analytic objects more obvious. It shows the flow of data way better. Easier to see the "parse tree" emerging.
+
+Here's a new question. Are analytic nodes agents? For example, do analytic nodes try to run a program, interpret the results, and then forward the data to their parents? Or, do synthetic nodes handle _all_ of the natural language functionality.
+
+I think that they are probably both agents because they have two distinct roles. A synthetic node needs to understand the plan, an analytic node needs to understand just the single step.
