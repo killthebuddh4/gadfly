@@ -1,5 +1,5 @@
 import { Network } from "../../primitives/network/Network.js";
-import { Actor } from "../../primitives/actor/Actor.js";
+import { Node } from "../../primitives/node/Node.js";
 import { Selector } from "../../primitives/selector/Selector.js";
 import { Message } from "../../primitives/message/Message.js";
 import { v4 as uuidv4 } from "uuid";
@@ -7,10 +7,10 @@ import { Proxy } from "../../primitives/proxy/Proxy.js";
 import { logger } from "../../lib/openai/logger.js";
 
 export const createNetwork = (): Network => {
-  const actors: Actor[] = [];
+  const actors: Node[] = [];
   const proxies: Proxy[] = [];
 
-  const join = async ({ actor }: { actor: Actor }) => {
+  const join = async ({ actor }: { actor: Node }) => {
     const found = actors.find((a) => a.id === actor.id);
 
     if (found) {
@@ -20,7 +20,7 @@ export const createNetwork = (): Network => {
     actors.push(actor);
   };
 
-  const leave = async ({ actor }: { actor: Actor }) => {
+  const leave = async ({ actor }: { actor: Node }) => {
     const found = actors.find((a) => a.id === actor.id);
 
     if (!found) {
@@ -75,7 +75,7 @@ export const createNetwork = (): Network => {
     actor,
   }: {
     selector: Selector;
-    actor: Actor;
+    actor: Node;
   }) => {
     const id = uuidv4();
 

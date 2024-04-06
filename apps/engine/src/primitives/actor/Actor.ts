@@ -1,9 +1,13 @@
-import { Network } from "../network/Network.js";
-import { Message } from "../message/Message.js";
+import { Handler } from "../message/Handler.js";
+import { Node } from "../node/Node.js";
 
 export type Actor = {
-  id: string;
-  network: Network;
-  messages: Message[];
-  receive: ({ message }: { message: Message }) => Promise<void>;
+  node: Node;
+  parent: Actor | null;
+  children: Actor[];
+  exec: Handler;
+  feedback: Handler;
+  value: Handler;
+  query: Handler;
+  error: Handler;
 };

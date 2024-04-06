@@ -1,18 +1,15 @@
 import { Selector } from "../selector/Selector.js";
 import { Message } from "../message/Message.js";
-import { Actor } from "../actor/Actor.js";
+import { Node } from "../node/Node.js";
 
 export type Network = {
   id: string;
-  join: ({ actor }: { actor: Actor }) => Promise<void>;
-  leave: ({ actor }: { actor: Actor }) => Promise<void>;
-  publish: ({ message }: { message: Message }) => Promise<void>;
-  whisper: ({ message }: { message: Message }) => Promise<void>;
-  proxy: ({
-    selector,
-    actor,
-  }: {
+  join: (args: { node: Node }) => Promise<void>;
+  leave: (args: { node: Node }) => Promise<void>;
+  publish: (args: { message: Message }) => Promise<void>;
+  whisper: (args: { message: Message }) => Promise<void>;
+  proxy: (args: {
     selector: Selector;
-    actor: Actor;
+    node: Node;
   }) => Promise<{ release: () => Promise<void> }>;
 };

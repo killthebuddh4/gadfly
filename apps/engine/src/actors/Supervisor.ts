@@ -1,8 +1,8 @@
-import { Agent } from "../primitives/agent/Agent.js";
+import { Agent } from "./Agent.js";
 import { Handler as MessageHandler } from "../primitives/message/Handler.js";
 
-export type Executor = {
+export type Supervisor = {
   agent: Agent;
-  onMessageFromParent: MessageHandler;
+  onNewMessage: MessageHandler;
   onMessageFromEngine: MessageHandler;
 };

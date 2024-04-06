@@ -282,3 +282,24 @@ Thinking about it this way makes a lot more sense I think. It makes the relation
 Here's a new question. Are analytic nodes agents? For example, do analytic nodes try to run a program, interpret the results, and then forward the data to their parents? Or, do synthetic nodes handle _all_ of the natural language functionality.
 
 I think that they are probably both agents because they have two distinct roles. A synthetic node needs to understand the plan, an analytic node needs to understand just the single step.
+
+2024-04-05-00
+
+SYNTHETIC NODE
+
+- execute analytic node
+- success or fail
+- feedback or return or fail
+- repeat
+
+ANALYTIC NODE
+
+- decide on type
+- generate strategy
+- generate children
+- execute children
+  - for each success or fail
+  - feedback or return or fail
+- success or fail
+- feedback or return
+- repeat

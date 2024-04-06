@@ -1,9 +1,9 @@
-import { Actor } from "../actor/Actor.js";
+import { Network } from "../network/Network.js";
+import { Message } from "../message/Message.js";
 
 export type Node = {
-  actor: Actor;
-  synthetic: Actor;
-  analytic: Actor;
-  parent: Node | null;
-  children: Node[];
+  address: string;
+  network: Network;
+  messages: Message[];
+  receive: (args: { message: Message }) => Promise<void>;
 };
