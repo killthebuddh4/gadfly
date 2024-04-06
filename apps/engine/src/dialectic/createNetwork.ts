@@ -1,33 +1,49 @@
-import { Network } from "../../primitives/network/Network.js";
-import { Node } from "../../primitives/node/Node.js";
-import { Selector } from "../../primitives/selector/Selector.js";
-import { Message } from "../../primitives/message/Message.js";
-import { v4 as uuidv4 } from "uuid";
-import { Proxy } from "../../primitives/proxy/Proxy.js";
-import { logger } from "../../lib/openai/logger.js";
+import { Network } from "../primitives/network/Network.js";
+import { Node } from "../primitives/node/Node.js";
+import { Selector } from "../primitives/message/Selector.js";
+import { Message } from "../primitives/message/Message.js";
+import { v4 as uuid } from "uuid";
+import { logger } from "../lib/openai/logger.js";
+import { Handler } from "../primitives/message/Handler.js";
 
 export const createNetwork = (): Network => {
-  const actors: Node[] = [];
-  const proxies: Proxy[] = [];
+  const nodes: Node[] = [];
+  const proxies: Array<{
+    id: string;
+    selector: Selector;
+    node: Node;
+  }> = [];
 
-  const join = async ({ actor }: { actor: Node }) => {
-    const found = actors.find((a) => a.id === actor.id);
-
-    if (found) {
-      throw new Error(`Actor ${actor.id} already exists`);
-    }
-
-    actors.push(actor);
-  };
-
-  const leave = async ({ actor }: { actor: Node }) => {
-    const found = actors.find((a) => a.id === actor.id);
+  const kick = async ({ node }: { node: Node }) => {
+    const found = nodes.find((a) => a.address === node.address);
 
     if (!found) {
-      throw new Error(`Actor ${actor.id} not found`);
+      throw new Error(`Actor ${node.address} not found`);
     }
 
-    actors.splice(actors.indexOf(found), 1);
+    nodes.splice(nodes.indexOf(found), 1);
+  };
+
+  const join = async ({ node }: { node: Node }) => {
+    const found = nodes.find((n) => n.address === node.address);
+
+    if (found) {
+      throw new Error(`Actor ${node.address} already exists`);
+    }
+
+    nodes.push(node);
+
+    const leave = async () => {
+      const found = nodes.find((a) => a.address === node.address);
+
+      if (!found) {
+        throw new Error(`Actor ${node.address} not found`);
+      }
+
+      nodes.splice(nodes.indexOf(found), 1);
+    };
+
+    return { leave };
   };
 
   const publish = async ({ message }: { message: Message }) => {
@@ -42,17 +58,17 @@ export const createNetwork = (): Network => {
       })(),
     );
 
-    const receiver = actors.find((a) => a.id === message.destination);
+    const receiver = nodes.find((a) => a.address === message.destination);
 
     if (receiver === undefined) {
       throw new Error(`Actor ${message.destination} not found`);
     }
 
-    for (const { actor, selector } of Object.values(proxies)) {
+    for (const { node, selector } of Object.values(proxies)) {
       const match = await selector({ message });
 
       if (match) {
-        actor.receive({ message });
+        node.receive({ message });
         return;
       }
     }
@@ -61,7 +77,7 @@ export const createNetwork = (): Network => {
   };
 
   const whisper = async ({ message }: { message: Message }) => {
-    const receiver = actors.find((a) => a.id === message.destination);
+    const receiver = nodes.find((a) => a.address === message.destination);
 
     if (receiver === undefined) {
       throw new Error(`Actor ${message.destination} not found`);
@@ -72,32 +88,32 @@ export const createNetwork = (): Network => {
 
   const proxy = async ({
     selector,
-    actor,
+    node,
   }: {
     selector: Selector;
-    actor: Node;
+    node: Node;
   }) => {
-    const id = uuidv4();
+    const id = uuid();
 
-    proxies.push({ id, actor, selector });
+    proxies.push({ id, selector, node });
 
-    const release = async () => {
+    const detach = async () => {
       const found = proxies.find((p) => p.id === id);
 
       if (!found) {
-        throw new Error(`Proxy ${proxy} not found. Was it already released?`);
+        throw new Error(`Proxy not found. Was it already released?`);
       }
 
       proxies.splice(proxies.indexOf(found), 1);
     };
 
-    return { release };
+    return { detach };
   };
 
   return {
-    id: "dialectic",
+    name: "dialectic",
     join,
-    leave,
+    kick,
     publish,
     whisper,
     proxy,
