@@ -2,9 +2,9 @@ import { Network } from "../primitives/network/Network.js";
 import { Node } from "../primitives/node/Node.js";
 import { Selector } from "../primitives/message/Selector.js";
 import { Message } from "../primitives/message/Message.js";
-import { v4 as uuid } from "uuid";
 import { logger } from "../lib/openai/logger.js";
-import { Handler } from "../primitives/message/Handler.js";
+import { Proxy } from "../primitives/proxy/Proxy.js";
+import { z } from "zod";
 
 export const createNetwork = (): Network => {
   const nodes: Node[] = [];
@@ -86,36 +86,23 @@ export const createNetwork = (): Network => {
     receiver.receive({ message });
   };
 
-  const proxy = async ({
-    selector,
-    node,
-  }: {
-    selector: Selector;
-    node: Node;
-  }) => {
-    const id = uuid();
+  const proxy = async ({ proxy }: { proxy: Proxy }) => {
+    proxies.push(proxy);
 
-    proxies.push({ id, selector, node });
-
-    const detach = async () => {
-      const found = proxies.find((p) => p.id === id);
+    const ignore = async () => {
+      const found = proxies.find((p) => p.id === proxy.id);
 
       if (!found) {
-        throw new Error(`Proxy not found. Was it already released?`);
+        throw new Error(
+          `Proxy ${proxy.id} not found. Was it already released?`,
+        );
       }
 
       proxies.splice(proxies.indexOf(found), 1);
     };
 
-    return { detach };
+    return { ignore };
   };
 
-  return {
-    name: "dialectic",
-    join,
-    kick,
-    publish,
-    whisper,
-    proxy,
-  };
+  return { name: "dialectic", join, kick, publish, whisper, proxy };
 };
