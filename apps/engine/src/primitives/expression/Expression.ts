@@ -1,7 +1,9 @@
-import { Supervisor } from "../supervisor/Supervisor.js";
+import { Actor } from "../actor/Actor.js";
 
 export type Expression = {
-  supervisor: Supervisor;
+  actor: Actor;
+  parent: Expression | null;
+  children: Expression[];
   expand: () => Promise<void>;
   evaluate: () => Promise<void>;
   reduce: () => Promise<void>;
