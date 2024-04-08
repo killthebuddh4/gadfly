@@ -1,6 +1,6 @@
 import { Message } from "../message/Message.js";
 
 export type Signal = {
-  type: "spawn" | "nudge" | "kill" | "value" | "query" | "error";
+  type: "init" | "patch" | "kill" | "value" | "query" | "error";
   message: Message;
 };
