@@ -1,10 +1,9 @@
 import { Actor } from "../actor/Actor.js";
 import { Sequence } from "../sequence/Sequence.js";
-import { Signal } from "../signal/Signal.js";
+import { Generation } from "../generation/Generation.js";
 
 export type Process = {
   actor: Actor;
-  history: Sequence[];
+  history: Generation<Sequence>;
   generate: () => Promise<Sequence>;
-  execute: (args: { signal: Signal }) => Promise<Signal>;
 };

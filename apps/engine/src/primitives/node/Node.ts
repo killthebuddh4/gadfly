@@ -1,10 +1,11 @@
 import { Network } from "../network/Network.js";
-import { Message } from "../message/Message.js";
+import { Signal } from "../signal/Signal.js";
 import { Address } from "../address/Address.js";
+import { Handler } from "../signal/Handler.js";
 
 export type Node = {
   address: Address;
   network: Network;
-  messages: Message[];
-  receive: (args: { message: Message }) => Promise<void>;
+  signals: Signal[];
+  receive: Handler;
 };

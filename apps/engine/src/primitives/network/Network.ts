@@ -1,6 +1,6 @@
-import { Message } from "../message/Message.js";
+import { Handler } from "../signal/Handler.js";
 import { Node } from "../node/Node.js";
-import { Proxy } from "../proxy/Proxy.js";
+import { Listener } from "../listener/Listener.js";
 
 export type Network = {
   name: string;
@@ -8,7 +8,9 @@ export type Network = {
     leave: () => Promise<void>;
   }>;
   kick: (args: { node: Node }) => Promise<void>;
-  publish: (args: { message: Message }) => Promise<void>;
-  whisper: (args: { message: Message }) => Promise<void>;
-  proxy: (args: { proxy: Proxy }) => Promise<{ ignore: () => Promise<void> }>;
+  publish: Handler;
+  whisper: Handler;
+  listen: (args: {
+    listener: Listener;
+  }) => Promise<{ ignore: () => Promise<void> }>;
 };

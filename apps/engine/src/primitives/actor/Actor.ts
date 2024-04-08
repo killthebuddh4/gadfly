@@ -3,7 +3,8 @@ import { Node } from "../node/Node.js";
 
 export type Actor = {
   inbox: Node;
-  init: Handler;
+  receive: Handler;
+  exec: Handler;
   value: Handler;
   query: Handler;
   error: Handler;

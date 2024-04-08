@@ -1,9 +1,8 @@
 import { Actor } from "../actor/Actor.js";
-import { Node } from "../node/Node.js";
-import { Proxy } from "../proxy/Proxy.js";
+import { Listener } from "../listener/Listener.js";
 
 export type Router = {
   actor: Actor;
-  proxy: Proxy;
-  targets: Node[];
+  listener: Listener;
+  targets: Actor[];
 };
