@@ -1,7 +1,7 @@
-import { Process } from "../process/Process.js";
+import { Actor } from "../actor/Actor.js";
 
 export type Expression = {
-  process: Process;
+  actor: Actor;
   parent: Expression | null;
   children: Expression[];
   expand: () => Promise<void>;

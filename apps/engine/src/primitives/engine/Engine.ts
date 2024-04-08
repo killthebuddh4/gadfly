@@ -1,6 +1,6 @@
-import { Process } from "../process/Process.js";
+import { Actor } from "../actor/Actor.js";
 
 export type Engine<Input, Output> = {
-  process: Process;
+  actor: Actor;
   run: (args: { input: Input }) => Promise<Output>;
 };
