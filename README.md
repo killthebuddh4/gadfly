@@ -330,3 +330,12 @@ Maybe an actor is how we implement an expression? ok, current thinking:
 What do the actors at either end of the process do?
 
 I just need to think a little bit harder, bottom up, about these ideas. Gonna sleep on it.
+
+2024-04-09-00
+
+Quick note: there's actually 2 kinds of queries:
+
+- one analogous to name resolution
+- one analogous to "what am i supposed to do"
+
+In a `block` the thing you're supposed to do sometimes depends on what to do next, but not always. sometimes you're computing a value to be used later on, sometimes you're just generating a side effect.
