@@ -1,8 +1,12 @@
 import { Handler } from "../signal/Handler.js";
-import { Node } from "../node/Node.js";
+import { Process } from "../process/Process.js";
 
 export type Actor = {
-  inbox: Node;
+  supervisor: Process;
+  synthetic: Process;
+  analytic: Process;
+  controller: Process;
+  workers: Process[];
   receive: Handler;
   exec: Handler;
   patch: Handler;
