@@ -305,3 +305,28 @@ ANALYTIC NODE
 - repeat
 
 ![Actor Exec](./assets/actor-exec.png)
+
+2024-04-08
+
+What are the things I know for sure regarding sequences, processes, actors, nodes, and expressions? Irrespective of that particular taxonomy. What are the underlying truths I know? For example, I know that I need to at some point end up with an _expression_ that gets _evaluated_. In fact, the current interface I think is pretty True:
+
+- expand
+- evaluate
+- reduce
+- return
+
+So I somehow have to build that API using the underlying mechanisms. There's a few more candidates for truths I can talk about right now:
+
+- the exec, patch, kill, yield, query, error signals seem pretty solid
+- the idea of a _sequence_ that converges I think is pretty solid
+- the idea of a _process_ that is a sequence of sequences I think is pretty solid.
+
+One thing that's tough is that a "sequence" of messages always spans two "actors". It's like what _is_ an _actor_?
+
+Maybe an actor is how we implement an expression? ok, current thinking:
+
+- Is every edge a process?
+
+What do the actors at either end of the process do?
+
+I just need to think a little bit harder, bottom up, about these ideas. Gonna sleep on it.
