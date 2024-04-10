@@ -339,3 +339,30 @@ Quick note: there's actually 2 kinds of queries:
 - one analogous to "what am i supposed to do"
 
 In a `block` the thing you're supposed to do sometimes depends on what to do next, but not always. sometimes you're computing a value to be used later on, sometimes you're just generating a side effect.
+
+I guess if you think of:
+
+do f
+do g with f
+do h with g
+
+return 
+
+as 
+
+return f(g(h(data)))
+
+then you avoid the ambiguity. Does it make sense for us to try to avoid the ambiguity?
+
+
+
+
+
+
+
+
+
+
+
+
+
