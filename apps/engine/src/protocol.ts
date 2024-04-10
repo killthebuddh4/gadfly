@@ -21,6 +21,10 @@ export type Expression = {
   type: "parallel" | "serial" | "switch" | "literal";
 };
 
+export type Program = {
+  root: Expression;
+};
+
 export type Signal = {
   type: "yield" | "query" | "abort" | "fork" | "exec" | "patch" | "kill";
   payload: Synthetic;
