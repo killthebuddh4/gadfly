@@ -1,9 +1,12 @@
-import { Sequence } from "../sequence/Sequence.js";
-import { Generation } from "../generation/Generation.js";
-import { Node } from "../node/Node.js";
-
 export type Process = {
-  node: Node;
-  history: Generation<Sequence>;
-  generate: () => Promise<Sequence>;
+  id: string;
+  parent: Process | null;
+  children: Process[];
+  yield: () => Promise<void>;
+  query: () => Promise<void>;
+  abort: () => Promise<void>;
+  fork: () => Promise<void>;
+  exec: () => Promise<void>;
+  patch: () => Promise<void>;
+  kill: () => Promise<void>;
 };

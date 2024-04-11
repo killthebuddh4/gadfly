@@ -1,11 +1,10 @@
 import { Address } from "../address/Address.js";
 
-export type Signal = {
-  type: "exec" | "patch" | "kill" | "value" | "query" | "error";
+export type Message = {
   id: string;
-  parent: Signal | null;
+  parent: Message | null;
   trace: Address[];
   source: Address;
   destination: Address;
-  text: string;
+  payload: unknown;
 };

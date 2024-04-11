@@ -1,11 +1,15 @@
-import { Actor } from "../actor/Actor.js";
-
 export type Expression = {
-  actor: Actor;
+  id: string;
+  context: string;
   parent: Expression | null;
   children: Expression[];
-  expand: () => Promise<void>;
+  expand: {
+    parallel: () => Promise<void>;
+    serial: () => Promise<void>;
+    switch: () => Promise<void>;
+    literal: () => Promise<void>;
+  };
   evaluate: () => Promise<void>;
   reduce: () => Promise<void>;
-  return: () => Promise<void>;
+  generate: (args: { message: string }) => Promise<string>;
 };

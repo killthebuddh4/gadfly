@@ -1,5 +1,5 @@
 import { Network } from "../primitives/network/Network.js";
-import { Node } from "../primitives/node/Node.js";
+import { Node } from "../network/node/Node.js";
 import { Filter } from "../primitives/signal/Filter.js";
 import { Signal } from "../primitives/signal/Signal.js";
 import { logger } from "../lib/openai/logger.js";
