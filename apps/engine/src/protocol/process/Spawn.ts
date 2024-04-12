@@ -1,7 +1,4 @@
 import { Signal } from "../primitives/Signal.js";
 import { Process } from "./Process.js";
 
-export type Abort = (args: {
-  process: Process;
-  signal: Signal;
-}) => Promise<void>;
+export type Spawn = (args: { signal: Signal }) => Promise<Process>;
