@@ -1,4 +1,4 @@
-import { Signal } from "../primitives/Signal.js";
+import { Signal } from "../circuit/Signal.js";
 import { Process } from "./Process.js";
 
 export type Abort = (args: {

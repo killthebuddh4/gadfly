@@ -1,5 +1,5 @@
 import { Process } from "./Process.js";
-import { Signal } from "../primitives/Signal.js";
+import { Signal } from "../circuit/Signal.js";
 
 export type Patch = (args: {
   signal: Signal;

@@ -1,3 +1,4 @@
 import { Generation } from "./Generation.js";
+import { Simulation } from "./Simulation.js";
 
-export type Filter = (args: { generation: Generation }) => Promise<Generation>;
+export type Filter = (args: { simulation: Simulation }) => Promise<Generation>;
