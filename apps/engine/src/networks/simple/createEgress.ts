@@ -1,10 +1,10 @@
-import { Memory } from "../../primitives/memory/Memory.js";
-import { Handler } from "../../primitives/memory/Handler.js";
+import { Memory } from "../../primitives/substrate/Neuron.js";
+import { Handler } from "../../primitives/substrate/Handler.js";
 import { Neuron } from "../../primitives/neuron/Neuron.js";
 import { v4 as uuid } from "uuid";
 import { openai } from "../../lib/openai/openai.js";
-import { Network } from "../../primitives/memory/Network.js";
-import { Message } from "../../primitives/memory/Message.js";
+import { Network } from "../../primitives/substrate/Network.js";
+import { Message } from "../../primitives/substrate/Message.js";
 
 export const createSestinaNeuron = async ({
   network,
@@ -47,6 +47,12 @@ export const createSestinaNeuron = async ({
         },
       ],
     });
+
+    const message = {
+      id: uuid(),
+      trace: [address],
+      destination: address,
+    };
 
     history.push(message);
   };

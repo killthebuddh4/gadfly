@@ -1,5 +1,5 @@
-import { Handler } from "../memory/Handler.js";
-import { Memory } from "../memory/Memory.js";
+import { Handler } from "../substrate/Handler.js";
+import { Memory } from "../substrate/Neuron.js";
 
 export type Process = {
   id: string;

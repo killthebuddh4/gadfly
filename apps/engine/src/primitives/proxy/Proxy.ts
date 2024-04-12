@@ -1,6 +1,6 @@
-import { Memory } from "../memory/Memory.js";
-import { Filter } from "../memory/Filter.js";
-import { Handler } from "../memory/Handler.js";
+import { Memory } from "../substrate/Neuron.js";
+import { Filter } from "../substrate/Filter.js";
+import { Handler } from "../substrate/Handler.js";
 
 export type Proxy = {
   id: string;
