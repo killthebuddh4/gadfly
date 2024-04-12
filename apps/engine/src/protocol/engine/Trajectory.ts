@@ -1,5 +1,7 @@
+import { Command } from "./Command.js";
+
 export type Trajectory = {
-  option: string;
+  command: Command;
   parent: Trajectory | null;
   children: Trajectory[];
 };

@@ -1,6 +1,8 @@
+import { Command } from "./Command.js";
 import { Trajectory } from "./Trajectory.js";
 
 export type Engine = {
   history: Trajectory;
-  options: string[];
+  head: Trajectory;
+  commands: Command[];
 };
