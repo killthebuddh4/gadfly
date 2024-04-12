@@ -1,15 +1,15 @@
 import { Network } from "../primitives/network/Network.js";
-import { Node } from "../network/node/Node.js";
+import { Stream } from "../network/stream/Node.js";
 import { Filter } from "../primitives/signal/Filter.js";
 import { Signal } from "../primitives/signal/Signal.js";
 import { logger } from "../lib/openai/logger.js";
 import { Listener } from "../primitives/listener/Listener.js";
 
 export const createNetwork = (args: { name: string }): Network => {
-  const nodes: Node[] = [];
+  const nodes: Stream[] = [];
   const listeners: Array<Listener> = [];
 
-  const kick = async ({ node }: { node: Node }) => {
+  const kick = async ({ node }: { node: Stream }) => {
     const found = nodes.find((a) => a.address === node.address);
 
     if (!found) {
@@ -19,7 +19,7 @@ export const createNetwork = (args: { name: string }): Network => {
     nodes.splice(nodes.indexOf(found), 1);
   };
 
-  const join = async ({ node }: { node: Node }) => {
+  const join = async ({ node }: { node: Stream }) => {
     const found = nodes.find((n) => n.address === node.address);
 
     if (found) {

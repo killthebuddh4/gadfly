@@ -1,3 +1,3 @@
 import { Process } from "./Process.js";
 
-export type Exec = (args: { process: Process }) => Promise<void>;
+export type Exec = (args: { process: Process }) => Promise<Process>;
