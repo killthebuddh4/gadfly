@@ -1,4 +1,4 @@
-import { Address } from "../address/Address.js";
+import { Address } from "./Address.js";
 
 export type Message = {
   id: string;
