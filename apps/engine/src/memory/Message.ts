@@ -1,4 +1,5 @@
 import { Address } from "./Address.js";
+import { Signal } from "../circuit/Signal.js";
 
 export type Message = {
   id: string;
@@ -6,5 +7,5 @@ export type Message = {
   trace: Address[];
   source: Address;
   destination: Address;
-  payload: unknown;
+  signal: Signal;
 };

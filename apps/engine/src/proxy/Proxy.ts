@@ -1,5 +1,5 @@
-import { Stream } from "../stream/Stream.js";
-import { Filter } from "../stream/Filter.js";
+import { Stream } from "../memory/Stream.js";
+import { Filter } from "../memory/Filter.js";
 
 export type Proxy = {
   id: string;
