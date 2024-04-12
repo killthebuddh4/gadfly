@@ -1,10 +1,10 @@
 import { Proxy } from "../proxy/Proxy.js";
-import { Memory } from "../memory/Memory.js";
-import { Signal } from "../memory/Signal.js";
+import { Memory } from "./Memory.js";
+import { Message } from "./Message.js";
 
 export type Network = {
   name: string;
-  streams: Memory[];
+  memory: Memory[];
   proxies: Proxy[];
 
   join: (args: { stream: Memory }) => Promise<{ leave: () => Promise<void> }>;
@@ -12,6 +12,6 @@ export type Network = {
   leave: (args: { stream: Memory }) => Promise<void>;
   listen: (args: { proxy: Proxy }) => Promise<{ ignore: () => Promise<void> }>;
   ignore: (args: { proxy: Proxy }) => Promise<void>;
-  publish: (args: { Signal: Signal }) => Promise<void>;
-  whisper: (args: { Signal: Signal }) => Promise<void>;
+  publish: (args: { message: Message }) => Promise<void>;
+  whisper: (args: { message: Message }) => Promise<void>;
 };

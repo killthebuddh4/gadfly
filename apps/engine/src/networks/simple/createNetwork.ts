@@ -1,9 +1,10 @@
-import { Memory } from "../../memory/Memory.js";
-import { Network } from "../../network/Network.js";
-import { Proxy } from "../../proxy/Proxy.js";
+import { Memory } from "../../primitives/memory/Memory.js";
+import { Message } from "../../primitives/memory/Message.js";
+import { Network } from "../../primitives/memory/Network.js";
+import { Proxy } from "../../primitives/proxy/Proxy.js";
 
-export const create = async (): Promise<Network> => {
-  const name = "basic";
+export const createNetwork = async (): Promise<Network> => {
+  const name = "sestina";
   const streams: Memory[] = [];
   const proxies: Proxy[] = [];
 
@@ -45,38 +46,38 @@ export const create = async (): Promise<Network> => {
     proxies.splice(proxies.indexOf(found), 1);
   };
 
-  const publish = async ({ Signal }: { Signal: any }) => {
-    const found = streams.find((n) => n.address === Signal.destination);
+  const publish = async ({ message }: { message: Message }) => {
+    const found = streams.find((n) => n.address === message.destination);
 
     if (!found) {
-      throw new Error(`Stream ${Signal.destination} not found`);
+      throw new Error(`Stream ${message.destination} not found`);
     }
 
     for (const proxy of proxies) {
-      const match = await proxy.filter({ Signal });
+      const match = await proxy.filter({ message });
 
       if (match) {
-        proxy.memory.write({ Signal });
+        proxy.memory.write({ message });
         return;
       }
     }
 
-    found.write({ Signal });
+    found.write({ message });
   };
 
-  const whisper = async ({ Signal }: { Signal: any }) => {
-    const found = streams.find((n) => n.address === Signal.destination);
+  const whisper = async ({ message }: { message: Message }) => {
+    const found = streams.find((n) => n.address === message.destination);
 
     if (!found) {
-      throw new Error(`Stream ${Signal.destination} not found`);
+      throw new Error(`Stream ${message.destination} not found`);
     }
 
-    found.write({ Signal });
+    found.write({ message });
   };
 
   return {
     name,
-    streams,
+    memory: streams,
     proxies,
     join,
     kick,
