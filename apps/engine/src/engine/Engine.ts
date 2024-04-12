@@ -5,4 +5,6 @@ export type Engine = {
   history: Trajectory;
   head: Trajectory;
   commands: Command[];
+  forward: (args: { command: Command }) => Promise<void>;
+  reverse: () => Promise<void>;
 };

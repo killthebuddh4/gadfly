@@ -1,13 +1,13 @@
-import { Stream } from "../../memory/Stream.js";
+import { Memory } from "../../memory/Memory.js";
 import { Network } from "../../network/Network.js";
 import { Proxy } from "../../proxy/Proxy.js";
 
 export const create = async (): Promise<Network> => {
   const name = "basic";
-  const streams: Stream[] = [];
+  const streams: Memory[] = [];
   const proxies: Proxy[] = [];
 
-  const join = async ({ stream }: { stream: Stream }) => {
+  const join = async ({ stream }: { stream: Memory }) => {
     const found = streams.find((n) => n.address === stream.address);
 
     if (found) {
@@ -19,7 +19,7 @@ export const create = async (): Promise<Network> => {
     return { leave: () => kick({ stream }) };
   };
 
-  const kick = async ({ stream }: { stream: Stream }) => {
+  const kick = async ({ stream }: { stream: Memory }) => {
     const found = streams.find((n) => n.address === stream.address);
 
     if (!found) {
@@ -39,39 +39,39 @@ export const create = async (): Promise<Network> => {
     const found = proxies.find((p) => p === proxy);
 
     if (!found) {
-      throw new Error(`Proxy ${proxy.stream.address} not found`);
+      throw new Error(`Proxy ${proxy.memory.address} not found`);
     }
 
     proxies.splice(proxies.indexOf(found), 1);
   };
 
-  const publish = async ({ message }: { message: any }) => {
-    const found = streams.find((n) => n.address === message.destination);
+  const publish = async ({ Signal }: { Signal: any }) => {
+    const found = streams.find((n) => n.address === Signal.destination);
 
     if (!found) {
-      throw new Error(`Stream ${message.destination} not found`);
+      throw new Error(`Stream ${Signal.destination} not found`);
     }
 
     for (const proxy of proxies) {
-      const match = await proxy.filter({ message });
+      const match = await proxy.filter({ Signal });
 
       if (match) {
-        proxy.stream.send({ message });
+        proxy.memory.write({ Signal });
         return;
       }
     }
 
-    found.send({ message });
+    found.write({ Signal });
   };
 
-  const whisper = async ({ message }: { message: any }) => {
-    const found = streams.find((n) => n.address === message.destination);
+  const whisper = async ({ Signal }: { Signal: any }) => {
+    const found = streams.find((n) => n.address === Signal.destination);
 
     if (!found) {
-      throw new Error(`Stream ${message.destination} not found`);
+      throw new Error(`Stream ${Signal.destination} not found`);
     }
 
-    found.send({ message });
+    found.write({ Signal });
   };
 
   return {

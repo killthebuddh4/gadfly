@@ -1,12 +1,12 @@
 import { Address } from "./Address.js";
-import { Message } from "./Message.js";
+import { Signal } from "./Signal.js";
 import { Handler } from "./Handler.js";
 
-export type Stream = {
+export type Memory = {
   address: Address;
-  history: Message[];
-  send: Handler;
+  history: Signal[];
   listeners: Array<{ id: string; handler: Handler }>;
+  write: Handler;
   listen: (args: { handler: Handler }) => Promise<{
     ignore: () => Promise<void>;
   }>;

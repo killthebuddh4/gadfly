@@ -1,17 +1,17 @@
 import { Proxy } from "../proxy/Proxy.js";
-import { Stream } from "../memory/Stream.js";
-import { Message } from "../memory/Message.js";
+import { Memory } from "../memory/Memory.js";
+import { Signal } from "../memory/Signal.js";
 
 export type Network = {
   name: string;
-  streams: Stream[];
+  streams: Memory[];
   proxies: Proxy[];
 
-  join: (args: { stream: Stream }) => Promise<{ leave: () => Promise<void> }>;
-  kick: (args: { stream: Stream }) => Promise<void>;
-  leave: (args: { stream: Stream }) => Promise<void>;
+  join: (args: { stream: Memory }) => Promise<{ leave: () => Promise<void> }>;
+  kick: (args: { stream: Memory }) => Promise<void>;
+  leave: (args: { stream: Memory }) => Promise<void>;
   listen: (args: { proxy: Proxy }) => Promise<{ ignore: () => Promise<void> }>;
   ignore: (args: { proxy: Proxy }) => Promise<void>;
-  publish: (args: { message: Message }) => Promise<void>;
-  whisper: (args: { message: Message }) => Promise<void>;
+  publish: (args: { Signal: Signal }) => Promise<void>;
+  whisper: (args: { Signal: Signal }) => Promise<void>;
 };

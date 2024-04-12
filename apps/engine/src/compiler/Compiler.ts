@@ -1,8 +1,13 @@
-import { Simulation } from "../simulation/Simulation.js";
-import { Expression } from "../expression/Expression.js";
+import { Expression } from "./Expression.js";
+import { Source } from "./Source.js";
+import { Spec } from "./Spec.js";
 
 export type Compiler = {
-  source: string;
-  tree: Expression | null;
-  simulation: Simulation;
+  source: Source | null;
+  spec: Spec | null;
+  expression: Expression | null;
+  load: () => Promise<void>;
+  lex: () => Promise<void>;
+  parse: () => Promise<void>;
+  exec: () => Promise<void>;
 };

@@ -1,5 +1,5 @@
 import { Wire } from "./Wire.js";
-import { Signal } from "./Signal.js";
+import { Signal } from "../memory/Signal.js";
 
 export type Junction = (args: {
   signal: Signal;

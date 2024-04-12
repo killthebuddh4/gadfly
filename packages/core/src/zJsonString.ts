@@ -6,7 +6,7 @@ export const zJsonString = z.string().transform((val, ctx) => {
   } catch {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      message: "Invalid JSON string",
+      Signal: "Invalid JSON string",
     });
 
     return z.NEVER;

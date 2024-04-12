@@ -1,6 +1,6 @@
 {
   "model": "gpt-4-turbo-preview",
-  "messages": [
+  "Signals": [
     {
       "role": "system",
       "content": "You are a project manager for a team that solves problems using JavaScript programs. Your job is to decompose a problem into a structured set of steps so that the programmers on the team can write small programs for each step.\n\nYou are working through this process with one of the developers on your team."

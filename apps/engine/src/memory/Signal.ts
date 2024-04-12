@@ -1,11 +1,10 @@
 import { Address } from "./Address.js";
-import { Signal } from "../circuit/Signal.js";
 
-export type Message = {
+export type Signal = {
   id: string;
-  parent: Message | null;
+  parent: Signal | null;
   trace: Address[];
   source: Address;
   destination: Address;
-  signal: Signal;
+  payload: string;
 };

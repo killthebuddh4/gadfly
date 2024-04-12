@@ -1,5 +1,5 @@
-import { Handler } from "../circuit/Handler.js";
-import { Stream } from "../memory/Stream.js";
+import { Handler } from "../memory/Handler.js";
+import { Memory } from "../memory/Memory.js";
 
 export type Process = {
   id: string;
@@ -7,11 +7,11 @@ export type Process = {
   parent: Process | null;
   children: Process[];
 
-  input: Stream;
-  output: Stream;
-  log: Stream;
-  error: Stream;
-  exit: Stream;
+  input: Memory;
+  output: Memory;
+  log: Memory;
+  error: Memory;
+  exit: Memory;
 
   pipe: Handler;
   patch: Handler;

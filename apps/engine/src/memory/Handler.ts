@@ -1,3 +1,3 @@
-import { Message } from "./Message.js";
+import { Signal } from "./Signal.js";
 
-export type Handler = (args: { message: Message }) => Promise<void>;
+export type Handler = (args: { Signal: Signal }) => Promise<void>;

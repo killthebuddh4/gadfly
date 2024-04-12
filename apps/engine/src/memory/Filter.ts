@@ -1,3 +1,3 @@
-import { Message } from "./Message.js";
+import { Signal } from "./Signal.js";
 
-export type Filter = (args: { message: Message }) => Promise<boolean>;
+export type Filter = (args: { Signal: Signal }) => Promise<boolean>;
