@@ -1,4 +1,4 @@
-import { Signal } from "../substrate/Signal.js";
+import { Signal } from "../memory/Signal.js";
 
 export type Expression = {
   id: string;

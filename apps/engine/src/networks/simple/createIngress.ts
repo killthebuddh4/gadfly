@@ -1,70 +1,57 @@
-import { Sequence } from "../../primitives/substrate/Sequence.js";
-import { Message } from "../../primitives/substrate/Message.js";
-import { Handler } from "../../primitives/substrate/Handler.js";
-import { v4 as uuid } from "uuid";
+import { Sequence } from "../../primitives/memory/Sequence.js";
+import { Signal } from "../../primitives/memory/Signal.js";
 
 export const createIngress = async (): Promise<Sequence> => {
   const address = { address: "simple ingress" };
 
-  const messages: Message[] = [];
+  const messages: Signal[] = [];
 
-  const proxies: {
-    tracers: Array<{ id: string; sequence: Sequence }>;
-    forward: Sequence | null;
-    reverse: Sequence | null;
-  } = { tracers: [], forward: null, reverse: null };
-
-  const forward = async ({ sequence }: { sequence: Sequence }) => {
-    if (proxies.forward !== null) {
-      throw new Error("Forward proxy already exists");
-    }
-
-    proxies.forward = sequence;
-
-    return {
-      ignore: async () => {
-        proxies.forward = null;
-      },
-    };
-  }
-
-  const reverse = async ({ sequence }: { sequence: Sequence }) => {
-    if (proxies.reverse !== null) {
-      throw new Error("Reverse proxy already exists");
-    }
-
-    proxies.reverse = sequence;
-
-    return {
-      ignore: async () => {
-        proxies.reverse = null;
-      },
-    };
-  }
+  const attached: Sequence[] = [];
 
   const read = async () => {
-    if (proxies.forward !== null) {
-      return proxies.forward.read();
-    } else {
-      return messages;
+    return messages;
+  };
+
+  const append = async ({ message }: { message: Signal }) => {
+    messages.push(message);
+
+    for (const sequence of attached) {
+      await sequence.append({ message });
     }
   };
 
-  const append = async ({ message }: { message: Message }) => {
-    if (proxies.reverse !== null) {
-      await proxies.reverse.append({ message });
-    } else {
-      messages.push(message);
+  const attach = async ({ sequence }: { sequence: Sequence }) => {
+    const found = attached.find(
+      (attached) => attached.address === sequence.address,
+    );
+
+    if (found !== undefined) {
+      throw new Error(`Sequence ${sequence.address.address} already attached`);
     }
-  }
+
+    attached.push(sequence);
+
+    return {
+      detach: async () => {
+        const index = attached.findIndex(
+          (attached) => attached.address === sequence.address,
+        );
+
+        if (index === -1) {
+          throw new Error(`Sequence ${sequence.address.address} not attached`);
+        }
+
+        attached.splice(index, 1);
+      },
+    };
+  };
 
   return {
     address,
     messages,
+    attached,
     read,
     append,
-    proxy: {
-      forward,
-      reverse,
-    },
+    attach,
   };
+};

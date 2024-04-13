@@ -1,10 +1,10 @@
-import { Memory } from "../../primitives/substrate/Neuron.js";
-import { Handler } from "../../primitives/substrate/Handler.js";
+import { Memory } from "../../primitives/memory/Neuron.js";
+import { Handler } from "../../primitives/memory/Handler.js";
 import { Neuron } from "../../primitives/neuron/Neuron.js";
 import { v4 as uuid } from "uuid";
 import { openai } from "../../lib/openai/openai.js";
-import { Network } from "../../primitives/substrate/Network.js";
-import { Message } from "../../primitives/substrate/Message.js";
+import { Network } from "../../primitives/memory/Network.js";
+import { Signal } from "../../primitives/memory/Signal.js";
 
 export const createSestinaNeuron = async ({
   network,
@@ -15,7 +15,7 @@ export const createSestinaNeuron = async ({
 }): Promise<Memory> => {
   const address = { address: "sestina neuron" };
 
-  const history: Message[] = [];
+  const history: Signal[] = [];
 
   const listeners: Array<{ id: string; handler: Handler }> = [];
 
@@ -37,7 +37,7 @@ export const createSestinaNeuron = async ({
     };
   };
 
-  const write = async ({ message }: { message: Message }) => {
+  const write = async ({ message }: { message: Signal }) => {
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [

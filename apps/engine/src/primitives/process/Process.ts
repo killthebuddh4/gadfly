@@ -1,5 +1,5 @@
-import { Handler } from "../substrate/Handler.js";
-import { Memory } from "../substrate/Neuron.js";
+import { Handler } from "../memory/Handler.js";
+import { Sequence } from "../memory/Sequence.js";
 
 export type Process = {
   id: string;
@@ -7,11 +7,11 @@ export type Process = {
   parent: Process | null;
   children: Process[];
 
-  input: Memory;
-  output: Memory;
-  log: Memory;
-  error: Memory;
-  exit: Memory;
+  input: Sequence;
+  output: Sequence;
+  log: Sequence;
+  error: Sequence;
+  exit: Sequence;
 
   pipe: Handler;
   patch: Handler;
