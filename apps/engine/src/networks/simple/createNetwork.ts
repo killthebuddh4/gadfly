@@ -39,10 +39,14 @@ export const createNetwork = async (): Promise<Network> => {
     },
 
     neuron: async ({ neuron }: { neuron: Neuron }) => {
-      const found = neurons.find((neuron) => neuron.address === neuron.address);
+      const found = neurons.find(
+        (neuron) => neuron.axon.address === neuron.axon.address,
+      );
 
       if (found !== undefined) {
-        throw new Error(`Neuron ${neuron.address.address} already attached`);
+        throw new Error(
+          `Neuron ${neuron.axon.address.address} already attached`,
+        );
       }
 
       neurons.push(neuron);
@@ -50,11 +54,13 @@ export const createNetwork = async (): Promise<Network> => {
       return {
         detach: async () => {
           const index = neurons.findIndex(
-            (neuron) => neuron.address === neuron.address,
+            (neuron) => neuron.axon.address === neuron.axon.address,
           );
 
           if (index === -1) {
-            throw new Error(`Neuron ${neuron.address.address} not attached`);
+            throw new Error(
+              `Neuron ${neuron.axon.address.address} not attached`,
+            );
           }
 
           neurons.splice(index, 1);

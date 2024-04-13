@@ -1,26 +1,39 @@
+import { Network } from "../../primitives/memory/Network.js";
 import { Sequence } from "../../primitives/memory/Sequence.js";
 import { Signal } from "../../primitives/memory/Signal.js";
 
-export const createIngress = async (): Promise<Sequence> => {
+export const createIngress = async ({
+  network,
+}: {
+  network: Network;
+}): Promise<Sequence> => {
   const address = { address: "simple ingress" };
 
-  const messages: Signal[] = [];
+  const signals: Signal[] = [];
 
   const attached: Sequence[] = [];
 
   const read = async () => {
-    return messages;
+    return signals;
   };
 
-  const append = async ({ message }: { message: Signal }) => {
-    messages.push(message);
+  const append = async ({ signal }: { signal: Signal }) => {
+    signals.push(signal);
 
     for (const sequence of attached) {
-      await sequence.append({ message });
+      await sequence.append({ signal });
     }
   };
 
   const attach = async ({ sequence }: { sequence: Sequence }) => {
+    const foundInNetwork = network.sequences.find(
+      (networkSequence) => networkSequence.address === sequence.address,
+    );
+
+    if (foundInNetwork === undefined) {
+      throw new Error(`Sequence ${sequence.address.address} not in network`);
+    }
+
     const found = attached.find(
       (attached) => attached.address === sequence.address,
     );
@@ -48,7 +61,7 @@ export const createIngress = async (): Promise<Sequence> => {
 
   return {
     address,
-    messages,
+    signals,
     attached,
     read,
     append,

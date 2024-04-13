@@ -3,7 +3,7 @@ import { Signal } from "./Signal.js";
 
 export type Sequence = {
   address: Address;
-  messages: Signal[];
+  signals: Signal[];
 
   read: () => Promise<Signal[]>;
   append: (args: { signal: Signal }) => Promise<void>;

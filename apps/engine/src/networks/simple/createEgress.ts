@@ -1,72 +1,70 @@
-import { Memory } from "../../primitives/memory/Neuron.js";
-import { Handler } from "../../primitives/memory/Handler.js";
-import { Neuron } from "../../primitives/neuron/Neuron.js";
-import { v4 as uuid } from "uuid";
-import { openai } from "../../lib/openai/openai.js";
 import { Network } from "../../primitives/memory/Network.js";
+import { Sequence } from "../../primitives/memory/Sequence.js";
 import { Signal } from "../../primitives/memory/Signal.js";
 
-export const createSestinaNeuron = async ({
+export const createEgress = async ({
   network,
-  axon,
 }: {
-  axon: Memory;
   network: Network;
-}): Promise<Memory> => {
-  const address = { address: "sestina neuron" };
+}): Promise<Sequence> => {
+  const address = { address: "simple egress" };
 
-  const history: Signal[] = [];
+  const signals: Signal[] = [];
 
-  const listeners: Array<{ id: string; handler: Handler }> = [];
+  const attached: Sequence[] = [];
 
-  const listen = async ({ handler }: { handler: Handler }) => {
-    const id = uuid();
+  const read = async () => {
+    return signals;
+  };
 
-    listeners.push({ id, handler });
+  const append = async ({ signal }: { signal: Signal }) => {
+    signals.push(signal);
+
+    for (const sequence of attached) {
+      await sequence.append({ signal });
+    }
+  };
+
+  const attach = async ({ sequence }: { sequence: Sequence }) => {
+    const foundInNetwork = network.sequences.find(
+      (networkSequence) => networkSequence.address === sequence.address,
+    );
+
+    if (foundInNetwork === undefined) {
+      throw new Error(`Sequence ${sequence.address.address} not in network`);
+    }
+
+    const found = attached.find(
+      (attached) => attached.address === sequence.address,
+    );
+
+    if (found !== undefined) {
+      throw new Error(`Sequence ${sequence.address.address} already attached`);
+    }
+
+    attached.push(sequence);
 
     return {
-      ignore: async () => {
-        const found = listeners.find((l) => l.id === id);
+      detach: async () => {
+        const index = attached.findIndex(
+          (attached) => attached.address === sequence.address,
+        );
 
-        if (!found) {
-          throw new Error(`Listener for id: ${id} not found`);
+        if (index === -1) {
+          throw new Error(`Sequence ${sequence.address.address} not attached`);
         }
 
-        listeners.splice(listeners.indexOf(found), 1);
+        attached.splice(index, 1);
       },
     };
   };
 
-  const write = async ({ message }: { message: Signal }) => {
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: "Please respond with a sestina.",
-        },
-      ],
-    });
-
-    const message = {
-      id: uuid(),
-      trace: [address],
-      destination: address,
-    };
-
-    history.push(message);
-  };
-
-  axon.listen({ handler });
-
-  // const oracle: Oracle = async ({ signal }) => {
-
-  // };
-
   return {
-    memory,
-    oracle,
-    listeners,
-    listen,
+    address,
+    signals,
+    attached,
+    read,
+    append,
+    attach,
   };
 };
