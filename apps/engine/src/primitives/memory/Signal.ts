@@ -1,8 +1,8 @@
-import { Sequence } from "./Sequence.js";
+import { Address } from "./Address.js";
 
 export type Signal = {
   id: string;
-  sequence: Sequence;
-  inputs: Signal[];
+  sequence: Address;
+  stimuli: Signal[];
   text: string;
 };

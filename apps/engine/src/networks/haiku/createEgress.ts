@@ -18,6 +18,8 @@ export const createEgress = async ({
   };
 
   const append = async ({ signal }: { signal: Signal }) => {
+    console.log(`Appending signal ${signal.id} to sequence ${address.address}`);
+
     signals.push(signal);
 
     for (const sequence of attached) {
@@ -27,7 +29,8 @@ export const createEgress = async ({
 
   const attach = async ({ sequence }: { sequence: Sequence }) => {
     const foundInNetwork = network.sequences.find(
-      (networkSequence) => networkSequence.address === sequence.address,
+      (networkSequence) =>
+        networkSequence.address.address === sequence.address.address,
     );
 
     if (foundInNetwork === undefined) {
@@ -35,19 +38,23 @@ export const createEgress = async ({
     }
 
     const found = attached.find(
-      (attached) => attached.address === sequence.address,
+      (attached) => attached.address.address === sequence.address.address,
     );
 
     if (found !== undefined) {
       throw new Error(`Sequence ${sequence.address.address} already attached`);
     }
 
+    console.log(
+      `Attaching sequence ${sequence.address.address} to sequence ${address.address}`,
+    );
+
     attached.push(sequence);
 
     return {
       detach: async () => {
         const index = attached.findIndex(
-          (attached) => attached.address === sequence.address,
+          (attached) => attached.address.address === sequence.address.address,
         );
 
         if (index === -1) {
@@ -59,7 +66,7 @@ export const createEgress = async ({
     };
   };
 
-  return {
+  const sequence = {
     address,
     signals,
     attached,
@@ -67,4 +74,10 @@ export const createEgress = async ({
     append,
     attach,
   };
+
+  console.log(`Creating egress ${address.address}`);
+  network.attach.sequence({ sequence });
+  console.log(`Created egress ${address.address}`);
+
+  return sequence;
 };

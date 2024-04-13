@@ -18,7 +18,13 @@ export const createIngress = async ({
   };
 
   const append = async ({ signal }: { signal: Signal }) => {
+    console.log(`Appending signal ${signal.id} to sequence ${address.address}`);
+
     signals.push(signal);
+
+    console.log(
+      `There are ${attached.length} sequences attached to sequence ${address.address}`,
+    );
 
     for (const sequence of attached) {
       await sequence.append({ signal });
@@ -27,7 +33,8 @@ export const createIngress = async ({
 
   const attach = async ({ sequence }: { sequence: Sequence }) => {
     const foundInNetwork = network.sequences.find(
-      (networkSequence) => networkSequence.address === sequence.address,
+      (networkSequence) =>
+        networkSequence.address.address === sequence.address.address,
     );
 
     if (foundInNetwork === undefined) {
@@ -35,19 +42,23 @@ export const createIngress = async ({
     }
 
     const found = attached.find(
-      (attached) => attached.address === sequence.address,
+      (attached) => attached.address.address === sequence.address.address,
     );
 
     if (found !== undefined) {
       throw new Error(`Sequence ${sequence.address.address} already attached`);
     }
 
+    console.log(
+      `Attaching sequence ${sequence.address.address} to sequence ${address.address}`,
+    );
+
     attached.push(sequence);
 
     return {
       detach: async () => {
         const index = attached.findIndex(
-          (attached) => attached.address === sequence.address,
+          (attached) => attached.address.address === sequence.address.address,
         );
 
         if (index === -1) {
@@ -59,7 +70,7 @@ export const createIngress = async ({
     };
   };
 
-  return {
+  const sequence = {
     address,
     signals,
     attached,
@@ -67,4 +78,8 @@ export const createIngress = async ({
     append,
     attach,
   };
+
+  network.attach.sequence({ sequence });
+
+  return sequence;
 };

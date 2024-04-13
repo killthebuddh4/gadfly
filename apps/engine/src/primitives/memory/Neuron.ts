@@ -7,15 +7,29 @@ export type Neuron = {
 
   dendrites: Sequence[];
   axon: Sequence;
-  feedback: Sequence;
+  feedback: Sequence | null;
 
-  attached: {
-    dendrites: Array<{ address: Address; sequence: Sequence }>;
-    axon: Sequence;
-    feedback: Sequence;
+  bound: {
+    axons: Sequence[];
+    dendrite: Sequence | null;
+  };
+
+  bind: {
+    dendrites: (args: { axons: Sequence[] }) => Promise<{
+      unbind: () => Promise<void>;
+    }>;
+    axon: (args: { dendrite: Sequence }) => Promise<{
+      unbind: () => Promise<void>;
+    }>;
   };
 
   activate: () => Promise<Signal>;
+
+  attached: {
+    dendrites: Array<{ address: Address; sequence: Sequence }>;
+    axon: Sequence[];
+    feedback: Sequence | null;
+  };
 
   attach: {
     dendrite: (args: { address: Address; sequence: Sequence }) => Promise<{

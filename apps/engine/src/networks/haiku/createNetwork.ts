@@ -3,14 +3,14 @@ import { Network } from "../../primitives/memory/Network.js";
 import { Sequence } from "../../primitives/memory/Sequence.js";
 
 export const createNetwork = async (): Promise<Network> => {
-  const name = "sestina";
+  const name = "haiku";
   const sequences: Sequence[] = [];
   const neurons: Neuron[] = [];
 
   const attach = {
     sequence: async ({ sequence }: { sequence: Sequence }) => {
       const found = sequences.find(
-        (sequence) => sequence.address === sequence.address,
+        (a) => a.address.address === sequence.address.address,
       );
 
       if (found !== undefined) {
@@ -19,12 +19,16 @@ export const createNetwork = async (): Promise<Network> => {
         );
       }
 
+      console.log(
+        `Attaching sequence ${sequence.address.address} to network ${name}`,
+      );
+
       sequences.push(sequence);
 
       return {
         detach: async () => {
           const index = sequences.findIndex(
-            (sequence) => sequence.address === sequence.address,
+            (sequence) => sequence.address.address === sequence.address.address,
           );
 
           if (index === -1) {
@@ -40,7 +44,7 @@ export const createNetwork = async (): Promise<Network> => {
 
     neuron: async ({ neuron }: { neuron: Neuron }) => {
       const found = neurons.find(
-        (neuron) => neuron.axon.address === neuron.axon.address,
+        (neuron) => neuron.axon.address.address === neuron.axon.address.address,
       );
 
       if (found !== undefined) {
@@ -49,12 +53,17 @@ export const createNetwork = async (): Promise<Network> => {
         );
       }
 
+      console.log(
+        `Attaching neuron ${neuron.axon.address.address} to network ${name}`,
+      );
+
       neurons.push(neuron);
 
       return {
         detach: async () => {
           const index = neurons.findIndex(
-            (neuron) => neuron.axon.address === neuron.axon.address,
+            (neuron) =>
+              neuron.axon.address.address === neuron.axon.address.address,
           );
 
           if (index === -1) {

@@ -19,7 +19,7 @@ describe("Gadfly", () => {
     console.log(JSON.stringify(json, null, 2));
   });
 
-  it.only("Dialectic", async function () {
+  it("Dialectic", async function () {
     this.timeout(60000);
     const response = await fetch(`http://localhost:9999/dialectic`);
     const json = await response.json();
