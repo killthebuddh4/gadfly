@@ -2,6 +2,8 @@ import { createNetwork } from "./createNetwork.js";
 import { createIngress } from "./createIngress.js";
 import { createEgress } from "./createEgress.js";
 import { createNeuron } from "./createNeuron.js";
+import { isSestina } from "./isSestina.js";
+import { isSetIterator } from "util/types";
 
 export const run = async ({ directions }: { directions: string }) => {
   const network = await createNetwork();
@@ -26,6 +28,8 @@ export const run = async ({ directions }: { directions: string }) => {
     }
 
     console.log(output[output.length - 1]?.text);
+
+    isSestina(output[output.length - 1]?.text);
   }, 300);
 
   ingress.append({

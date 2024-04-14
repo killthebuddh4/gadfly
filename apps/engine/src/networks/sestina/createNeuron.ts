@@ -200,7 +200,7 @@ export const createNeuron = async ({ network }: { network: Network }) => {
       messages: [
         {
           role: "system",
-          content: "You are a haiku generator",
+          content: "You are a sestina generator",
         },
         {
           role: "user",
