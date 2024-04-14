@@ -3,7 +3,6 @@ import { createIngress } from "./createIngress.js";
 import { createEgress } from "./createEgress.js";
 import { createNeuron } from "./createNeuron.js";
 import { isSestina } from "./isSestina.js";
-import { isSetIterator } from "util/types";
 
 export const run = async ({ directions }: { directions: string }) => {
   const network = await createNetwork();
