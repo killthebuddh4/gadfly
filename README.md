@@ -2,6 +2,9 @@
 
 ## Overview
 
+_2024-04-14 -- I might be ready to make this a real thing, I [made a (wip) deck](https://www.canva.com/design/DAGCbH7Q9nw/nJLfMYB5gpFY3ZDQIoOFQw/edit?utm_content=DAGCbH7Q9nw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)_
+
+
 __Gadfly__ is an AI agent framework. It's core is a natural language compiler, programming language, and orchestration engine. A Gadfly agent satisfies natural language requests by writing scripts and then executing them.
 
 > More specifically, Gadfly is only concerned with deciding which scripts to write, when to execute them, and how to glue them together. General-purpose source code generation and execution is, at the moment, out of scope. We think that Gadfly could be a natural complement to something like [Open Interpreter](https://www.openinterpreter.com/).
@@ -9,6 +12,10 @@ __Gadfly__ is an AI agent framework. It's core is a natural language compiler, p
 A Gadfly agent's interface is natural language. When it receives a request it _parses_ the request into a program in the Gadfly language, a very simple and very high level functional programming language. It then _compiles_ the program into a collection of source files in a general purpose programming language. Finally, it orchestrates the execution of the collection of source files.
 
 ## (WIP) Litepaper
+
+_[Some helpful diagrams](https://www.figma.com/file/jYFPoCavF5E4FJOa5CYwjP/gadfly?type=whiteboard&node-id=0%3A1&t=VfQlWVZY9yWlPsty-1)_
+
+_
 
 When we think of how a programming language executes, a common way to start is by thinking of the program's source code as a tree (a parse tree). The leaf nodes in the tree are executed first and yield values. The values are propagated upwards as inputs into their parent nodes, which represent functions. And so on. In this way we imagine data flowing from the leaf nodes _upwards_ towards the root of the tree. When the program halts, the root node in the tree is the result of the program.
 
