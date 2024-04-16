@@ -12,6 +12,7 @@
   justify-content: center;
   min-height: 100vh;
   padding: 3rem;
+  overflow-y: hidden;
 }
 
 h1 {
