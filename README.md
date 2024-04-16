@@ -2,7 +2,7 @@
 
 ## Overview
 
-_2024-04-14 -- I might be ready to make this a real thing, I [made a (wip) deck](https://www.canva.com/design/DAGCbH7Q9nw/nJLfMYB5gpFY3ZDQIoOFQw/edit?utm_content=DAGCbH7Q9nw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)_
+_2024-04-14 -- I might be ready to make this a real thing, I [made a (wip) deck](https://www.canva.com/design/DAGCbH7Q9nw/cWEMoBESe1JUii0SxWhIRA/view)_
 
 
 __Gadfly__ is an AI agent framework. It's core is a natural language compiler, programming language, and orchestration engine. A Gadfly agent satisfies natural language requests by writing scripts and then executing them.
