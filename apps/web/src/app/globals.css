@@ -11,7 +11,7 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 3rem;
+  padding: 2rem;
   overflow-y: hidden;
 }
 
@@ -39,10 +39,16 @@ nav {
 .logo {
   max-height: 321px;
   position: fixed;
-  right: 3rem;
-  top: 3rem;
+  right: 2rem;
+  top: 2rem;
 }
 
 .upside-down {
   transform: rotate(180deg);
+}
+
+.deck {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
 }
