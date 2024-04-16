@@ -10,8 +10,8 @@ export default function Home() {
         className="logo"
         src="/gadfly.png"
         alt="Gadfly"
-        width={109.2}
-        height={128.8}
+        width={72.8}
+        height={85.8}
       />
       <h1>gadfly</h1>
       <h2>a system 2 compiler for language models</h2>
