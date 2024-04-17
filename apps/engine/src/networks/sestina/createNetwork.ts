@@ -1,86 +1,102 @@
-import { Neuron } from "../../primitives/memory/neuron/Neuron.js";
+import { Actor } from "../../primitives/actor/Actor.js";
 import { Network } from "../../primitives/memory/Network.js";
-import { Sequence } from "../../primitives/memory/Sequence.js";
+import { Log } from "../../primitives/memory/Log.js";
+import { Signal } from "../../primitives/memory/Signal.js";
+import { Handler } from "../../primitives/memory/Handler.js";
 
 export const createNetwork = async (): Promise<Network> => {
   const name = "sestina";
-  const sequences: Sequence[] = [];
-  const neurons: Neuron[] = [];
+  const logs: Log[] = [];
+  const actors: Actor[] = [];
 
   const attach = {
-    sequence: async ({ sequence }: { sequence: Sequence }) => {
-      const found = sequences.find(
-        (a) => a.address.address === sequence.address.address,
-      );
+    log: async ({ log }: { log: Log }) => {
+      const found = logs.find((a) => a.address.address === log.address.address);
 
       if (found !== undefined) {
-        throw new Error(
-          `Sequence ${sequence.address.address} already attached`,
-        );
+        throw new Error(`Actor ${log.address.address} already attached`);
       }
 
-      console.log(
-        `Attaching sequence ${sequence.address.address} to network ${name}`,
-      );
+      console.log(`Attaching log ${log.address.address} to network ${name}`);
 
-      sequences.push(sequence);
+      logs.push(log);
 
       return {
         detach: async () => {
-          const index = sequences.findIndex(
-            (s) => s.address.address === sequence.address.address,
+          const index = logs.findIndex(
+            (s) => s.address.address === log.address.address,
           );
 
           if (index === -1) {
-            throw new Error(
-              `Sequence ${sequence.address.address} not attached`,
-            );
+            throw new Error(`Actor ${log.address.address} not attached`);
           }
 
-          sequences.splice(index, 1);
+          logs.splice(index, 1);
         },
       };
     },
 
-    neuron: async ({ neuron }: { neuron: Neuron }) => {
-      const found = neurons.find(
-        (n) => n.axon.address.address === neuron.axon.address.address,
+    actor: async ({ actor }: { actor: Actor }) => {
+      const found = actors.find(
+        (n) => n.output.address.address === actor.output.address.address,
       );
 
       if (found !== undefined) {
         throw new Error(
-          `Neuron ${neuron.axon.address.address} already attached`,
+          `Actor ${actor.output.address.address} already attached`,
         );
       }
 
       console.log(
-        `Attaching neuron ${neuron.axon.address.address} to network ${name}`,
+        `Attaching actor ${actor.output.address.address} to network ${name}`,
       );
 
-      neurons.push(neuron);
+      actors.push(actor);
 
       return {
         detach: async () => {
-          const index = neurons.findIndex(
-            (n) => n.axon.address.address === neuron.axon.address.address,
+          const index = actors.findIndex(
+            (n) => n.output.address.address === actor.output.address.address,
           );
 
           if (index === -1) {
             throw new Error(
-              `Neuron ${neuron.axon.address.address} not attached`,
+              `Actor ${actor.output.address.address} not attached`,
             );
           }
 
-          neurons.splice(index, 1);
+          actors.splice(index, 1);
         },
       };
     },
   };
 
+  const subscribers: Handler[] = [];
+
+  const publish = async ({ signal }: { signal: Signal }) => {
+    for (const subscriber of subscribers) {
+      subscriber({ signal });
+    }
+
+    return signal;
+  };
+
+  const subscribe = async ({ handler }: { handler: Handler }) => {
+    subscribers.push(handler);
+
+    return {
+      unsubscribe: async () => {
+        subscribers.splice(subscribers.indexOf(handler), 1);
+      },
+    };
+  };
+
   return {
     name,
-    sequences,
-    neurons,
+    logs: logs,
+    actors,
     attach,
+    publish,
+    subscribe,
   };
 };

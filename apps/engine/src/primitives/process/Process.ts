@@ -1,5 +1,5 @@
 import { Handler } from "../memory/Handler.js";
-import { Sequence } from "../memory/Sequence.js";
+import { Log } from "../memory/Log.js";
 
 export type Process = {
   id: string;
@@ -7,11 +7,11 @@ export type Process = {
   parent: Process | null;
   children: Process[];
 
-  input: Sequence;
-  output: Sequence;
-  log: Sequence;
-  error: Sequence;
-  exit: Sequence;
+  input: Log;
+  output: Log;
+  log: Log;
+  error: Log;
+  exit: Log;
 
   pipe: Handler;
   patch: Handler;

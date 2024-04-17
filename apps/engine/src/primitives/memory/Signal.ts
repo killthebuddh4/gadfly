@@ -2,7 +2,7 @@ import { Address } from "./Address.js";
 
 export type Signal = {
   id: string;
-  sequence: Address;
+  log: Address;
   stimuli: Signal[];
   text: string;
 };

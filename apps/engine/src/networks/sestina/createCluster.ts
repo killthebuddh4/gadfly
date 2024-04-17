@@ -1,57 +1,28 @@
 import { createNetwork } from "./createNetwork.js";
-import { createIngress } from "./createIngress.js";
-import { createEgress } from "./createEgress.js";
-import { createSyntheticNeuron } from "./createSyntheticNeuron.js";
-import { createAnalyticNeuron } from "./createAnalyticNeuron.js";
-import { getMostRecentSignal } from "../../primitives/memory/neuron/getMostRecentSignal.js";
-import { Signal } from "../../primitives/memory/Signal.js";
+import { createSyntheticActor } from "./createSyntheticActor.js";
+import { createAnalyticActor } from "./createAnalyticActor.js";
+import { createLog } from "./createLog.js";
 import { v4 as uuid } from "uuid";
+import { Signal } from "../../primitives/memory/Signal.js";
 
 export const createCluster = async () => {
   const network = await createNetwork();
-  const ingress = await createIngress({ network });
-  const egress = await createEgress({ network });
-  const synthetic = await createSyntheticNeuron({ network });
-  const analytic = await createAnalyticNeuron({ network });
-
-  synthetic.bind.dendrites({ axons: [ingress] });
-  synthetic.bind.feedback({ axon: analytic.axon });
-  analytic.bind.dendrites({ axons: [synthetic.axon] });
-  synthetic.attach.axon({ sequence: egress });
+  const ingress = await createLog({
+    network,
+    address: { address: "ingress" },
+  });
+  const synthetic = await createSyntheticActor({ network });
 
   return async ({ input }: { input: string }) => {
-    let output: Signal | null = null;
+    const signal: Signal = {
+      id: uuid(),
+      log: ingress.address,
+      stimuli: [],
+      text: input,
+    };
 
-    console.log("INPUT TO CLUSTER IS: ", input);
-    ingress.append({
-      signal: {
-        id: uuid(),
-        sequence: ingress.address,
-        stimuli: [],
-        text: input,
-      },
-    });
+    await ingress.append({ signal });
 
-    return new Promise<string>((resolve) => {
-      const interval = setInterval(async () => {
-        const newOutput = getMostRecentSignal({ sequence: egress });
-
-        if (newOutput === null) {
-          return;
-        }
-
-        if (output === null) {
-          output = newOutput;
-        } else {
-          if (output.id === newOutput.id) {
-            return;
-          }
-        }
-
-        clearInterval(interval);
-
-        resolve(newOutput.text);
-      }, 3000);
-    });
+    return synthetic.call({ inputs: [signal] });
   };
 };

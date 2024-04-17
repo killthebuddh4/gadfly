@@ -1,16 +1,16 @@
 import { Address } from "./Address.js";
 import { Signal } from "./Signal.js";
 
-export type Sequence = {
+export type Log = {
   address: Address;
   signals: Signal[];
 
   read: () => Promise<Signal[]>;
   append: (args: { signal: Signal }) => Promise<void>;
 
-  attached: Sequence[];
+  attached: Log[];
 
-  attach: (args: { sequence: Sequence }) => Promise<{
+  attach: (args: { log: Log }) => Promise<{
     detach: () => Promise<void>;
   }>;
 };
