@@ -1,6 +1,6 @@
 import { createSequence } from "./createSequence.js";
 import { Network } from "../../primitives/memory/Network.js";
-import { Neuron } from "../../primitives/memory/Neuron.js";
+import { Neuron } from "../../primitives/memory/neuron/Neuron.js";
 import { v4 as uuid } from "uuid";
 import { parseSestina } from "./parser/parseSestina.js";
 
@@ -219,15 +219,19 @@ export const createAnalyticNeuron = async ({
   };
 
   const activate = async () => {
+    console.log("ANALYTIC NEURON ACTIVATED");
+
     const text = dendrites[0].signals[dendrites[0].signals.length - 1].text;
     const parsed = parseSestina({ text });
+
+    console.log("ANALYTIC NEURON PARSED", parsed);
 
     if (!parsed.ok) {
       return {
         id: uuid(),
         sequence: axon.address,
         stimuli: dendrites.map((dendrite) => dendrite.signals).flat(),
-        text: `There was a problem with the sestina you generated: ${parsed.reason}`,
+        text: `There was a problem with the sestina you generated:\n${parsed.reason}`,
       };
     } else {
       return {

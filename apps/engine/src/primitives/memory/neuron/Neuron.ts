@@ -1,6 +1,6 @@
-import { Address } from "./Address.js";
-import { Sequence } from "./Sequence.js";
-import { Signal } from "./Signal.js";
+import { Address } from "../Address.js";
+import { Sequence } from "../Sequence.js";
+import { Signal } from "../Signal.js";
 
 export type Neuron = {
   description: string;

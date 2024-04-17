@@ -1,6 +1,6 @@
 import { createSequence } from "./createSequence.js";
 import { Network } from "../../primitives/memory/Network.js";
-import { Neuron } from "../../primitives/memory/Neuron.js";
+import { Neuron } from "../../primitives/memory/neuron/Neuron.js";
 import { v4 as uuid } from "uuid";
 import { openai } from "../../lib/openai/openai.js";
 import { Signal } from "../../primitives/memory/Signal.js";
@@ -246,7 +246,7 @@ export const createRetryNeuron = async ({ network }: { network: Network }) => {
       tries += 1;
 
       const response = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
+        model: "gpt-4",
         messages: [
           {
             role: "system",

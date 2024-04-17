@@ -1,28 +1,17 @@
+import { parseSestina } from "./networks/sestina/parser/parseSestina.js";
+
 describe("Gadfly", () => {
-  it("Birthday request", async function () {
+  it.only("Sestina", async function () {
     this.timeout(60000);
-    const problem = "I want to throw a third birthday for my son.";
+    const problem = "Please write me a sestina about the ocean";
+
     const response = await fetch(
-      `http://localhost:9999/gadfly?problem=${problem}`,
+      `http://localhost:9999/sestina?input=${problem}`,
     );
     const json = await response.json();
-    console.log(JSON.stringify(json, null, 2));
-  });
 
-  it("Thanks request", async function () {
-    this.timeout(60000);
-    const problem = "I want send each of my friends a thank you note.";
-    const response = await fetch(
-      `http://localhost:9999/gadfly?problem=${problem}`,
-    );
-    const json = await response.json();
-    console.log(JSON.stringify(json, null, 2));
-  });
+    const parsed = parseSestina({ text: json.data.output });
 
-  it("Dialectic", async function () {
-    this.timeout(60000);
-    const response = await fetch(`http://localhost:9999/dialectic`);
-    const json = await response.json();
-    console.log(JSON.stringify(json, null, 2));
+    console.log(JSON.stringify(parsed, null, 2));
   });
 });

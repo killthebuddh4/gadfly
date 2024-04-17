@@ -1,4 +1,4 @@
-import { Neuron } from "./Neuron.js";
+import { Neuron } from "./neuron/Neuron.js";
 import { Sequence } from "./Sequence.js";
 
 export type Network = {

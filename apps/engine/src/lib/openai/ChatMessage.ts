@@ -1,5 +1,5 @@
 import { openai } from "./openai.js";
 
-export type Message = Parameters<
+export type ChatMessage = Parameters<
   typeof openai.chat.completions.create
 >[0]["messages"][number];

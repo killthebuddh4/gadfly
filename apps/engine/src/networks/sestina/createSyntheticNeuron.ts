@@ -1,9 +1,11 @@
 import { createSequence } from "./createSequence.js";
 import { Network } from "../../primitives/memory/Network.js";
-import { Neuron } from "../../primitives/memory/Neuron.js";
+import { Neuron } from "../../primitives/memory/neuron/Neuron.js";
+import { getMostRecentSignal } from "../../primitives/memory/neuron/getMostRecentSignal.js";
 import { v4 as uuid } from "uuid";
 import { openai } from "../../lib/openai/openai.js";
 import { Signal } from "../../primitives/memory/Signal.js";
+import { ChatMessage } from "../../lib/openai/ChatMessage.js";
 
 const isFeedback = ({ signal }: { signal: Signal }) => {
   return signal.text !== `You generated a perfect sestina!`;
@@ -223,38 +225,72 @@ export const createSyntheticNeuron = async ({
     },
   };
 
-  let tries = 0;
-
   const activate = async () => {
-    tries += 1;
+    console.log("SYNTHETIC SESTINA NEURON ACTIVATING");
 
-    console.log(`ACTIVATING SYNTHETIC SESTINA ATTEMPT ${tries}`);
+    const input = getMostRecentSignal({ sequence: dendrites[0] });
 
-    const input = dendrites
-      .map((dendrite) => dendrite.signals.map((s) => s.text))
-      .flat()
-      .join("\n");
+    if (input === null) {
+      throw new Error(`No input found but activate was called`);
+    }
 
-    const system = `
-      You are a sestina generator.
+    const system: ChatMessage = await (async () => {
+      const signals = await feedback.read();
 
-      Here is a list of feedback you've received about your previous sestinas:
+      if (signals.length === 0) {
+        return {
+          role: "system",
+          content: `Please assist the user.`,
+        };
+      } else {
+        if (bound.feedback === null) {
+          throw new Error("Feedback is not bound but somehow has signals");
+        }
 
-      ${feedback.signals.map((signal) => signal.text).join("\n\n\n")}
-    `.trim();
+        const feedback = bound.feedback.signals
+          .map((signal) => signal.text)
+          .map((text): ChatMessage => {
+            return {
+              role: "user",
+              content: text,
+            };
+          });
+
+        const response = await openai.chat.completions.create({
+          model: "gpt-4",
+          messages: [
+            {
+              role: "system",
+              content: `Your apprentice has received feedback from a number of clients. Please consider the feedback and respond with detailed instructions for the apprentice that incorporate the feedback.`,
+            },
+            ...feedback,
+          ],
+        });
+
+        const prompt = response.choices[0].message.content;
+
+        if (typeof prompt !== "string") {
+          throw new Error(`Invalid prompt response: ${prompt}`);
+        }
+
+        return {
+          role: "system",
+          content: prompt,
+        };
+      }
+    })();
 
     console.log("SYSTEM PROMPT", system);
 
+    console.log("USER INPUT", input);
+
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4",
       messages: [
-        {
-          role: "system",
-          content: system,
-        },
+        system,
         {
           role: "user",
-          content: input,
+          content: input.text,
         },
       ],
     });
@@ -264,6 +300,8 @@ export const createSyntheticNeuron = async ({
     if (typeof sestina !== "string") {
       throw new Error(`Invalid sestina response: ${sestina}`);
     }
+
+    console.log("SYNTHETIC GENERATED...", sestina);
 
     return {
       id: uuid(),
@@ -287,20 +325,6 @@ export const createSyntheticNeuron = async ({
       return;
     } else {
       activation.prevTotal = total;
-
-      const signal = await activate();
-
-      axon.append({ signal });
-    }
-  }, 250);
-
-  setInterval(async () => {
-    const fb = feedback.signals.filter((signal) => isFeedback({ signal }));
-
-    if (activation.feedback === fb.length) {
-      return;
-    } else {
-      activation.feedback = fb.length;
 
       const signal = await activate();
 

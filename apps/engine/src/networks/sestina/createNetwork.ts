@@ -1,4 +1,4 @@
-import { Neuron } from "../../primitives/memory/Neuron.js";
+import { Neuron } from "../../primitives/memory/neuron/Neuron.js";
 import { Network } from "../../primitives/memory/Network.js";
 import { Sequence } from "../../primitives/memory/Sequence.js";
 
@@ -43,8 +43,6 @@ export const createNetwork = async (): Promise<Network> => {
     },
 
     neuron: async ({ neuron }: { neuron: Neuron }) => {
-      console.log(neurons.map((n) => n.axon.address.address));
-
       const found = neurons.find(
         (n) => n.axon.address.address === neuron.axon.address.address,
       );
