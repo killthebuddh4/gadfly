@@ -12,13 +12,19 @@ export type Neuron = {
   bound: {
     axons: Sequence[];
     dendrite: Sequence | null;
+    feedback: Sequence | null;
   };
 
   bind: {
     dendrites: (args: { axons: Sequence[] }) => Promise<{
       unbind: () => Promise<void>;
     }>;
+
     axon: (args: { dendrite: Sequence }) => Promise<{
+      unbind: () => Promise<void>;
+    }>;
+
+    feedback: (args: { axon: Sequence }) => Promise<{
       unbind: () => Promise<void>;
     }>;
   };

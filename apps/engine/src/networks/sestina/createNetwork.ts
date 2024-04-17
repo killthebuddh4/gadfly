@@ -3,7 +3,7 @@ import { Network } from "../../primitives/memory/Network.js";
 import { Sequence } from "../../primitives/memory/Sequence.js";
 
 export const createNetwork = async (): Promise<Network> => {
-  const name = "haiku";
+  const name = "sestina";
   const sequences: Sequence[] = [];
   const neurons: Neuron[] = [];
 
@@ -28,7 +28,7 @@ export const createNetwork = async (): Promise<Network> => {
       return {
         detach: async () => {
           const index = sequences.findIndex(
-            (sequence) => sequence.address.address === sequence.address.address,
+            (s) => s.address.address === sequence.address.address,
           );
 
           if (index === -1) {
@@ -43,8 +43,10 @@ export const createNetwork = async (): Promise<Network> => {
     },
 
     neuron: async ({ neuron }: { neuron: Neuron }) => {
+      console.log(neurons.map((n) => n.axon.address.address));
+
       const found = neurons.find(
-        (neuron) => neuron.axon.address.address === neuron.axon.address.address,
+        (n) => n.axon.address.address === neuron.axon.address.address,
       );
 
       if (found !== undefined) {
@@ -62,8 +64,7 @@ export const createNetwork = async (): Promise<Network> => {
       return {
         detach: async () => {
           const index = neurons.findIndex(
-            (neuron) =>
-              neuron.axon.address.address === neuron.axon.address.address,
+            (n) => n.axon.address.address === neuron.axon.address.address,
           );
 
           if (index === -1) {

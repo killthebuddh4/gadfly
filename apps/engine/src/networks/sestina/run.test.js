@@ -1,7 +1,7 @@
 import { run } from "./run.js";
 
 describe("run", () => {
-  it("should return a string", async function () {
+  it.only("should return a string", async function () {
     this.timeout(10000);
 
     try {

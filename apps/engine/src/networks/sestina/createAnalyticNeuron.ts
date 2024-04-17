@@ -2,21 +2,28 @@ import { createSequence } from "./createSequence.js";
 import { Network } from "../../primitives/memory/Network.js";
 import { Neuron } from "../../primitives/memory/Neuron.js";
 import { v4 as uuid } from "uuid";
-import { openai } from "../../lib/openai/openai.js";
+import { parseSestina } from "./parser/parseSestina.js";
 
-export const createNeuron = async ({ network }: { network: Network }) => {
+export const createAnalyticNeuron = async ({
+  network,
+}: {
+  network: Network;
+}) => {
   const dendrites = [
-    await createSequence({ network, address: { address: "haiku dendrite" } }),
+    await createSequence({
+      network,
+      address: { address: "analytic sestina dendrite" },
+    }),
   ];
 
   const axon = await createSequence({
     network,
-    address: { address: "Generated haiku axon" },
+    address: { address: "analytic sestina axon" },
   });
 
   const feedback = await createSequence({
     network,
-    address: { address: "haiku feedback" },
+    address: { address: "analytic sestina feedback" },
   });
 
   const attached: Neuron["attached"] = {
@@ -128,6 +135,7 @@ export const createNeuron = async ({ network }: { network: Network }) => {
   const bound: Neuron["bound"] = {
     axons: [],
     dendrite: null,
+    feedback: null,
   };
 
   const bind: Neuron["bind"] = {
@@ -187,40 +195,48 @@ export const createNeuron = async ({ network }: { network: Network }) => {
         },
       };
     },
+
+    feedback: async ({ axon }) => {
+      if (bound.feedback !== null) {
+        throw new Error(`Feedback already bound`);
+      }
+      const detach = await axon.attach({ sequence: feedback });
+
+      bound.feedback = axon;
+
+      return {
+        unbind: async () => {
+          if (bound.feedback === null) {
+            throw new Error(`Feedback not bound`);
+          }
+
+          await detach.detach();
+
+          bound.feedback = null;
+        },
+      };
+    },
   };
 
   const activate = async () => {
-    const input = dendrites
-      .map((dendrite) => dendrite.signals.map((s) => s.text))
-      .flat()
-      .join("\n");
+    const text = dendrites[0].signals[dendrites[0].signals.length - 1].text;
+    const parsed = parseSestina({ text });
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: "You are a sestina generator",
-        },
-        {
-          role: "user",
-          content: input,
-        },
-      ],
-    });
-
-    const haiku = response.choices[0].message.content;
-
-    if (typeof haiku !== "string") {
-      throw new Error(`Invalid haiku response: ${haiku}`);
+    if (!parsed.ok) {
+      return {
+        id: uuid(),
+        sequence: axon.address,
+        stimuli: dendrites.map((dendrite) => dendrite.signals).flat(),
+        text: `There was a problem with the sestina you generated: ${parsed.reason}`,
+      };
+    } else {
+      return {
+        id: uuid(),
+        sequence: axon.address,
+        stimuli: dendrites.map((dendrite) => dendrite.signals).flat(),
+        text: `You generated a perfect sestina!`,
+      };
     }
-
-    return {
-      id: uuid(),
-      sequence: axon.address,
-      stimuli: dendrites.map((dendrite) => dendrite.signals).flat(),
-      text: haiku,
-    };
   };
 
   const activation = {
@@ -244,7 +260,7 @@ export const createNeuron = async ({ network }: { network: Network }) => {
   }, 250);
 
   const neuron = {
-    description: "Generate a haiku neuron",
+    description: "Analyze a sestina neuron",
     dendrites,
     axon,
     feedback,
@@ -255,7 +271,13 @@ export const createNeuron = async ({ network }: { network: Network }) => {
     attach,
   };
 
-  await network.attach.neuron({ neuron });
+  const found = network.neurons.find(
+    (n) => n.axon.address.address === axon.address.address,
+  );
+
+  if (found === undefined) {
+    await network.attach.neuron({ neuron });
+  }
 
   return neuron;
 };
