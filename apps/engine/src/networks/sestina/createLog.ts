@@ -6,12 +6,12 @@ import { Signal } from "../../primitives/memory/Signal.js";
 export const createLog = async ({
   address,
   network,
+  signals,
 }: {
   address: Address;
   network: Network;
+  signals: Signal[];
 }): Promise<Log> => {
-  const signals: Signal[] = [];
-
   const attached: Log[] = [];
 
   const read = async () => {

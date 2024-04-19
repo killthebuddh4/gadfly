@@ -8,69 +8,19 @@ import { Signal } from "../../primitives/memory/Signal.js";
 
 export const createAnalyticActor = async ({
   network,
+  spec,
+  inputs,
+  output,
+  feedback,
+  history,
 }: {
   network: Network;
+  spec: Actor["spec"];
+  inputs: Actor["inputs"];
+  output: Actor["output"];
+  feedback: Actor["feedback"];
+  history: Actor["history"];
 }) => {
-  const spec = {
-    name: await createLog({
-      network,
-      address: { address: "analytic sestina name" },
-      signals: [],
-    }),
-
-    description: await createLog({
-      network,
-      address: { address: "analytic sestina description" },
-      signals: [],
-    }),
-
-    inputs: [
-      await createLog({
-        network,
-        address: { address: "analytic sestina input spec" },
-        signals: [],
-      }),
-    ],
-
-    output: await createLog({
-      network,
-      address: { address: "analytic sestina output spec" },
-      signals: [],
-    }),
-
-    constraints: [
-      await createLog({
-        network,
-        address: { address: "analytic sestina constraints" },
-        signals: [],
-      }),
-    ],
-  };
-
-  const inputs = await Promise.all(
-    spec.inputs.map(async (log) => {
-      return createLog({
-        network,
-        address: { address: `${uuid()}-analytic-sestina-input` },
-        signals: [],
-      });
-    }),
-  );
-
-  const output = await createLog({
-    network,
-    address: { address: `${uuid()}-analytic-sestina-output` },
-    signals: [],
-  });
-
-  const feedback = await createLog({
-    network,
-    address: { address: `${uuid()}-analytic-sestina-feedback` },
-    signals: [],
-  });
-
-  const history: Actor["history"] = [];
-
   const describe: Actor["describe"] = async () => {
     const name = getMostRecentSignal({ log: spec.name });
 

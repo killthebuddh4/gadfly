@@ -12,5 +12,8 @@
   },
   "scripts": {
     "dev": "turbo run dev"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.42.5"
   }
 }

@@ -14,29 +14,34 @@ export const createSyntheticActor = async ({
     name: await createLog({
       network,
       address: { address: "synthetic sestina name" },
+      signals: [],
     }),
 
     description: await createLog({
       network,
       address: { address: "synthetic sestina description" },
+      signals: [],
     }),
 
     inputs: [
       await createLog({
         network,
         address: { address: "synthetic sestina input spec" },
+        signals: [],
       }),
     ],
 
     output: await createLog({
       network,
       address: { address: "synthetic sestina output spec" },
+      signals: [],
     }),
 
     constraints: [
       await createLog({
         network,
         address: { address: "synthetic sestina constraints" },
+        signals: [],
       }),
     ],
   };
@@ -46,6 +51,7 @@ export const createSyntheticActor = async ({
       return createLog({
         network,
         address: { address: `${uuid()}-synthetic-sestina-input` },
+        signals: [],
       });
     }),
   );
@@ -53,11 +59,13 @@ export const createSyntheticActor = async ({
   const output = await createLog({
     network,
     address: { address: `${uuid()}-synthetic-sestina-output` },
+    signals: [],
   });
 
   const feedback = await createLog({
     network,
     address: { address: `${uuid()}-synthetic-sestina-feedback` },
+    signals: [],
   });
 
   const history: Actor["history"] = [];
