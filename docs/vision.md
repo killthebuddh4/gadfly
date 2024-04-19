@@ -1,5 +1,7 @@
 # Gadfly
 
+The vision 
+
 - 1980 people who wanted a computation done had to go to a programmer
 - Mathematica/Wolfram Alpha
 - linguistic interfaces broaden access to computation
