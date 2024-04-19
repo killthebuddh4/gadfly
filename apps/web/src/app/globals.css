@@ -27,13 +27,16 @@ h2 {
   font-style: italic;
 }
 
+a {
+  font-size: 1.5rem;
+}
+
 nav {
   display: flex;
   justify-content: center;
   align-items: flex-end;
   margin-bottom: 2rem;
   gap: 1rem;
-  font-size: 1.5rem;
 }
 
 .logo {
@@ -46,9 +49,10 @@ nav {
 .upside-down {
   transform: rotate(180deg);
 }
-
-.deck {
+.b-right {
   position: fixed;
   bottom: 2rem;
   left: 2rem;
+  display: flex;
+  gap: 1rem;
 }
