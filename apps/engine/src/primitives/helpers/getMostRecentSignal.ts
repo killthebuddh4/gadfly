@@ -1,4 +1,4 @@
-import { Log } from "../memory/Log.js";
+import { Log } from "../network/Log.js";
 
 export const getMostRecentSignal = ({ log }: { log: Log }) => {
   if (log.signals.length === 0) {

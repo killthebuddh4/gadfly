@@ -1,8 +1,8 @@
 import { Actor } from "../../primitives/actor/Actor.js";
-import { Network } from "../../primitives/memory/Network.js";
-import { Log } from "../../primitives/memory/Log.js";
-import { Signal } from "../../primitives/memory/Signal.js";
-import { Handler } from "../../primitives/memory/Handler.js";
+import { Network } from "../../primitives/network/Network.js";
+import { Log } from "../../primitives/network/Log.js";
+import { Signal } from "../../primitives/network/Signal.js";
+import { Handler } from "../../primitives/network/Handler.js";
 
 export const createNetwork = async (): Promise<Network> => {
   const name = "sestina";

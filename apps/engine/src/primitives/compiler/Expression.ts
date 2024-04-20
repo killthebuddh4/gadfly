@@ -1,4 +1,4 @@
-import { Signal } from "../memory/Signal.js";
+import { Signal } from "../network/Signal.js";
 
 export type Expression = {
   id: string;

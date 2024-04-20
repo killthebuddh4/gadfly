@@ -1,5 +1,5 @@
-import { Log } from "../memory/Log.js";
-import { Signal } from "../memory/Signal.js";
+import { Log } from "../network/Log.js";
+import { Signal } from "../network/Signal.js";
 
 export type Actor = {
   id: string;

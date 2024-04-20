@@ -1,9 +1,9 @@
 import { createLog } from "./createLog.js";
-import { Network } from "../../primitives/memory/Network.js";
+import { Network } from "../../primitives/network/Network.js";
 import { Actor } from "../../primitives/actor/Actor.js";
 import { v4 as uuid } from "uuid";
 import { getMostRecentSignal } from "../../primitives/helpers/getMostRecentSignal.js";
-import { Signal } from "../../primitives/memory/Signal.js";
+import { Signal } from "../../primitives/network/Signal.js";
 
 export const createSyntheticActor = async ({
   network,

@@ -1,7 +1,7 @@
-import { Address } from "../../primitives/memory/Address.js";
-import { Network } from "../../primitives/memory/Network.js";
-import { Log } from "../../primitives/memory/Log.js";
-import { Signal } from "../../primitives/memory/Signal.js";
+import { Address } from "../../primitives/network/Address.js";
+import { Network } from "../../primitives/network/Network.js";
+import { Log } from "../../primitives/network/Log.js";
+import { Signal } from "../../primitives/network/Signal.js";
 
 export const createLog = async ({
   address,

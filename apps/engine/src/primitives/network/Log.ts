@@ -3,7 +3,8 @@ import { Signal } from "./Signal.js";
 export type Log = {
   id: string;
   description: string;
-
+  parent: Log | null;
+  children: Log[];
   signals: Signal[];
 
   read: () => Promise<Signal[]>;

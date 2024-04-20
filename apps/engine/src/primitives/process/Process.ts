@@ -1,5 +1,5 @@
-import { Handler } from "../memory/Handler.js";
-import { Log } from "../memory/Log.js";
+import { Handler } from "../network/Handler.js";
+import { Log } from "../network/Log.js";
 
 export type Process = {
   id: string;
