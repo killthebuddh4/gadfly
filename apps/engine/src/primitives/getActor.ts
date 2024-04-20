@@ -1,105 +1,122 @@
 import { prisma } from "../lib/prisma.js";
+import { openai } from "../lib/openai/openai.js";
 
 export const getActor = async ({ id }: { id: string }) => {
-  const actor = await prisma.actor.findUnique({
-    where: {
-      id,
-    },
-  });
+  const actor = await prisma.actor.findUnique({ where: { id } });
 
   if (actor === null) {
     throw new Error(`Actor not found: ${id}`);
   }
 
-  const specNameLog = await prisma.actorLog.findFirst({
+  const specNameLog = await prisma.log.findFirst({
     where: {
-      actor: {
-        id: actor.id,
+      actors: {
+        some: {
+          actor: {
+            id,
+          },
+          type: "SPEC_NAME",
+        },
       },
-      type: "SPEC_NAME",
     },
   });
 
   if (specNameLog === null) {
-    throw new Error(`Actor name not found: ${id}`);
+    throw new Error(`Actor spec name not found: ${id}`);
   }
 
-  const specDescriptionLog = await prisma.actorLog.findFirst({
+  const specDescriptionLog = await prisma.log.findFirst({
     where: {
-      actor: {
-        id: actor.id,
+      actors: {
+        some: {
+          actor: {
+            id,
+          },
+          type: "SPEC_DESCRIPTION",
+        },
       },
-      type: "SPEC_DESCRIPTION",
     },
   });
 
   if (specDescriptionLog === null) {
-    throw new Error(`Actor description not found: ${id}`);
+    throw new Error(`Actor spec description not found: ${id}`);
   }
 
-  const specInputsLogs = await prisma.actorLog.findMany({
+  const specInputsLogs = await prisma.log.findMany({
     where: {
-      actor: {
-        id: actor.id,
+      actors: {
+        some: {
+          actor: {
+            id,
+          },
+          type: "SPEC_INPUT",
+        },
       },
-      type: "SPEC_INPUT",
     },
   });
 
-  if (specInputsLogs.length === 0) {
-    throw new Error(`Actor inputs not found: ${id}`);
-  }
-
-  const specOutputsLogs = await prisma.actorLog.findMany({
+  const specOutputsLogs = await prisma.log.findMany({
     where: {
-      actor: {
-        id: actor.id,
+      actors: {
+        some: {
+          actor: {
+            id,
+          },
+          type: "SPEC_OUTPUT",
+        },
       },
-      type: "SPEC_OUTPUT",
     },
   });
 
-  if (specOutputsLogs.length === 0) {
-    throw new Error(`Actor outputs not found: ${id}`);
-  }
-
-  const specConstraintsLogs = await prisma.actorLog.findMany({
+  const specConstraintsLogs = await prisma.log.findMany({
     where: {
-      actor: {
-        id: actor.id,
+      actors: {
+        some: {
+          actor: {
+            id,
+          },
+          type: "SPEC_CONSTRAINT",
+        },
       },
-      type: "SPEC_CONSTRAINT",
     },
   });
 
-  if (specConstraintsLogs.length === 0) {
-    throw new Error(`Actor constraints not found: ${id}`);
-  }
-
-  const inputsLogs = await prisma.actorLog.findMany({
+  const inputsLogs = await prisma.log.findMany({
     where: {
-      actor: {
-        id: actor.id,
+      actors: {
+        some: {
+          actor: {
+            id,
+          },
+          type: "INPUT",
+        },
       },
-      type: "SPEC_INPUT",
     },
   });
 
-  const outputsLogs = await prisma.actorLog.findMany({
+  const outputsLogs = await prisma.log.findMany({
     where: {
-      actor: {
-        id: actor.id,
+      actors: {
+        some: {
+          actor: {
+            id,
+          },
+          type: "OUTPUT",
+        },
       },
-      type: "SPEC_OUTPUT",
     },
   });
 
-  const feedbackLog = await prisma.actorLog.findFirst({
+  const feedbackLog = await prisma.log.findFirst({
     where: {
-      actor: {
-        id: actor.id,
+      actors: {
+        some: {
+          actor: {
+            id,
+          },
+          type: "FEEDBACK",
+        },
       },
-      type: "FEEDBACK",
     },
   });
 
@@ -135,7 +152,7 @@ export const getActor = async ({ id }: { id: string }) => {
     });
 
     const inputsSpecs = await Promise.all(
-      specInputsLogs.map(async (inputLog) => {
+      specInputsLogs.map((inputLog) => {
         return prisma.signal.findMany({
           where: {
             log: {
@@ -152,7 +169,7 @@ export const getActor = async ({ id }: { id: string }) => {
     );
 
     const outputsSpecs = await Promise.all(
-      specOutputsLogs.map(async (outputLog) => {
+      specOutputsLogs.map((outputLog) => {
         return prisma.signal.findMany({
           where: {
             log: {
@@ -169,7 +186,7 @@ export const getActor = async ({ id }: { id: string }) => {
     );
 
     const constraintsSpecs = await Promise.all(
-      specConstraintsLogs.map(async (constraintLog) => {
+      specConstraintsLogs.map((constraintLog) => {
         return prisma.signal.findMany({
           where: {
             log: {
@@ -186,6 +203,7 @@ export const getActor = async ({ id }: { id: string }) => {
     );
 
     return {
+      id: actor.id,
       name: nameSpec[0],
       description: descriptionSpec[0],
       inputs: inputsSpecs.map((input) => input[0]),
@@ -231,8 +249,8 @@ export const getActor = async ({ id }: { id: string }) => {
 
     if (args.inputs !== undefined) {
       await Promise.all(
-        args.inputs.map(async (input, index) => {
-          await prisma.signal.create({
+        args.inputs.map((input, index) => {
+          return prisma.signal.create({
             data: {
               log: {
                 connect: {
@@ -248,8 +266,8 @@ export const getActor = async ({ id }: { id: string }) => {
 
     if (args.outputs !== undefined) {
       await Promise.all(
-        args.outputs.map(async (output, index) => {
-          await prisma.signal.create({
+        args.outputs.map((output, index) => {
+          return prisma.signal.create({
             data: {
               log: {
                 connect: {
@@ -265,8 +283,8 @@ export const getActor = async ({ id }: { id: string }) => {
 
     if (args.constraints !== undefined) {
       await Promise.all(
-        args.constraints.map(async (constraint, index) => {
-          await prisma.signal.create({
+        args.constraints.map((constraint, index) => {
+          return prisma.signal.create({
             data: {
               log: {
                 connect: {
@@ -294,9 +312,214 @@ export const getActor = async ({ id }: { id: string }) => {
     });
   };
 
-  const call = async (args: { inputs: string[] }) => {
-    return { id: "NOT YET IMPLEMENTED" };
-  };
+  const call = async () => {
+    const spec = await describe();
+
+    const system = `
+${spec.description.text}
+
+${spec.inputs.map((input) => input.text).join("\n")}
+
+${spec.outputs.map((output) => output.text).join("\n")}
+
+${spec.constraints.map((constraint) => constraint.text).join("\n")}
+    `;
+
+    const inputs = await Promise.all(
+      inputsLogs.map((inputLog) => {
+        return prisma.signal.findMany({
+          where: {
+            log: {
+              id: inputLog.id,
+            },
+          },
+          orderBy: {
+            index: "desc",
+          },
+          skip: 0,
+          take: 1,
+        });
+      }),
+    );
+
+    const text = inputs.map((input) => input[0].text).join("\n");
+
+    console.log("SYSTEM PROMPT");
+    console.log(system);
+    console.log("USER PROMPT");
+    console.log(text);
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content: system,
+        },
+        {
+          role: "user",
+          content: text,
+        },
+      ],
+    });
+
+    const output = response.choices[0].message.content;
+
+    if (typeof output !== "string") {
+      throw new Error(`Expected string, got: ${typeof output}`);
+    }
+
+    console.log("RESPONSE TEXT");
+    console.log(output);
+
+    const image = await prisma.image.create({
+      data: {
+        actor: {
+          connect: {
+            id: actor.id,
+          },
+        },
+      },
+    });
+
+    await prisma.imageSignal.create({
+      data: {
+        image: {
+          connect: {
+            id: image.id,
+          },
+        },
+        signal: {
+          connect: {
+            id: spec.name.id,
+          },
+        },
+        type: "SPEC_NAME",
+      },
+    });
+
+    await prisma.imageSignal.create({
+      data: {
+        image: {
+          connect: {
+            id: image.id,
+          },
+        },
+        signal: {
+          connect: {
+            id: spec.description.id,
+          },
+        },
+        type: "SPEC_DESCRIPTION",
+      },
+    });
+
+    await Promise.all(
+      spec.inputs.map((input) => {
+        return prisma.imageSignal.create({
+          data: {
+            image: {
+              connect: {
+                id: image.id,
+              },
+            },
+            signal: {
+              connect: {
+                id: input.id,
+              },
+            },
+            type: "SPEC_INPUT",
+          },
+        });
+      }),
+    );
+
+    await Promise.all(
+      spec.outputs.map((output) => {
+        return prisma.imageSignal.create({
+          data: {
+            image: {
+              connect: {
+                id: image.id,
+              },
+            },
+            signal: {
+              connect: {
+                id: output.id,
+              },
+            },
+            type: "SPEC_OUTPUT",
+          },
+        });
+      }),
+    );
+
+    await Promise.all(
+      spec.constraints.map((constraint) => {
+        return prisma.imageSignal.create({
+          data: {
+            image: {
+              connect: {
+                id: image.id,
+              },
+            },
+            signal: {
+              connect: {
+                id: constraint.id,
+              },
+            },
+            type: "SPEC_CONSTRAINT",
+          },
+        });
+      }),
+    );
+
+    await prisma.imageSignal.create({
+      data: {
+        image: {
+          connect: {
+            id: image.id,
+          },
+        },
+        signal: {
+          connect: {
+            id: feedbackLog.id,
+          },
+        },
+        type: "FEEDBACK",
+      },
+    });
+
+    await Promise.all(
+      inputs.map((input) => {
+        return prisma.imageSignal.create({
+          data: {
+            image: {
+              connect: {
+                id: image.id,
+              },
+            },
+            signal: {
+              connect: {
+                id: input[0].id,
+              },
+            },
+            type: "INPUT",
+          },
+        });
+      }),
+    );
+
+    await prisma.imageSignal.create({
+      data: {
+        image: {
+          connect: {
+            id: image.id,
+          },
+        },
+        signal: {
+          create: {
+          
 
   const history = async () => {
     return prisma.image.findMany({
@@ -316,4 +539,17 @@ export const getActor = async ({ id }: { id: string }) => {
     call,
     history,
   };
+};
+
+const computePrompt = (args: {
+  spec: {
+    name: string;
+    description: string;
+    inputs: string[];
+    outputs: string[];
+    constraints: string[];
+  };
+  inputs: string[];
+}) => {
+  return "";
 };

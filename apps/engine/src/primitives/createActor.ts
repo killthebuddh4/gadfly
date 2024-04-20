@@ -13,8 +13,6 @@ export const createActor = async ({
   outputs: string[];
   constraints: string[];
 }) => {
-  console.log(prisma.actor.create);
-
   const actor = await prisma.actor.create({ data: {} });
 
   const specNameLog = await prisma.log.create({
@@ -311,6 +309,7 @@ export const createActor = async ({
     );
 
     return {
+      id: actor.id,
       name: nameSpec[0],
       description: descriptionSpec[0],
       inputs: inputsSpecs.map((input) => input[0]),
