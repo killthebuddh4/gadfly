@@ -1,8 +1,9 @@
-import { Address } from "./Address.js";
+import { Log } from "./Log.js";
 
 export type Signal = {
   id: string;
-  log: Address;
+  log: Log;
+  index: number;
   stimuli: Signal[];
   text: string;
 };

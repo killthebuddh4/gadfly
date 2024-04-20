@@ -1,8 +1,9 @@
-import { Address } from "./Address.js";
 import { Signal } from "./Signal.js";
 
 export type Log = {
-  address: Address;
+  id: string;
+  description: string;
+
   signals: Signal[];
 
   read: () => Promise<Signal[]>;

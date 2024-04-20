@@ -2,6 +2,8 @@ import { Log } from "../memory/Log.js";
 import { Signal } from "../memory/Signal.js";
 
 export type Actor = {
+  id: string;
+
   spec: {
     name: Log;
     description: Log;

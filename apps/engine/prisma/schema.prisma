@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("GADFLY_SUPABASE_URL")
+}
+
+model Log {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  description String
+  signals     Signal[]
+}
+
+model Signal {
+  id        String           @id @default(uuid())
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  log       Log              @relation(fields: [logId], references: [id])
+  logId     String
+  index     Int
+  text      String
+  stimuli   StimulusSignal[]
+  specs     SpecSignal[]
+  images    ImageSignal[]
+
+  @@unique([logId, index])
+}
+
+model StimulusSignal {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  signal    Signal   @relation(fields: [signalId], references: [id])
+  signalId  String
+}
+
+model SpecSignal {
+  id                String   @id @default(uuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  signal            Signal   @relation(fields: [signalId], references: [id])
+  signalId          String
+  nameSpec          Spec     @relation("name_spec_id", fields: [nameSpecId], references: [id])
+  nameSpecId        String   @unique
+  descriptionSpec   Spec     @relation("description_spec_id", fields: [descriptionSpecId], references: [id])
+  descriptionSpecId String   @unique
+  inputsSpec        Spec     @relation("inputs_spec_id", fields: [inputsSpecId], references: [id])
+  inputsSpecId      String
+  outputsSpec       Spec     @relation("outputs_spec_id", fields: [outputsSpecId], references: [id])
+  outputsSpecId     String   @unique
+  constraintsSpec   Spec     @relation("constraints_spec_id", fields: [constraintsSpecId], references: [id])
+  constraintsSpecId String
+}
+
+model ImageSignal {
+  id              String   @id @default(uuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  signal          Signal?  @relation(fields: [signalId], references: [id])
+  signalId        String?
+  inputImage      Image    @relation("image_signal_input", fields: [inputImageId], references: [id])
+  inputImageId    String
+  outputImage     Image    @relation("image_signal_output", fields: [outputImageId], references: [id])
+  outputImageId   String
+  feedbackImage   Image    @relation("image_signal_feedback", fields: [feedbackImageId], references: [id])
+  feedbackImageId String
+}
+
+model Spec {
+  id          String       @id @default(uuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  name        SpecSignal[] @relation("name_spec_id")
+  description SpecSignal[] @relation("description_spec_id")
+  inputs      SpecSignal[] @relation("inputs_spec_id")
+  outputs     SpecSignal[] @relation("outputs_spec_id")
+  constraints SpecSignal[] @relation("constraints_spec_id")
+  images      Image[]
+}
+
+model Image {
+  id        String        @id @default(uuid())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  spec      Spec          @relation(fields: [specId], references: [id])
+  specId    String
+  inputs    ImageSignal[] @relation("image_signal_input")
+  output    ImageSignal[] @relation("image_signal_output")
+  feedback  ImageSignal[] @relation("image_signal_feedback")
+}

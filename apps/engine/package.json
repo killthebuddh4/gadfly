@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@dqbd/tiktoken": "^1.0.13",
+    "@prisma/client": "^5.12.1",
     "@repo/core": "*",
     "@supabase/supabase-js": "^2.39.8",
     "express": "^4.19.2",
@@ -36,6 +37,7 @@
     "mocha": "^10.2.0",
     "nodemon": "^3.0.1",
     "prettier": "^3.0.3",
+    "prisma": "^5.12.1",
     "typescript": "^5.2.2"
   }
 }
