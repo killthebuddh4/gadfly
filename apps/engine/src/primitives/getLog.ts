@@ -1,11 +1,13 @@
-import { Signal } from "../../primitives/network/Signal.js";
-import { Log } from "../../primitives/network/Log.js";
-import { prisma } from "../../lib/prisma.js";
+import { Signal } from "../protocol/network/Signal.js";
+import { Log } from "../protocol/network/Log.js";
+import { prisma } from "../lib/prisma.js";
 
-export const createLog = async (args: { description: string }) => {
-  const log = await prisma.log.create({
-    data: { description: args.description },
-  });
+export const getLog = async (args: { id: string }) => {
+  const log = await prisma.log.findUnique({ where: { id: args.id } });
+
+  if (log === null) {
+    throw new Error(`Log not found: ${args.id}`);
+  }
 
   const id = async () => {
     return log.id;

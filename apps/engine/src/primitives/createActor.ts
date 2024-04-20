@@ -1,4 +1,4 @@
-import { prisma } from "../../lib/prisma.js";
+import { prisma } from "../lib/prisma.js";
 
 export const createActor = async ({
   name,
@@ -27,7 +27,7 @@ export const createActor = async ({
           description: name,
         },
       },
-      type: "name",
+      type: "SPEC_NAME",
     },
   });
 
@@ -43,7 +43,7 @@ export const createActor = async ({
           description,
         },
       },
-      type: "description",
+      type: "SPEC_DESCRIPTION",
     },
   });
 
@@ -61,7 +61,7 @@ export const createActor = async ({
               description: input,
             },
           },
-          type: "input",
+          type: "SPEC_INPUT",
         },
       });
     }),
@@ -81,7 +81,7 @@ export const createActor = async ({
               description: output,
             },
           },
-          type: "output",
+          type: "SPEC_OUTPUT",
         },
       });
     }),
@@ -101,7 +101,7 @@ export const createActor = async ({
               description: constraint,
             },
           },
-          type: "constraint",
+          type: "SPEC_CONSTRAINT",
         },
       });
     }),
@@ -121,7 +121,7 @@ export const createActor = async ({
               description: input,
             },
           },
-          type: "input",
+          type: "INPUT",
         },
       });
     }),
@@ -141,7 +141,7 @@ export const createActor = async ({
               description: output,
             },
           },
-          type: "output",
+          type: "OUTPUT",
         },
       });
     }),
@@ -159,7 +159,7 @@ export const createActor = async ({
           description: "",
         },
       },
-      type: "feedback",
+      type: "FEEDBACK",
     },
   });
 
