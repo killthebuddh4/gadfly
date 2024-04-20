@@ -13,55 +13,57 @@ export const createActor = async ({
   outputs: string[];
   constraints: string[];
 }) => {
-  const actor = await prisma.actor.create({});
+  console.log(prisma.actor.create);
 
-  const specNameLog = await prisma.actorLog.create({
+  const actor = await prisma.actor.create({ data: {} });
+
+  const specNameLog = await prisma.log.create({
     data: {
-      actor: {
-        connect: {
-          id: actor.id,
-        },
-      },
-      log: {
+      description: "spec name",
+      actors: {
         create: {
-          description: name,
-        },
-      },
-      type: "SPEC_NAME",
-    },
-  });
-
-  const specDescriptionLog = await prisma.actorLog.create({
-    data: {
-      actor: {
-        connect: {
-          id: actor.id,
-        },
-      },
-      log: {
-        create: {
-          description,
-        },
-      },
-      type: "SPEC_DESCRIPTION",
-    },
-  });
-
-  const specInputsLogs = await Promise.all(
-    inputs.map((input) => {
-      return prisma.actorLog.create({
-        data: {
           actor: {
             connect: {
               id: actor.id,
             },
           },
-          log: {
-            create: {
-              description: input,
+          type: "SPEC_NAME",
+        },
+      },
+    },
+  });
+
+  const specDescriptionLog = await prisma.log.create({
+    data: {
+      description: "spec description",
+      actors: {
+        create: {
+          actor: {
+            connect: {
+              id: actor.id,
             },
           },
-          type: "SPEC_INPUT",
+          type: "SPEC_DESCRIPTION",
+        },
+      },
+    },
+  });
+
+  const specInputsLogs = await Promise.all(
+    inputs.map((input) => {
+      return prisma.log.create({
+        data: {
+          description: "spec input",
+          actors: {
+            create: {
+              actor: {
+                connect: {
+                  id: actor.id,
+                },
+              },
+              type: "SPEC_INPUT",
+            },
+          },
         },
       });
     }),
@@ -69,19 +71,19 @@ export const createActor = async ({
 
   const specOutputsLogs = await Promise.all(
     outputs.map((output) => {
-      return prisma.actorLog.create({
+      return prisma.log.create({
         data: {
-          actor: {
-            connect: {
-              id: actor.id,
-            },
-          },
-          log: {
+          description: "spec output",
+          actors: {
             create: {
-              description: output,
+              actor: {
+                connect: {
+                  id: actor.id,
+                },
+              },
+              type: "SPEC_OUTPUT",
             },
           },
-          type: "SPEC_OUTPUT",
         },
       });
     }),
@@ -89,19 +91,86 @@ export const createActor = async ({
 
   const specConstraintsLogs = await Promise.all(
     constraints.map((constraint) => {
-      return prisma.actorLog.create({
+      return prisma.log.create({
         data: {
-          actor: {
-            connect: {
-              id: actor.id,
-            },
-          },
-          log: {
+          description: "spec constraint",
+          actors: {
             create: {
-              description: constraint,
+              actor: {
+                connect: {
+                  id: actor.id,
+                },
+              },
+              type: "SPEC_CONSTRAINT",
             },
           },
-          type: "SPEC_CONSTRAINT",
+        },
+      });
+    }),
+  );
+
+  await prisma.signal.create({
+    data: {
+      log: {
+        connect: {
+          id: specNameLog.id,
+        },
+      },
+      text: name,
+    },
+  });
+
+  await prisma.signal.create({
+    data: {
+      log: {
+        connect: {
+          id: specDescriptionLog.id,
+        },
+      },
+      text: description,
+    },
+  });
+
+  await Promise.all(
+    inputs.map(async (input, index) => {
+      await prisma.signal.create({
+        data: {
+          log: {
+            connect: {
+              id: specInputsLogs[index].id,
+            },
+          },
+          text: input,
+        },
+      });
+    }),
+  );
+
+  await Promise.all(
+    outputs.map(async (output, index) => {
+      await prisma.signal.create({
+        data: {
+          log: {
+            connect: {
+              id: specOutputsLogs[index].id,
+            },
+          },
+          text: output,
+        },
+      });
+    }),
+  );
+
+  await Promise.all(
+    constraints.map(async (constraint, index) => {
+      await prisma.signal.create({
+        data: {
+          log: {
+            connect: {
+              id: specConstraintsLogs[index].id,
+            },
+          },
+          text: constraint,
         },
       });
     }),
@@ -109,19 +178,19 @@ export const createActor = async ({
 
   const inputsLogs = await Promise.all(
     inputs.map(async (input) => {
-      return prisma.actorLog.create({
+      return prisma.log.create({
         data: {
-          actor: {
-            connect: {
-              id: actor.id,
-            },
-          },
-          log: {
+          description: "input",
+          actors: {
             create: {
-              description: input,
+              actor: {
+                connect: {
+                  id: actor.id,
+                },
+              },
+              type: "INPUT",
             },
           },
-          type: "INPUT",
         },
       });
     }),
@@ -129,37 +198,37 @@ export const createActor = async ({
 
   const outputsLogs = await Promise.all(
     outputs.map(async (output) => {
-      return prisma.actorLog.create({
+      return prisma.log.create({
         data: {
-          actor: {
-            connect: {
-              id: actor.id,
-            },
-          },
-          log: {
+          description: "output",
+          actors: {
             create: {
-              description: output,
+              actor: {
+                connect: {
+                  id: actor.id,
+                },
+              },
+              type: "OUTPUT",
             },
           },
-          type: "OUTPUT",
         },
       });
     }),
   );
 
-  const feedbackLog = await prisma.actorLog.create({
+  const feedbackLog = await prisma.log.create({
     data: {
-      actor: {
-        connect: {
-          id: actor.id,
-        },
-      },
-      log: {
+      description: "feedback",
+      actors: {
         create: {
-          description: "",
+          actor: {
+            connect: {
+              id: actor.id,
+            },
+          },
+          type: "FEEDBACK",
         },
       },
-      type: "FEEDBACK",
     },
   });
 

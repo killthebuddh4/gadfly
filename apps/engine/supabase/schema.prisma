@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("GADFLY_SUPABASE_URL")
+  url      = env("SUPABASE_URL")
 }
 
 model Log {
@@ -22,9 +22,9 @@ model AttachedLog {
   id            String   @id @default(uuid())
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  source_log    Log      @relation("source_logs", fields: [source_log_id], references: [id])
+  source_log    Log      @relation("source_logs", fields: [source_log_id], references: [id], onDelete: Cascade)
   source_log_id String
-  sink_log      Log      @relation("sink_logs", fields: [sink_log_id], references: [id])
+  sink_log      Log      @relation("sink_logs", fields: [sink_log_id], references: [id], onDelete: Cascade)
   sink_log_id   String
 }
 
@@ -32,7 +32,7 @@ model Signal {
   id        String        @id @default(uuid())
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
-  log       Log           @relation(fields: [log_id], references: [id])
+  log       Log           @relation(fields: [log_id], references: [id], onDelete: Cascade)
   log_id    String
   index     Int?          @default(autoincrement())
   text      String
@@ -43,9 +43,9 @@ model ActorLog {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  actor     Actor    @relation(fields: [actor_id], references: [id])
+  actor     Actor    @relation(fields: [actor_id], references: [id], onDelete: Cascade)
   actor_id  String
-  log       Log      @relation(fields: [log_id], references: [id])
+  log       Log      @relation(fields: [log_id], references: [id], onDelete: Cascade)
   log_id    String
   type      String
 }
@@ -60,9 +60,9 @@ model ImageSignal {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  signal    Signal   @relation(fields: [signal_id], references: [id])
+  signal    Signal   @relation(fields: [signal_id], references: [id], onDelete: Cascade)
   signal_id String
-  image     Image    @relation(fields: [image_id], references: [id])
+  image     Image    @relation(fields: [image_id], references: [id], onDelete: Cascade)
   image_id  String
   type      String
 }
@@ -71,7 +71,7 @@ model Image {
   id        String        @id @default(uuid())
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
-  actor     Actor         @relation(fields: [actor_id], references: [id])
+  actor     Actor         @relation(fields: [actor_id], references: [id], onDelete: Cascade)
   actor_id  String
   signals   ImageSignal[]
 }
