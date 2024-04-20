@@ -1,126 +1,375 @@
-import { createLog } from "./createLog.js";
-import { Network } from "../../primitives/network/Network.js";
-import { Actor } from "../../primitives/actor/Actor.js";
-import { v4 as uuid } from "uuid";
-import { parseSestina } from "./parser/parseSestina.js";
-import { getMostRecentSignal } from "../../primitives/helpers/getMostRecentSignal.js";
-import { Signal } from "../../primitives/network/Signal.js";
+import { prisma } from "../../lib/prisma.js";
 
-export const createAnalyticActor = async ({
-  network,
-  spec,
+export const createActor = async ({
+  name,
+  description,
   inputs,
-  output,
-  feedback,
-  history,
+  outputs,
+  constraints,
 }: {
-  network: Network;
-  spec: Actor["spec"];
-  inputs: Actor["inputs"];
-  output: Actor["output"];
-  feedback: Actor["feedback"];
-  history: Actor["history"];
+  name: string;
+  description: string;
+  inputs: string[];
+  outputs: string[];
+  constraints: string[];
 }) => {
-  const describe: Actor["describe"] = async () => {
-    const name = getMostRecentSignal({ log: spec.name });
+  const actor = await prisma.actor.create({});
 
-    if (name === null) {
-      return null;
-    }
-    const description = getMostRecentSignal({ log: spec.description });
+  const specNameLog = await prisma.actorLog.create({
+    data: {
+      actor: {
+        connect: {
+          id: actor.id,
+        },
+      },
+      log: {
+        create: {
+          description: name,
+        },
+      },
+      type: "name",
+    },
+  });
 
-    if (description === null) {
-      return null;
-    }
+  const specDescriptionLog = await prisma.actorLog.create({
+    data: {
+      actor: {
+        connect: {
+          id: actor.id,
+        },
+      },
+      log: {
+        create: {
+          description,
+        },
+      },
+      type: "description",
+    },
+  });
 
-    const inputs = spec.inputs.map((input) => {
-      return getMostRecentSignal({ log: input });
+  const specInputsLogs = await Promise.all(
+    inputs.map((input) => {
+      return prisma.actorLog.create({
+        data: {
+          actor: {
+            connect: {
+              id: actor.id,
+            },
+          },
+          log: {
+            create: {
+              description: input,
+            },
+          },
+          type: "input",
+        },
+      });
+    }),
+  );
+
+  const specOutputsLogs = await Promise.all(
+    outputs.map((output) => {
+      return prisma.actorLog.create({
+        data: {
+          actor: {
+            connect: {
+              id: actor.id,
+            },
+          },
+          log: {
+            create: {
+              description: output,
+            },
+          },
+          type: "output",
+        },
+      });
+    }),
+  );
+
+  const specConstraintsLogs = await Promise.all(
+    constraints.map((constraint) => {
+      return prisma.actorLog.create({
+        data: {
+          actor: {
+            connect: {
+              id: actor.id,
+            },
+          },
+          log: {
+            create: {
+              description: constraint,
+            },
+          },
+          type: "constraint",
+        },
+      });
+    }),
+  );
+
+  const inputsLogs = await Promise.all(
+    inputs.map(async (input) => {
+      return prisma.actorLog.create({
+        data: {
+          actor: {
+            connect: {
+              id: actor.id,
+            },
+          },
+          log: {
+            create: {
+              description: input,
+            },
+          },
+          type: "input",
+        },
+      });
+    }),
+  );
+
+  const outputsLogs = await Promise.all(
+    outputs.map(async (output) => {
+      return prisma.actorLog.create({
+        data: {
+          actor: {
+            connect: {
+              id: actor.id,
+            },
+          },
+          log: {
+            create: {
+              description: output,
+            },
+          },
+          type: "output",
+        },
+      });
+    }),
+  );
+
+  const feedbackLog = await prisma.actorLog.create({
+    data: {
+      actor: {
+        connect: {
+          id: actor.id,
+        },
+      },
+      log: {
+        create: {
+          description: "",
+        },
+      },
+      type: "feedback",
+    },
+  });
+
+  const describe = async () => {
+    const nameSpec = await prisma.signal.findMany({
+      where: {
+        log: {
+          id: specNameLog.id,
+        },
+      },
+      orderBy: {
+        index: "desc",
+      },
+      skip: 0,
+      take: 1,
     });
 
-    if (inputs.includes(null)) {
-      return null;
-    }
-
-    const output = getMostRecentSignal({ log: spec.output });
-
-    if (output === null) {
-      return null;
-    }
-
-    const constraints = spec.constraints.map((constraint) => {
-      return getMostRecentSignal({ log: constraint });
+    const descriptionSpec = await prisma.signal.findMany({
+      where: {
+        log: {
+          id: specDescriptionLog.id,
+        },
+      },
+      orderBy: {
+        index: "desc",
+      },
+      skip: 0,
+      take: 1,
     });
 
-    if (constraints.includes(null)) {
-      return null;
-    }
+    const inputsSpecs = await Promise.all(
+      specInputsLogs.map(async (inputLog) => {
+        return prisma.signal.findMany({
+          where: {
+            log: {
+              id: inputLog.id,
+            },
+          },
+          orderBy: {
+            index: "desc",
+          },
+          skip: 0,
+          take: 1,
+        });
+      }),
+    );
+
+    const outputsSpecs = await Promise.all(
+      specOutputsLogs.map(async (outputLog) => {
+        return prisma.signal.findMany({
+          where: {
+            log: {
+              id: outputLog.id,
+            },
+          },
+          orderBy: {
+            index: "desc",
+          },
+          skip: 0,
+          take: 1,
+        });
+      }),
+    );
+
+    const constraintsSpecs = await Promise.all(
+      specConstraintsLogs.map(async (constraintLog) => {
+        return prisma.signal.findMany({
+          where: {
+            log: {
+              id: constraintLog.id,
+            },
+          },
+          orderBy: {
+            index: "desc",
+          },
+          skip: 0,
+          take: 1,
+        });
+      }),
+    );
 
     return {
-      name,
-      description,
-      inputs: inputs as Signal[],
-      output,
-      constraints: constraints as Signal[],
+      name: nameSpec[0],
+      description: descriptionSpec[0],
+      inputs: inputsSpecs.map((input) => input[0]),
+      outputs: outputsSpecs.map((output) => output[0]),
+      constraints: constraintsSpecs.map((constraint) => constraint[0]),
     };
   };
 
-  const exec: Actor["exec"] = async (args) => {
-    if (args.spec.name !== undefined) {
-      await spec.name.append({ signal: args.spec.name });
+  const exec = async (
+    args: Partial<{
+      name: string;
+      description: string;
+      inputs: string[];
+      outputs: string[];
+      constraints: string[];
+    }>,
+  ) => {
+    if (args.name !== undefined) {
+      await prisma.signal.create({
+        data: {
+          log: {
+            connect: {
+              id: specNameLog.id,
+            },
+          },
+          text: args.name,
+        },
+      });
     }
 
-    if (args.spec.description !== undefined) {
-      await spec.description.append({ signal: args.spec.description });
+    if (args.description !== undefined) {
+      await prisma.signal.create({
+        data: {
+          log: {
+            connect: {
+              id: specDescriptionLog.id,
+            },
+          },
+          text: args.description,
+        },
+      });
     }
 
-    if (args.spec.inputs !== undefined) {
+    if (args.inputs !== undefined) {
       await Promise.all(
-        args.spec.inputs.map(async (input, i) => {
-          await spec.inputs[i].append({ signal: input });
+        args.inputs.map(async (input, index) => {
+          await prisma.signal.create({
+            data: {
+              log: {
+                connect: {
+                  id: specInputsLogs[index].id,
+                },
+              },
+              text: input,
+            },
+          });
         }),
       );
     }
 
-    if (args.spec.output !== undefined) {
-      await spec.output.append({ signal: args.spec.output });
+    if (args.outputs !== undefined) {
+      await Promise.all(
+        args.outputs.map(async (output, index) => {
+          await prisma.signal.create({
+            data: {
+              log: {
+                connect: {
+                  id: specOutputsLogs[index].id,
+                },
+              },
+              text: output,
+            },
+          });
+        }),
+      );
     }
 
-    if (args.spec.constraints !== undefined) {
+    if (args.constraints !== undefined) {
       await Promise.all(
-        args.spec.constraints.map(async (constraint, i) => {
-          await spec.constraints[i].append({ signal: constraint });
+        args.constraints.map(async (constraint, index) => {
+          await prisma.signal.create({
+            data: {
+              log: {
+                connect: {
+                  id: specConstraintsLogs[index].id,
+                },
+              },
+              text: constraint,
+            },
+          });
         }),
       );
     }
   };
 
-  const patch: Actor["patch"] = async (args) => {
-    await feedback.append({ signal: args.feedback });
+  const patch = async (args: { feedback: string }) => {
+    await prisma.signal.create({
+      data: {
+        log: {
+          connect: {
+            id: feedbackLog.id,
+          },
+        },
+        text: args.feedback,
+      },
+    });
   };
 
-  const call: Actor["call"] = async (args) => {
-    return { output: args.inputs[0] };
+  const call = async (args: { inputs: string[] }) => {
+    return { id: "NOT YET IMPLEMENTED" };
   };
 
-  const actor = {
-    spec,
-    inputs,
-    output,
-    feedback,
-    history,
+  const history = async () => {
+    return prisma.image.findMany({
+      where: {
+        actor: {
+          id: actor.id,
+        },
+      },
+    });
+  };
+
+  return {
+    id: async () => actor.id,
     describe,
     exec,
     patch,
     call,
+    history,
   };
-
-  const found = network.actors.find(
-    (n) => n.output.address.address === output.address.address,
-  );
-
-  if (found === undefined) {
-    await network.attach.actor({ actor });
-  }
-
-  return actor;
 };

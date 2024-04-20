@@ -1,81 +1,87 @@
-import { Address } from "../../primitives/network/Address.js";
-import { Network } from "../../primitives/network/Network.js";
-import { Log } from "../../primitives/network/Log.js";
 import { Signal } from "../../primitives/network/Signal.js";
+import { Log } from "../../primitives/network/Log.js";
+import { prisma } from "../../lib/prisma.js";
 
-export const createLog = async ({
-  address,
-  network,
-  signals,
-}: {
-  address: Address;
-  network: Network;
-  signals: Signal[];
-}): Promise<Log> => {
-  const attached: Log[] = [];
+export const createLog = async (args: { description: string }) => {
+  const log = await prisma.log.create({
+    data: { description: args.description },
+  });
 
-  const read = async () => {
-    return signals;
+  const id = async () => {
+    return log.id;
   };
 
-  const append = async ({ signal }: { signal: Signal }) => {
-    network.publish({ signal });
-
-    signals.push(signal);
-
-    for (const log of attached) {
-      await log.append({ signal });
-    }
+  const description = async () => {
+    return log.description;
   };
 
-  const attach = async ({ log }: { log: Log }) => {
-    const foundInNetwork = network.logs.find(
-      (networkLog) => networkLog.address.address === log.address.address,
-    );
+  const attached = async () => {
+    return prisma.attachedLog.findMany({
+      where: { source_log: { id: log.id } },
+    });
+  };
 
-    if (foundInNetwork === undefined) {
-      throw new Error(`Log ${log.address.address} not in network`);
-    }
-
-    const found = attached.find(
-      (attached) => attached.address.address === log.address.address,
-    );
-
-    if (found !== undefined) {
-      throw new Error(`Log ${log.address.address} already attached`);
-    }
-
-    console.log(
-      `Attaching log ${log.address.address} to log ${address.address}`,
-    );
-
-    attached.push(log);
+  const attach = async (args: { log: Log }) => {
+    const attachedLog = await prisma.attachedLog.create({
+      data: {
+        source_log: {
+          connect: {
+            id: log.id,
+          },
+        },
+        sink_log: {
+          connect: {
+            id: await args.log.id(),
+          },
+        },
+      },
+    });
 
     return {
       detach: async () => {
-        const index = attached.findIndex(
-          (attached) => attached.address.address === log.address.address,
-        );
-
-        if (index === -1) {
-          throw new Error(`Log ${log.address.address} not attached`);
-        }
-
-        attached.splice(index, 1);
+        await prisma.attachedLog.delete({ where: { id: attachedLog.id } });
       },
     };
   };
 
-  const log = {
-    address,
-    signals,
-    attached,
-    read,
-    append,
-    attach,
+  const read = async () => {
+    return prisma.signal.findMany({ where: { log: { id: log.id } } });
   };
 
-  network.attach.log({ log });
+  const append = async (args: { text: string }) => {
+    await prisma.signal.create({
+      data: {
+        log: {
+          connect: {
+            id: log.id,
+          },
+        },
+        text: args.text,
+      },
+    });
 
-  return log;
+    const sinks = await attached();
+
+    for (const sink of sinks) {
+      await prisma.signal.create({
+        data: {
+          log: {
+            connect: {
+              id: sink.sink_log_id,
+            },
+          },
+          text: args.text,
+        },
+      });
+    }
+  };
+
+  return {
+    id,
+    description,
+    read,
+    append,
+    attached,
+    attach,
+  };
 };

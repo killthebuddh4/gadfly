@@ -8,34 +8,70 @@ datasource db {
 }
 
 model Log {
-  id          String   @id @default(uuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id          String        @id @default(uuid())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
   description String
   signals     Signal[]
+  actors      ActorLog[]
+  sources     AttachedLog[] @relation("source_logs")
+  sinks       AttachedLog[] @relation("sink_logs")
+}
+
+model AttachedLog {
+  id            String   @id @default(uuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  source_log    Log      @relation("source_logs", fields: [source_log_id], references: [id])
+  source_log_id String
+  sink_log      Log      @relation("sink_logs", fields: [sink_log_id], references: [id])
+  sink_log_id   String
 }
 
 model Signal {
-  id        String           @id @default(uuid())
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-  log       Log              @relation(fields: [logId], references: [id])
-  logId     String
-  index     Int
+  id        String        @id @default(uuid())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  log       Log           @relation(fields: [log_id], references: [id])
+  log_id    String
+  index     Int?          @default(autoincrement())
   text      String
-  stimuli   StimulusSignal[]
-
-  @@unique([logId, index])
+  images    ImageSignal[]
 }
 
-model StimulusSignal {
+model ActorLog {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  signal    Signal   @relation(fields: [signalId], references: [id])
-  signalId  String
+  actor     Actor    @relation(fields: [actor_id], references: [id])
+  actor_id  String
+  log       Log      @relation(fields: [log_id], references: [id])
+  log_id    String
+  type      String
 }
 
 model Actor {
-  id String @id @default(uuid())
+  id      String     @id @default(uuid())
+  logs    ActorLog[]
+  history Image[]
+}
+
+model ImageSignal {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  signal    Signal   @relation(fields: [signal_id], references: [id])
+  signal_id String
+  image     Image    @relation(fields: [image_id], references: [id])
+  image_id  String
+  type      String
+}
+
+model Image {
+  id        String        @id @default(uuid())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  actor     Actor         @relation(fields: [actor_id], references: [id])
+  actor_id  String
+  signals   ImageSignal[]
 }

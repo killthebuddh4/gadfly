@@ -8,12 +8,12 @@ export type Actor = {
     name: Log;
     description: Log;
     inputs: Log[];
-    output: Log;
+    outputs: Log;
     constraints: Log[];
   };
 
   inputs: Log[];
-  output: Log;
+  outputs: Log[];
   feedback: Log;
 
   history: Array<{
@@ -21,11 +21,11 @@ export type Actor = {
       name: Signal;
       description: Signal;
       inputs: Signal[];
-      output: Signal;
+      outputs: Signal[];
       constraints: Signal[];
     };
     inputs: Signal[];
-    output: Signal;
+    outputs: Signal[];
     feedback: Signal;
   }>;
 
@@ -49,5 +49,5 @@ export type Actor = {
 
   patch: (args: { feedback: Signal }) => Promise<void>;
 
-  call: (args: { inputs: Signal[] }) => Promise<{ output: Signal }>;
+  call: (args: { inputs: Signal[] }) => Promise<{ id: string }>;
 };
