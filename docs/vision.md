@@ -1,5 +1,8 @@
 # Gadfly
 
+Imagine a world where every person can deploy general purpose computing as easily as thinking.
+
+Imagine a world where every person can generate and interface with computer programs at the speed of thought. You think about an encoding or representation, think about the kinds of high-level information you want to know, and an AI running in the cloud generates and runs an implementation for you. It probably uses data from your phone or contacts or whatever, it can see and hear what you see and hear.
 
 
 The vision 
