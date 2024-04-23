@@ -441,3 +441,11 @@ export const createActor = async ({
     history,
   };
 };
+
+const f = (data: number[], compare: (a: number, b: number) => number) => {
+  return data.sort(compare);
+};
+
+("hey f i need a function that can do a bunch of stuff");
+
+("f says ok, here are the tools needed to do that stuff");
