@@ -1,4 +1,11 @@
-# Gadfly
+> This document describes our motivation, you should also check out our:
+>
+> - [seed deck]("https://www.canva.com/design/DAGCbH7Q9nw/cWEMoBESe1JUii0SxWhIRA/view?utm_content=DAGCbH7Q9nw&utm_campaign=designshare&utm_medium=link&utm_source=editor")
+> - [vision](./vision.md)
+> - [mission](./mission.md)
+> - [litepaper](./litepaper.md)
+
+# WIP
 
 Within 3 years every desk job with a median salary of less than $50K will be implementable by a computer program. Within 10 years, $100K. The source code for these programs will be written in your favorite general purpose programming language, but not by humans. Instead, they'll be compiled from natural language instructions and other high-level specifications. I call the compilers _system 2 compilers_. A system 2 compiler is a computer program which provides to neural networks the primitives they need in order to deliberate, plan, adapt, and generate effects.
 

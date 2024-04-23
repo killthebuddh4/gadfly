@@ -1,9 +1,15 @@
-# Gadfly
+> This paper describes our vision, you can also check out our:
+>
+> - [seed deck]("https://www.canva.com/design/DAGCbH7Q9nw/cWEMoBESe1JUii0SxWhIRA/view?utm_content=DAGCbH7Q9nw&utm_campaign=designshare&utm_medium=link&utm_source=editor")
+> - [mission](./mission.md)
+> - [motivation](./motivation.md)
+> - [litepaper](./litepaper.md)
 
-Imagine a world where every person can deploy general purpose computing as easily as thinking.
+# Gadfly
 
 Imagine a world where every person can generate and interface with computer programs at the speed of thought. You think about an encoding or representation, think about the kinds of high-level information you want to know, and an AI running in the cloud generates and runs an implementation for you. It probably uses data from your phone or contacts or whatever, it can see and hear what you see and hear.
 
+# Notes 
 
 The vision 
 

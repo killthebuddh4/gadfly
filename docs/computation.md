@@ -1,3 +1,5 @@
+# WIP
+
 Neural networks' fundamental output will be source code "written in" a general purpose programming language. The argument is from first principles and emerges from an idea called _computational irreducibility_.
 
 A computationally irreducible system is a system whose future state at time X + T can only be predicted by computing each state X, X + 1, ..., X + T - 1 according to a set of known transition rules. Such a system is fundamentally intractable, there's no way to compute final states without computing each intermediate state. Such a system affords no intelligent behavior, no way to make predictions. And the thing is, _every single system is computationally irreducible_. 

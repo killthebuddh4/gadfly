@@ -3,8 +3,8 @@ import Image from "next/image";
 const SEED_DECK_URL =
   "https://www.canva.com/design/DAGCbH7Q9nw/cWEMoBESe1JUii0SxWhIRA/view?utm_content=DAGCbH7Q9nw&utm_campaign=designshare&utm_medium=link&utm_source=editor";
 
-const LITEPAPER_URL =
-  "https://github.com/killthebuddh4/gadfly/blob/master/docs/litepaper.md";
+const DOCS_URL =
+  "https://github.com/killthebuddh4/gadfly/blob/master/docs/vision.md";
 
 export default function Home() {
   return (
@@ -27,8 +27,8 @@ export default function Home() {
         <a href={SEED_DECK_URL} className="deck">
           seed deck
         </a>
-        <a href={LITEPAPER_URL} className="deck">
-          litepaper
+        <a href={DOCS_URL} className="deck">
+          vision
         </a>
       </div>
     </main>
