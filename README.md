@@ -379,4 +379,26 @@ I need to first decide exactly what data needs to be written where on each of th
 SIDE NOTE: One thing I haven't thought much about in this iteration of the protocol is evolution/annealing: Where do map/filter/reduce operations fit into the current scheme?
 
 
+# Notes 2024-04-24
 
+What do you have to do when a bound variable widens?
+What do you have to do when a bound variable narrows?
+What do you have to do when a bound variable is written?
+What do you have to do when a bound variable's type widens?
+What do you have to do when a bound variable's type narrows?
+What do you have to do when a bound variable's type is written?
+What do you have to do when a free variable widens?
+What do you have to do when a free variable narrows?
+What do you have to do when a free variable is written?
+What do you have to do when a free variable's type widens?
+What do you have to do when a free variable's type narrows?
+What do you have to do when a free variable's type is written?
+What do you have to do when a context variable widens?
+What do you have to do when a context variable narrows?
+What do you have to do when a context variable is written?
+What do you have to do when a context variable's type widens?
+What do you have to do when a context variable's type narrows?
+What do you have to do when a context variable's type is written?
+What do you have to do when you get feedback on a bound variable?
+What do you have to do when you get feedback on a free variable?
+What do you have to do when you get feedback on a context variable?
