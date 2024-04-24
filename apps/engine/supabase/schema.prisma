@@ -26,18 +26,45 @@ model Variable {
   updatedAt DateTime    @updatedAt
   name      String
   history   Operation[]
-  actor     Actor       @relation(fields: [actor_id], references: [id], onDelete: Cascade)
-  actor_id  String
   role      String
+  input     Input?
+  output    Output?
+}
+
+model Input {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  variable    Variable @relation(fields: [variable_id], references: [id], onDelete: Cascade)
+  variable_id String   @unique
+  actor       Actor    @relation(fields: [actor_id], references: [id], onDelete: Cascade)
+  actor_id    String
+  type        String
+
+  @@unique([variable_id, actor_id])
+}
+
+model Output {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  variable    Variable @relation(fields: [variable_id], references: [id], onDelete: Cascade)
+  variable_id String   @unique
+  actor       Actor    @relation(fields: [actor_id], references: [id], onDelete: Cascade)
+  actor_id    String
+  type        String
+
+  @@unique([variable_id, actor_id])
 }
 
 model Actor {
-  id         String     @id @default(uuid())
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  variables  Variable[]
-  network    Network?   @relation(fields: [network_id], references: [id])
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  network    Network? @relation(fields: [network_id], references: [id])
   network_id String?
+  inputs     Input[]
+  outputs    Output[]
 }
 
 model Stimulus {
