@@ -1,6 +1,6 @@
 import { prisma } from "../lib/prisma.js";
 
-export const createNarrowing = async ({
+export const createNarrow = async ({
   variableId,
   mutation,
 }: {
@@ -64,9 +64,7 @@ export const createNarrowing = async ({
     throw new Error(`Head operation with id ${head.id} has null result`);
   }
 
-  const argument = head.result;
-
-  const operation = await prisma.operation.create({
+  return prisma.operation.create({
     data: {
       type: "narrow",
       variable: {
@@ -78,7 +76,7 @@ export const createNarrowing = async ({
         create: {
           value: {
             connect: {
-              id: argument.value.id,
+              id: head.result.value.id,
             },
           },
         },
@@ -98,7 +96,7 @@ export const createNarrowing = async ({
             create: {
               signals: {
                 create: [
-                  ...argument.value.signals.map(({ text }) => ({ text })),
+                  ...head.result.value.signals.map(({ text }) => ({ text })),
                   { text: mutation },
                 ],
               },
@@ -108,6 +106,4 @@ export const createNarrowing = async ({
       },
     },
   });
-
-  console.log(operation);
 };
