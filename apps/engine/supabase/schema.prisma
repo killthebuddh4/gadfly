@@ -4,20 +4,49 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("SUPABASE_URL")
+  url      = env("SUPABASE_CONN_STRING")
 }
 
 model Operation {
-  id          String   @id @default(uuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   type        String
-  signal      Signal   @relation(fields: [signal_id], references: [id], onDelete: Cascade)
-  signal_id   String   @unique
-  value       Value    @relation(fields: [value_id], references: [id], onDelete: Cascade)
-  value_id    String   @unique
-  variable    Variable @relation(fields: [variable_id], references: [id], onDelete: Cascade)
+  argument    Argument?
+  mutation    Mutation?
+  result      Result?
+  variable    Variable  @relation(fields: [variable_id], references: [id], onDelete: Cascade)
   variable_id String
+}
+
+model Mutation {
+  id           String    @id @default(uuid())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  operation    Operation @relation(fields: [operation_id], references: [id], onDelete: Cascade)
+  operation_id String    @unique
+  signal       Signal    @relation(fields: [signal_id], references: [id])
+  signal_id    String    @unique
+}
+
+model Argument {
+  id           String    @id @default(uuid())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  operation    Operation @relation(fields: [operation_id], references: [id], onDelete: Cascade)
+  operation_id String    @unique
+  value        Value     @relation(fields: [value_id], references: [id], onDelete: Cascade)
+  value_id     String
+}
+
+model Result {
+  id           String    @id @default(uuid())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  operation    Operation @relation(fields: [operation_id], references: [id], onDelete: Cascade)
+  operation_id String    @unique
+  value        Value     @relation(fields: [value_id], references: [id], onDelete: Cascade)
+  value_id     String
 }
 
 model Variable {
@@ -67,31 +96,24 @@ model Actor {
   outputs    Output[]
 }
 
-model Stimulus {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  signal    Signal   @relation(fields: [signal_id], references: [id], onDelete: Cascade)
-  signal_id String
-}
-
 model Signal {
-  id        String     @id @default(uuid())
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   text      String
-  stimuli   Stimulus[]
-  value     Value      @relation(fields: [value_id], references: [id], onDelete: Cascade)
-  value_id  String
-  operation Operation?
+  // A signal is always part of a value or it is a mutation.
+  value     Value?    @relation(fields: [value_id], references: [id], onDelete: Cascade)
+  value_id  String?
+  mutation  Mutation?
 }
 
 model Value {
-  id        String      @id @default(uuid())
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  id        String     @id @default(uuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   signals   Signal[]
-  Operation Operation[]
+  argument  Argument[]
+  result    Result[]
 }
 
 model Network {

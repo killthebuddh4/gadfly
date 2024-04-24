@@ -1,5 +1,5 @@
 describe("Gadfly", () => {
-  it.only("Create a summarizer", async function () {
+  it("Create a summarizer", async function () {
     const response = await fetch("http://localhost:9999/actor", {
       method: "POST",
       headers: {
@@ -31,7 +31,7 @@ A few decades ago we learned how to reify Idea, we discovered Meme, or Idea as V
 Sometimes I feel hopeless, but I always remember there's a way out. For a short time, a few millenia, we lived happily beneath Philosophy and Religion. In a world of sun and Sun, we toiled and worshipped and for the most part became more bold and more beautiful. I think we can still live this way, we can feel the tension of a hard day's labor under the eye of Idea. 
 `;
 
-  it.only("Call the summarizer", async function () {
+  it("Call the summarizer", async function () {
     const id = "";
     const response = await fetch(`http://localhost:9999/actor/${id}/call`, {
       method: "POST",

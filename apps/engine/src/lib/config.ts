@@ -6,7 +6,9 @@ const configSchema = zJsonString.pipe(
   z.object({
     OPENAI_API_KEY: z.string(),
     OPENAI_LOG_DIR: z.string(),
+    SUPABASE_CONN_STRING: z.string(),
     SUPABASE_URL: z.string(),
+    SUPABASE_KEY: z.string(),
   }),
 );
 
