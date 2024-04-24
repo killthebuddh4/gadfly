@@ -363,13 +363,20 @@ then you avoid the ambiguity. Does it make sense for us to try to avoid the ambi
 
 
 
+# Notes 2024-04-23
 
+An actor is basically completed defined by the behavior of a number of event handlers:
 
+- onParentChange
+- onChildFeedback
+- onFreeInputChange
+- onBoundInputChange
+- onBoundOutputFeedback
+- onFreeOutputFeedback
 
+I need to first decide exactly what data needs to be written where on each of those events. i.e. what is the protocol for each of those events. once i settle on something i need to create factory functions that allow us to implement specific behaviors.
 
-
-
-
+SIDE NOTE: One thing I haven't thought much about in this iteration of the protocol is evolution/annealing: Where do map/filter/reduce operations fit into the current scheme?
 
 
 
