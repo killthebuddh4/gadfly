@@ -381,24 +381,51 @@ SIDE NOTE: One thing I haven't thought much about in this iteration of the proto
 
 # Notes 2024-04-24
 
-What do you have to do when a bound variable widens?
-What do you have to do when a bound variable narrows?
-What do you have to do when a bound variable is written?
-What do you have to do when a bound variable's type widens?
-What do you have to do when a bound variable's type narrows?
-What do you have to do when a bound variable's type is written?
-What do you have to do when a free variable widens?
-What do you have to do when a free variable narrows?
-What do you have to do when a free variable is written?
-What do you have to do when a free variable's type widens?
-What do you have to do when a free variable's type narrows?
-What do you have to do when a free variable's type is written?
-What do you have to do when a context variable widens?
-What do you have to do when a context variable narrows?
-What do you have to do when a context variable is written?
-What do you have to do when a context variable's type widens?
-What do you have to do when a context variable's type narrows?
-What do you have to do when a context variable's type is written?
-What do you have to do when you get feedback on a bound variable?
-What do you have to do when you get feedback on a free variable?
-What do you have to do when you get feedback on a context variable?
+_What do you have to do when a bound variable widens?_
+
+This means that someone took something back, so you have to make sure it still works for you.
+
+_What do you have to do when a bound variable narrows?_
+
+if you're already working, then you don't need to do anything.
+
+but you should probably recompute.
+
+_What do you have to do when a bound variable is written?_
+
+Recompute everything.
+
+_What do you have to do when a bound variable's type widens?_
+
+check to see if the variable could theoretically go bad, make sure you listen to changes.
+
+_What do you have to do when a bound variable's type narrows?_
+
+if you're already working, nothing. otherwise, see if you work now.
+
+_What do you have to do when a bound variable's type is written?_
+
+Recompute everything.
+
+_What do you have to do when a free variable widens?_
+
+Recompute everything
+
+__WAIT, let's just recompute everything whenever an input changes for now__
+
+__WHAT ARE THE STATES AN ACTOR CAN BE IN????__
+
+_What do you have to do when a free variable narrows?_
+_What do you have to do when a free variable is written?_
+_What do you have to do when a free variable's type widens?_
+_What do you have to do when a free variable's type narrows?_
+_What do you have to do when a free variable's type is written?_
+_What do you have to do when a context variable widens?_
+_What do you have to do when a context variable narrows?_
+_What do you have to do when a context variable is written?_
+_What do you have to do when a context variable's type widens?_
+_What do you have to do when a context variable's type narrows?_
+_What do you have to do when a context variable's type is written?_
+_What do you have to do when you get feedback on a bound variable?_
+_What do you have to do when you get feedback on a free variable?_
+_What do you have to do when you get feedback on a context variable?_
