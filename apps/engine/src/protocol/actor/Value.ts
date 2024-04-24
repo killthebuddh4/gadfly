@@ -1,4 +1,4 @@
-import { Signal } from "../network/Signal.js";
+import { Signal } from "./Signal.js";
 
 export type Value = {
   id: () => Promise<string>;

@@ -1,4 +1,4 @@
-import { Signal } from "./Signal.js";
+import { Signal } from "../actor/Signal.js";
 
 export type Log = {
   id: () => Promise<string>;

@@ -32,10 +32,12 @@ model Variable {
 }
 
 model Actor {
-  id        String     @id @default(uuid())
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  variables Variable[]
+  id         String     @id @default(uuid())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  variables  Variable[]
+  network    Network?   @relation(fields: [network_id], references: [id])
+  network_id String?
 }
 
 model Stimulus {
@@ -63,4 +65,12 @@ model Value {
   updatedAt DateTime    @updatedAt
   signals   Signal[]
   Operation Operation[]
+}
+
+model Network {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  actors    Actor[]
 }

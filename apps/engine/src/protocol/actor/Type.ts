@@ -1,4 +1,4 @@
-import { Signal } from "../network/Signal.js";
+import { Signal } from "./Signal.js";
 import { Value } from "./Value.js";
 import { Operation } from "./Operation.js";
 
