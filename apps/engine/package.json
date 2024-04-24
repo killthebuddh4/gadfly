@@ -5,7 +5,7 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "dev": "concurrently \"npm run build:watch\" \"nodemon build/server/server.js\"",
+    "dev": "rm -rf build/ && concurrently \"npm run build:watch\" \"nodemon build/server/server.js\"",
     "test": "mocha build/**/*.test.js",
     "lint": "eslint .",
     "format": "prettier --check .",

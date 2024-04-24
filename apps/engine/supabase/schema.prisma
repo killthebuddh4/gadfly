@@ -15,8 +15,8 @@ model Operation {
   argument    Argument?
   mutation    Mutation?
   result      Result?
-  variable    Variable  @relation(fields: [variable_id], references: [id], onDelete: Cascade)
-  variable_id String
+  sequence    Sequence  @relation(fields: [sequence_id], references: [id], onDelete: Cascade)
+  sequence_id String
 }
 
 model Mutation {
@@ -50,14 +50,36 @@ model Result {
 }
 
 model Variable {
+  id          String   @id @default(uuid())
+  name        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  sequence    Sequence @relation(fields: [sequence_id], references: [id], onDelete: Cascade)
+  sequence_id String
+  variant     String?
+  input       Input?
+  output      Output?
+  type        Type     @relation(fields: [type_id], references: [id], onDelete: Cascade)
+  type_id     String
+}
+
+model Type {
+  id          String     @id @default(uuid())
+  name        String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  sequence    Sequence   @relation(fields: [sequence_id], references: [id], onDelete: Cascade)
+  sequence_id String
+  variables   Variable[]
+}
+
+model Sequence {
   id        String      @id @default(uuid())
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
-  name      String
   history   Operation[]
-  role      String
-  input     Input?
-  output    Output?
+  variables Variable[]
+  types     Type[]
 }
 
 model Input {
@@ -68,7 +90,6 @@ model Input {
   variable_id String   @unique
   actor       Actor    @relation(fields: [actor_id], references: [id], onDelete: Cascade)
   actor_id    String
-  type        String
 
   @@unique([variable_id, actor_id])
 }
@@ -81,7 +102,6 @@ model Output {
   variable_id String   @unique
   actor       Actor    @relation(fields: [actor_id], references: [id], onDelete: Cascade)
   actor_id    String
-  type        String
 
   @@unique([variable_id, actor_id])
 }

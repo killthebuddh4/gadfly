@@ -1,10 +1,10 @@
 import { prisma } from "../lib/prisma.js";
 
 export const createWrite = async ({
-  variableId,
+  sequenceId,
   mutation,
 }: {
-  variableId: string;
+  sequenceId: string;
   mutation: string;
 }) => {
   return prisma.operation.create({
@@ -38,9 +38,9 @@ export const createWrite = async ({
         },
       },
 
-      variable: {
+      sequence: {
         connect: {
-          id: variableId,
+          id: sequenceId,
         },
       },
     },

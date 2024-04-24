@@ -1,18 +1,18 @@
 import { prisma } from "../lib/prisma.js";
 
 export const createFeedback = async ({
-  variableId,
+  sequenceId,
   mutation,
 }: {
-  variableId: string;
+  sequenceId: string;
   mutation: string;
 }) => {
-  const variable = await prisma.variable.findUnique({
-    where: { id: variableId },
+  const sequence = await prisma.sequence.findUnique({
+    where: { id: sequenceId },
   });
 
-  if (variable === null) {
-    throw new Error(`Variable with id ${variableId} not found`);
+  if (sequence === null) {
+    throw new Error(`Variable with id ${sequenceId} not found`);
   }
 
   // Get the operations where the result has not been used as an argument.
@@ -31,8 +31,8 @@ export const createFeedback = async ({
       },
     },
     where: {
-      variable: {
-        id: variableId,
+      sequence: {
+        id: sequenceId,
       },
       result: {
         value: {
@@ -46,13 +46,13 @@ export const createFeedback = async ({
 
   if (heads.length === 0) {
     throw new Error(
-      `No head operation found for variable with id ${variableId}`,
+      `No head operation found for sequence with id ${sequenceId}`,
     );
   }
 
   if (heads.length > 1) {
     throw new Error(
-      `More than one head found for variable with id ${variableId}`,
+      `More than one head found for sequence with id ${sequenceId}`,
     );
   }
 
@@ -67,9 +67,9 @@ export const createFeedback = async ({
   return prisma.operation.create({
     data: {
       type: "feedback",
-      variable: {
+      sequence: {
         connect: {
-          id: variableId,
+          id: sequenceId,
         },
       },
       argument: {
