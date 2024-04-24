@@ -1,16 +1,16 @@
 import { Variable } from "./Variable.js";
 
 export type Actor = {
-  parent: Variable | null;
-  children: Variable[];
+  parent: () => Promise<Variable | null>;
+  children: () => Promise<Variable[]>;
 
   inputs: {
-    bound: Variable[];
-    free: Variable[];
+    bound: () => Promise<Variable[]>;
+    free: () => Promise<Variable[]>;
   };
 
   outputs: {
-    bound: Variable[];
-    free: Variable[];
+    bound: () => Promise<Variable[]>;
+    free: () => Promise<Variable[]>;
   };
 };

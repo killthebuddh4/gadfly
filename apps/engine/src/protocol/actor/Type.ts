@@ -11,4 +11,5 @@ export type Type = {
   write: (args: { value: Value }) => Promise<void>;
   widen: (args: { signal: Signal }) => Promise<void>;
   narrow: (args: { signal: Signal }) => Promise<void>;
+  feedback: (args: { signal: Signal }) => Promise<void>;
 };
