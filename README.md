@@ -429,3 +429,16 @@ _What do you have to do when a context variable's type is written?_
 _What do you have to do when you get feedback on a bound variable?_
 _What do you have to do when you get feedback on a free variable?_
 _What do you have to do when you get feedback on a context variable?_
+
+__What is the actor lifecycle__
+
+
+So there's more than just variables. There's something like "controls", control sequences.
+
+An Actor might be an Expression.
+
+An Expression is something that is, you know declarative. It's something that is supposed to "make sense" eventually. The expression is responsible for wiggling into correctness space.
+
+Expressions respond to changes in variables, but what is responsible for creating and removing variables?
+
+I think an Actor is actually this think that oversees the expression lifecycle. I need to think about this a little bit more.
