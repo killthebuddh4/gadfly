@@ -442,3 +442,7 @@ An Expression is something that is, you know declarative. It's something that is
 Expressions respond to changes in variables, but what is responsible for creating and removing variables?
 
 I think an Actor is actually this think that oversees the expression lifecycle. I need to think about this a little bit more.
+
+
+addBoundVariable
+addFreeVariable

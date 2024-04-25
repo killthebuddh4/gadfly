@@ -19,7 +19,7 @@ export default function Home() {
       <h1>gadfly</h1>
       <h2>a system 2 compiler for language models</h2>
       <nav>
-        <a href="https://github.com/killthebuddh4">github</a>
+        <a href="https://github.com/killthebuddh4/gadfly">github</a>
         <a href="https://twitter.com/killthebuddha_">twitter</a>
         <a href="https://discord.gg/Ad5szmQWhS">discord</a>
       </nav>
