@@ -7,8 +7,6 @@ _2024-04-14 -- I might be ready to make this a real thing, I [made a (wip) deck]
 
 __Gadfly__ is an AI agent framework. It's core is a natural language compiler, programming language, and orchestration engine. A Gadfly agent satisfies natural language requests by writing scripts and then executing them.
 
-> More specifically, Gadfly is only concerned with deciding which scripts to write, when to execute them, and how to glue them together. General-purpose source code generation and execution is, at the moment, out of scope. We think that Gadfly could be a natural complement to something like [Open Interpreter](https://www.openinterpreter.com/).
-
 A Gadfly agent's interface is natural language. When it receives a request it _parses_ the request into a program in the Gadfly language, a very simple and very high level functional programming language. It then _compiles_ the program into a collection of source files in a general purpose programming language. Finally, it orchestrates the execution of the collection of source files.
 
 ## (WIP) Litepaper
