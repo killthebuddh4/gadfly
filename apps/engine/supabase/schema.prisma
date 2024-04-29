@@ -27,20 +27,21 @@ model Type {
   created_at  DateTime              @default(now())
   updated_at  DateTime              @updatedAt
   history     Transformation[]
+  actor       Actor                 @relation(fields: [actor_id], references: [id])
+  actor_id    String                @unique
   independent IndependentVariable[]
   dependent   DependentVariable[]
   bound       BoundVariable[]
-  actor       Actor                 @relation(fields: [actor_id], references: [id])
-  actor_id    String                @unique
 }
 
 model Set {
-  id         String          @id @default(uuid())
-  created_at DateTime        @default(now())
-  updated_at DateTime        @updatedAt
-  target     Transformation? @relation("transformation_target")
-  payload    Transformation? @relation("transformation_payload")
-  result     Transformation? @relation("transformation_result")
+  id          String          @id @default(uuid())
+  created_at  DateTime        @default(now())
+  updated_at  DateTime        @updatedAt
+  target      Transformation? @relation("transformation_target")
+  payload     Transformation? @relation("transformation_payload")
+  result      Transformation? @relation("transformation_result")
+  description String
 }
 
 model IndependentVariable {
@@ -83,8 +84,6 @@ model Expression {
   id          String                @id @default(uuid())
   created_at  DateTime              @default(now())
   updated_at  DateTime              @updatedAt
-  actor       Actor                 @relation(fields: [actor_id], references: [id])
-  actor_id    String                @unique
   dependent   DependentVariable[]
   independent IndependentVariable[]
   bound       BoundVariable[]
@@ -145,8 +144,7 @@ model Message {
   updated_at DateTime @updatedAt
   from       Outbox   @relation(fields: [from_id], references: [id])
   from_id    String
-  to         Inbox    @relation(fields: [to_id], references: [id])
-  to_id      String
+  to         Inbox[]
   code       String
   message    String
 }
@@ -168,37 +166,48 @@ model Outbox {
 }
 
 model Actor {
-  id         String      @id @default(uuid())
-  created_at DateTime    @default(now())
-  updated_at DateTime    @updatedAt
-  inbox      Inbox       @relation(fields: [inbox_id], references: [id])
-  inbox_id   String      @unique
-  outbox     Outbox      @relation(fields: [outbox_id], references: [id])
-  outbox_id  String      @unique
-  network    Network     @relation(fields: [network_id], references: [id])
-  network_id String
-  expression Expression?
-  type       Type?
-  variable   Variable?
-  organism   Organism?
+  id            String     @id @default(uuid())
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+  inbox         Inbox      @relation(fields: [inbox_id], references: [id])
+  inbox_id      String     @unique
+  outbox        Outbox     @relation(fields: [outbox_id], references: [id])
+  outbox_id     String     @unique
+  network       Network    @relation(fields: [network_id], references: [id])
+  network_id    String
+  type          Type?
+  variable      Variable?
+  trajectory    Trajectory @relation(fields: [trajectory_id], references: [id])
+  trajectory_id String     @unique
 }
 
-model Engine {
+model Simulation {
   id          String       @id @default(uuid())
   created_at  DateTime     @default(now())
   updated_at  DateTime     @updatedAt
   generations Generation[]
 }
 
+model Trajectory {
+  id            String     @id @default(uuid())
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+  generation    Generation @relation(fields: [generation_id], references: [id])
+  generation_id String
+  parents       Ancestry[] @relation("ancestry_parent")
+  children      Ancestry[] @relation("ancestry_child")
+  actor         Actor?
+}
+
 model Generation {
-  id         String      @id @default(uuid())
-  created_at DateTime    @default(now())
-  updated_at DateTime    @updatedAt
-  engine     Engine      @relation(fields: [engine_id], references: [id])
-  engine_id  String
-  previous   Transition? @relation("to_generation")
-  next       Transition? @relation("from_generation")
-  organisms  Organism[]
+  id            String       @id @default(uuid())
+  created_at    DateTime     @default(now())
+  updated_at    DateTime     @updatedAt
+  simulation    Simulation   @relation(fields: [simulation_id], references: [id])
+  simulation_id String
+  previous      Transition?  @relation("to_generation")
+  next          Transition?  @relation("from_generation")
+  trajectories  Trajectory[]
 }
 
 model Transition {
@@ -211,25 +220,13 @@ model Transition {
   to_id      String     @unique
 }
 
-model Organism {
-  id            String     @id @default(uuid())
-  created_at    DateTime   @default(now())
-  updated_at    DateTime   @updatedAt
-  actor         Actor      @relation(fields: [actor_id], references: [id])
-  actor_id      String     @unique
-  generation    Generation @relation(fields: [generation_id], references: [id])
-  generation_id String
-  parents       Ancestry[] @relation("ancestry_parent")
-  children      Ancestry[] @relation("ancestry_child")
-}
-
 model Ancestry {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  parent     Organism @relation("ancestry_parent", fields: [parent_id], references: [id])
+  id         String     @id @default(uuid())
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  parent     Trajectory @relation("ancestry_parent", fields: [parent_id], references: [id])
   parent_id  String
-  child      Organism @relation("ancestry_child", fields: [child_id], references: [id])
+  child      Trajectory @relation("ancestry_child", fields: [child_id], references: [id])
   child_id   String
 }
 
