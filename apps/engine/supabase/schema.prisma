@@ -18,12 +18,15 @@ model Transformation {
   payload_id String   @unique
   result     Set      @relation("transformation_result", fields: [result_id], references: [id])
   result_id  String   @unique
+  type       Type     @relation(fields: [type_id], references: [id])
+  type_id    String
 }
 
 model Type {
   id          String                @id @default(uuid())
   createdAt   DateTime              @default(now())
   updatedAt   DateTime              @updatedAt
+  history     Transformation[]
   independent IndependentVariable[]
   dependent   DependentVariable[]
   bound       BoundVariable[]
@@ -109,6 +112,7 @@ model Value {
   target    Mutation? @relation("mutation_target")
   payload   Mutation? @relation("mutation_payload")
   result    Mutation? @relation("mutation_result")
+  value     String
 }
 
 model Variable {
@@ -167,9 +171,6 @@ model Actor {
   id         String      @id @default(uuid())
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
-  parent     Edge?       @relation("to_edge")
-  parent_id  String?
-  children   Edge[]      @relation("from_edge")
   inbox      Inbox       @relation(fields: [inbox_id], references: [id])
   inbox_id   String      @unique
   outbox     Outbox      @relation(fields: [outbox_id], references: [id])
@@ -179,16 +180,45 @@ model Actor {
   expression Expression?
   type       Type?
   variable   Variable?
+  organism   Organism?
 }
 
-model Edge {
+model Generation {
+  id        String      @id @default(uuid())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  previous  Transition? @relation("to_generation")
+  next      Transition? @relation("from_generation")
+}
+
+model Transition {
+  id        String     @id @default(uuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  from      Generation @relation("from_generation", fields: [from_id], references: [id])
+  from_id   String     @unique
+  to        Generation @relation("to_generation", fields: [to_id], references: [id])
+  to_id     String     @unique
+}
+
+model Organism {
+  id        String     @id @default(uuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  actor     Actor      @relation(fields: [actor_id], references: [id])
+  actor_id  String     @unique
+  parents   Ancestry[] @relation("ancestry_parent")
+  children  Ancestry[] @relation("ancestry_child")
+}
+
+model Ancestry {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  from      Actor    @relation("from_edge", fields: [from_id], references: [id])
-  from_id   String
-  to        Actor    @relation("to_edge", fields: [to_id], references: [id])
-  to_id     String   @unique
+  parent    Organism @relation("ancestry_parent", fields: [parent_id], references: [id])
+  parent_id String
+  child     Organism @relation("ancestry_child", fields: [child_id], references: [id])
+  child_id  String
 }
 
 model Network {
