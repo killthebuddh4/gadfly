@@ -38,3 +38,12 @@ The vision
 - it's kind of a set of design patterns that end up showing up everywhere as you write computer programs. it's the kind of computational structure of the world. not the theoretical, the actual in fact practical logical structure of the world
 - writing started to be a specialty, then it became a thing for everyone, math started to be a specialty, then it became a thing, programming started to be a specialty, then it became a thing. we had quills and parchment and bullshit, but then it became accessible. we had compilers and programs and whatnot but now we have language models. we will expect everybody to know how to do cx because it will be available to everybody
 - the visual arts will be able to do something like "tell me what % of the screen is white".
+
+
+- GeoHot -- why don't LLMs have a memory or hippocampus?
+- future LLMs will be smaller, but loop and have retrieval (so you can cite sources)
+- when someone makes an LLM that can cite its sources it will kill google
+- competitors (Meta is better than Google)
+- the "do what i mean machine"
+- 
+

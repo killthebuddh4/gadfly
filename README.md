@@ -444,3 +444,44 @@ I think an Actor is actually this think that oversees the expression lifecycle. 
 
 addBoundVariable
 addFreeVariable
+
+# 2024-04-26
+
+There's 2 kinds of engines: a dialectical engine and an analytical engine.
+
+The analytical engine generates a tree structure.
+The dialectical engine generates a dag structure.
+
+The whole thing operates as an interleaving of analytical and dialectical engines.
+
+A dialectical engine is about making decisions.
+An analytical engine is about executing decisions.
+
+A synthetical engine which operates according to the dialectic calculus.
+An analytical engine which operates according to the lambda calculus.
+
+The synthetical engine flows down a tree. The analytical engine flows up a tree.
+
+The tree is 
+
+
+An expression is:
+
+DV -> IV
+   -> IV
+   -> IV
+   -> IV
+
+Every expression is either synthetic or analytic.
+
+A synthetic expression is one where the DV's value _uses_ the IVs' values but it is not obvious whether the DV's value satisfies its type. To know if the expression is consistent, it must be "executed". In a synthetic expression, the IVs are like "tools".
+
+An analytic expression is one where the DV's value is _derived_ from the IVs' values and obviously satisfies its type. In an analytic expression, the IVs are like "preconditions".
+
+Every expression has an operator. The operator is either a map, filter, or reduce operator. A map operator transforms each input into something new. A filter operator selects values. A reduce operator combines the values into a single new value.
+
+How do we combine map/filter/reduce to create things like short circuits?
+
+
+
+
