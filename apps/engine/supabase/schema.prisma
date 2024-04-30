@@ -75,9 +75,9 @@ model BoundVariable {
   type          Type       @relation(fields: [type_id], references: [id], onDelete: Cascade)
   type_id       String
   variable      Variable   @relation(fields: [variable_id], references: [id], onDelete: Cascade)
-  variable_id   String     @unique
+  variable_id   String
   expression    Expression @relation(fields: [expression_id], references: [id], onDelete: Cascade)
-  expression_id String     @unique
+  expression_id String
 }
 
 model Expression {
@@ -87,6 +87,8 @@ model Expression {
   dependent   DependentVariable[]
   independent IndependentVariable[]
   bound       BoundVariable[]
+  actor       Actor                 @relation(fields: [actor_id], references: [id])
+  actor_id    String                @unique
 }
 
 model Mutation {
@@ -121,21 +123,9 @@ model Variable {
   history     Mutation[]
   independent IndependentVariable?
   dependent   DependentVariable?
-  bound       BoundVariable?
-  parents     Binding[]            @relation("parent_binding")
-  children    Binding[]            @relation("child_binding")
+  bindings    BoundVariable[]
   actor       Actor                @relation(fields: [actor_id], references: [id])
   actor_id    String               @unique
-}
-
-model Binding {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  parent     Variable @relation("parent_binding", fields: [parent_id], references: [id])
-  parent_id  String
-  child      Variable @relation("child_binding", fields: [child_id], references: [id])
-  child_id   String
 }
 
 model Message {
@@ -166,19 +156,19 @@ model Outbox {
 }
 
 model Actor {
-  id            String     @id @default(uuid())
-  created_at    DateTime   @default(now())
-  updated_at    DateTime   @updatedAt
-  inbox         Inbox      @relation(fields: [inbox_id], references: [id])
-  inbox_id      String     @unique
-  outbox        Outbox     @relation(fields: [outbox_id], references: [id])
-  outbox_id     String     @unique
-  network       Network    @relation(fields: [network_id], references: [id])
-  network_id    String
-  type          Type?
-  variable      Variable?
-  trajectory    Trajectory @relation(fields: [trajectory_id], references: [id])
-  trajectory_id String     @unique
+  id         String      @id @default(uuid())
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  inbox      Inbox       @relation(fields: [inbox_id], references: [id])
+  inbox_id   String      @unique
+  outbox     Outbox      @relation(fields: [outbox_id], references: [id])
+  outbox_id  String      @unique
+  network    Network     @relation(fields: [network_id], references: [id])
+  network_id String
+  type       Type?
+  variable   Variable?
+  expression Expression?
+  trajectory Trajectory?
 }
 
 model Simulation {
@@ -196,7 +186,8 @@ model Trajectory {
   generation_id String
   parents       Ancestry[] @relation("ancestry_parent")
   children      Ancestry[] @relation("ancestry_child")
-  actor         Actor?
+  actor         Actor      @relation(fields: [actor_id], references: [id])
+  actor_id      String     @unique
 }
 
 model Generation {
