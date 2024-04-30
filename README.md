@@ -482,6 +482,10 @@ Every expression has an operator. The operator is either a map, filter, or reduc
 
 How do we combine map/filter/reduce to create things like short circuits?
 
+# Notes 2024-04-29
 
+So I've got the simple core somewhat stable, I think. Expressions, variables, types. All with a kind of mutation that look the same as each other.
 
+Big open questions I'm noodling on. The simulation/dag part of the system should be something like "every message forks the entire system, the simulation manages the forks". But it's hard to think about how a system where every single message forks it would work. I also have a wierd intuition that the solution will be simple. Something like "fork when you encounter an unknown history". So that's one of the two big questions in my head. The other one is the specifics of what a mutation on an expression looks like. We look at variables and types as basically an append-only mutation log, a derived state. For variables and types I think I get it, but what about for an expression? So that's the other big question in my head.
 
+_I'm getting so close though._
