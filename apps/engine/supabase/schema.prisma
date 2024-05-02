@@ -25,7 +25,7 @@ model Process {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
   computer    Computer @relation(fields: [computer_id], references: [id])
-  computer_id String
+  computer_id String   @unique
   sent        Signal[] @relation("signal_source")
   received    Signal[] @relation("signal_target")
   children    Child[]
@@ -54,7 +54,7 @@ model Type {
   created_at  DateTime   @default(now())
   updated_at  DateTime   @updatedAt
   computer    Computer   @relation(fields: [computer_id], references: [id])
-  computer_id String
+  computer_id String     @unique
   machine     Machine    @relation(fields: [machine_id], references: [id])
   machine_id  String     @unique
   instances   Variable[]
@@ -65,7 +65,7 @@ model Variable {
   created_at     DateTime    @default(now())
   updated_at     DateTime    @updatedAt
   computer       Computer    @relation(fields: [computer_id], references: [id])
-  computer_id    String
+  computer_id    String      @unique
   type           Type        @relation(fields: [type_id], references: [id])
   type_id        String
   machine        Machine     @relation(fields: [machine_id], references: [id])
@@ -118,7 +118,7 @@ model Machine {
   created_at  DateTime     @default(now())
   updated_at  DateTime     @updatedAt
   computer    Computer     @relation(fields: [computer_id], references: [id])
-  computer_id String
+  computer_id String       @unique
   network     Network      @relation(fields: [network_id], references: [id])
   network_id  String
   state       Transition[]
@@ -136,18 +136,20 @@ model Description {
 }
 
 model Value {
-  id           String        @id @default(uuid())
-  created_at   DateTime      @default(now())
-  updated_at   DateTime      @updatedAt
-  value        String
-  inputs       Input[]
-  output       Output[]
-  signals      Signal[]
-  parameters   Parameter[]
-  feedback     Feedback[]
-  states       State[]
-  events       Event[]
-  descriptions Description[]
+  id            String        @id @default(uuid())
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+  simulation    Simulation    @relation(fields: [simulation_id], references: [id])
+  simulation_id String        @unique
+  value         String
+  inputs        Input[]
+  output        Output[]
+  signals       Signal[]
+  parameters    Parameter[]
+  feedback      Feedback[]
+  states        State[]
+  events        Event[]
+  descriptions  Description[]
 }
 
 model Input {
@@ -186,16 +188,16 @@ model Computer {
   updated_at     DateTime      @updatedAt
   description    Description   @relation(fields: [description_id], references: [id])
   description_id String
+  simulation     Simulation    @relation(fields: [simulation_id], references: [id])
+  simulation_id  String        @unique
   network        Network       @relation(fields: [network_id], references: [id], onDelete: Cascade)
   network_id     String
   computations   Computation[]
-  processes      Process[]
-  variables      Variable[]
-  types          Type[]
-  machines       Machine[]
-  simulations    Simulation[]
-  generations    Generation[]
-  instances      Instance[]
+  process        Process?
+  variable       Variable?
+  type           Type?
+  machine        Machine?
+  generation     Generation?
 }
 
 model Parameter {
@@ -206,7 +208,6 @@ model Parameter {
   value_id     String
   simulations  Simulation[]
   generations  Generation[]
-  instances    Instance[]
   evolutions   Evolution[]
   trajectories Trajectory[]
 }
@@ -219,39 +220,39 @@ model Feedback {
   value_id     String
   simulations  Simulation[]
   generations  Generation[]
-  instances    Instance[]
   evolutions   Evolution[]
   trajectories Trajectory[]
 }
 
 model Simulation {
+  id            String       @id @default(uuid())
+  created_at    DateTime     @default(now())
+  updated_at    DateTime     @updatedAt
+  computer      Computer?
+  value         Value?
+  parameter     Parameter    @relation(fields: [parameter_id], references: [id])
+  parameter_id  String
+  feedback      Feedback     @relation(fields: [feedback_id], references: [id])
+  feedback_id   String
+  generation    Generation   @relation(fields: [generation_id], references: [id])
+  generation_id String
+  parents       Trajectory[] @relation("trajectory_parent")
+  children      Trajectory[] @relation("trajectory_child")
+}
+
+model Generation {
   id           String       @id @default(uuid())
   created_at   DateTime     @default(now())
   updated_at   DateTime     @updatedAt
   computer     Computer     @relation(fields: [computer_id], references: [id])
-  computer_id  String
+  computer_id  String       @unique
   parameter    Parameter    @relation(fields: [parameter_id], references: [id])
   parameter_id String
   feedback     Feedback     @relation(fields: [feedback_id], references: [id])
   feedback_id  String
-  generations  Generation[]
-}
-
-model Generation {
-  id            String     @id @default(uuid())
-  created_at    DateTime   @default(now())
-  updated_at    DateTime   @updatedAt
-  simulation    Simulation @relation(fields: [simulation_id], references: [id])
-  simulation_id String
-  computer      Computer   @relation(fields: [computer_id], references: [id])
-  computer_id   String
-  parameter     Parameter  @relation(fields: [parameter_id], references: [id])
-  parameter_id  String
-  feedback      Feedback   @relation(fields: [feedback_id], references: [id])
-  feedback_id   String
-  previous      Evolution? @relation("to_generation")
-  next          Evolution? @relation("from_generation")
-  instances     Instance[]
+  previous     Evolution?   @relation("to_generation")
+  next         Evolution?   @relation("from_generation")
+  instances    Simulation[]
 }
 
 model Evolution {
@@ -268,33 +269,17 @@ model Evolution {
   to_id        String     @unique
 }
 
-model Instance {
-  id            String       @id @default(uuid())
-  created_at    DateTime     @default(now())
-  updated_at    DateTime     @updatedAt
-  computer      Computer     @relation(fields: [computer_id], references: [id])
-  computer_id   String
-  generation    Generation   @relation(fields: [generation_id], references: [id])
-  generation_id String
-  parameter     Parameter    @relation(fields: [parameter_id], references: [id])
-  parameter_id  String
-  feedback      Feedback     @relation(fields: [feedback_id], references: [id])
-  feedback_id   String
-  parents       Trajectory[] @relation("trajectory_parent")
-  children      Trajectory[] @relation("trajectory_child")
-}
-
 model Trajectory {
-  id           String    @id @default(uuid())
-  created_at   DateTime  @default(now())
-  updated_at   DateTime  @updatedAt
-  parent       Instance  @relation("trajectory_parent", fields: [parent_id], references: [id])
+  id           String     @id @default(uuid())
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @updatedAt
+  parent       Simulation @relation("trajectory_parent", fields: [parent_id], references: [id])
   parent_id    String
-  child        Instance  @relation("trajectory_child", fields: [child_id], references: [id])
+  child        Simulation @relation("trajectory_child", fields: [child_id], references: [id])
   child_id     String
-  parameter    Parameter @relation(fields: [parameter_id], references: [id])
+  parameter    Parameter  @relation(fields: [parameter_id], references: [id])
   parameter_id String
-  feedback     Feedback  @relation(fields: [feedback_id], references: [id])
+  feedback     Feedback   @relation(fields: [feedback_id], references: [id])
   feedback_id  String
 }
 
