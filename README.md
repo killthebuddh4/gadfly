@@ -489,3 +489,21 @@ So I've got the simple core somewhat stable, I think. Expressions, variables, ty
 Big open questions I'm noodling on. The simulation/dag part of the system should be something like "every message forks the entire system, the simulation manages the forks". But it's hard to think about how a system where every single message forks it would work. I also have a wierd intuition that the solution will be simple. Something like "fork when you encounter an unknown history". So that's one of the two big questions in my head. The other one is the specifics of what a mutation on an expression looks like. We look at variables and types as basically an append-only mutation log, a derived state. For variables and types I think I get it, but what about for an expression? So that's the other big question in my head.
 
 _I'm getting so close though._
+
+# Notes 2024-04-30
+
+OP_CODES
+
+VAL_WRITE
+VAL_WIDEN
+VAL_NARROW
+TYPE_WRITE
+TYPE_WIDEN
+TYPE_NARROW
+ACTOR_GEN
+ACTOR_GEN_IV
+ACTOR_GEN_BV
+ACTOR_GEN_CPU
+ACTOR_GEN_DV
+EVOLUTION_MAP
+EVOLUTION_REDUCE

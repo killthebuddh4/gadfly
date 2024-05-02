@@ -7,168 +7,118 @@ datasource db {
   url      = env("SUPABASE_CONN_STRING")
 }
 
-model Transformation {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  operation  String
-  target     Set      @relation("transformation_target", fields: [target_id], references: [id])
-  target_id  String   @unique
-  payload    Set      @relation("transformation_payload", fields: [payload_id], references: [id])
-  payload_id String   @unique
-  result     Set      @relation("transformation_result", fields: [result_id], references: [id])
-  result_id  String   @unique
-  type       Type     @relation(fields: [type_id], references: [id])
-  type_id    String
+model Expression {
+  id          String     @id @default(uuid())
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+  dependent   Variable[] @relation("variable_dependent")
+  independent Variable[] @relation("variable_independent")
+  bound       Variable[] @relation("variable_bound")
+  free        Variable[] @relation("variable_free")
 }
 
 model Type {
-  id          String                @id @default(uuid())
-  created_at  DateTime              @default(now())
-  updated_at  DateTime              @updatedAt
-  history     Transformation[]
-  actor       Actor                 @relation(fields: [actor_id], references: [id])
-  actor_id    String                @unique
-  independent IndependentVariable[]
-  dependent   DependentVariable[]
-  bound       BoundVariable[]
-}
-
-model Set {
-  id          String          @id @default(uuid())
-  created_at  DateTime        @default(now())
-  updated_at  DateTime        @updatedAt
-  target      Transformation? @relation("transformation_target")
-  payload     Transformation? @relation("transformation_payload")
-  result      Transformation? @relation("transformation_result")
-  description String
-}
-
-model IndependentVariable {
-  id            String     @id @default(uuid())
-  created_at    DateTime   @default(now())
-  updated_at    DateTime   @updatedAt
-  type          Type       @relation(fields: [type_id], references: [id], onDelete: Cascade)
-  type_id       String
-  variable      Variable   @relation(fields: [variable_id], references: [id], onDelete: Cascade)
-  variable_id   String     @unique
-  expression    Expression @relation(fields: [expression_id], references: [id], onDelete: Cascade)
-  expression_id String
-}
-
-model DependentVariable {
-  id            String     @id @default(uuid())
-  created_at    DateTime   @default(now())
-  updated_at    DateTime   @updatedAt
-  type          Type       @relation(fields: [type_id], references: [id], onDelete: Cascade)
-  type_id       String
-  variable      Variable   @relation(fields: [variable_id], references: [id], onDelete: Cascade)
-  variable_id   String     @unique
-  expression    Expression @relation(fields: [expression_id], references: [id], onDelete: Cascade)
-  expression_id String     @unique
-}
-
-model BoundVariable {
-  id            String     @id @default(uuid())
-  created_at    DateTime   @default(now())
-  updated_at    DateTime   @updatedAt
-  type          Type       @relation(fields: [type_id], references: [id], onDelete: Cascade)
-  type_id       String
-  variable      Variable   @relation(fields: [variable_id], references: [id], onDelete: Cascade)
-  variable_id   String
-  expression    Expression @relation(fields: [expression_id], references: [id], onDelete: Cascade)
-  expression_id String
-}
-
-model Expression {
-  id          String                @id @default(uuid())
-  created_at  DateTime              @default(now())
-  updated_at  DateTime              @updatedAt
-  dependent   DependentVariable[]
-  independent IndependentVariable[]
-  bound       BoundVariable[]
-  actor       Actor                 @relation(fields: [actor_id], references: [id])
-  actor_id    String                @unique
-}
-
-model Mutation {
-  id          String   @id @default(uuid())
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  code        String
-  target      Value    @relation("mutation_target", fields: [target_id], references: [id])
-  target_id   String   @unique
-  payload     Value    @relation("mutation_payload", fields: [payload_id], references: [id])
-  payload_id  String   @unique
-  result      Value    @relation("mutation_result", fields: [result_id], references: [id])
-  result_id   String   @unique
-  variable    Variable @relation(fields: [variable_id], references: [id])
-  variable_id String
-}
-
-model Value {
-  id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  target     Mutation? @relation("mutation_target")
-  payload    Mutation? @relation("mutation_payload")
-  result     Mutation? @relation("mutation_result")
-  value      String
+  id         String     @id @default(uuid())
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  machine    Machine    @relation(fields: [machine_id], references: [id])
+  machine_id String     @unique
+  instances  Variable[]
 }
 
 model Variable {
-  id          String               @id @default(uuid())
-  created_at  DateTime             @default(now())
-  updated_at  DateTime             @updatedAt
-  history     Mutation[]
-  independent IndependentVariable?
-  dependent   DependentVariable?
-  bindings    BoundVariable[]
-  actor       Actor                @relation(fields: [actor_id], references: [id])
-  actor_id    String               @unique
+  id             String      @id @default(uuid())
+  created_at     DateTime    @default(now())
+  updated_at     DateTime    @updatedAt
+  type           Type        @relation(fields: [type_id], references: [id])
+  type_id        String
+  machine        Machine     @relation(fields: [machine_id], references: [id])
+  machine_id     String      @unique
+  bound          Expression? @relation("variable_bound", fields: [bound_id], references: [id], onDelete: Cascade)
+  bound_id       String?
+  free           Expression? @relation("variable_free", fields: [free_id], references: [id], onDelete: Cascade)
+  free_id        String?
+  dependent      Expression? @relation("variable_dependent", fields: [dependent_id], references: [id], onDelete: Cascade)
+  dependent_id   String?
+  independent    Expression? @relation("variable_independent", fields: [independent_id], references: [id], onDelete: Cascade)
+  independent_id String?
 }
 
-model Message {
+model Transition {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  from       Outbox   @relation(fields: [from_id], references: [id])
-  from_id    String
-  to         Inbox[]
-  code       String
-  message    String
+  type       String
+  start      Signal   @relation("transition_start", fields: [start_id], references: [id])
+  start_id   String
+  event      Signal   @relation("transition_event", fields: [event_id], references: [id])
+  event_id   String   @unique
+  finish     Signal   @relation("transition_finish", fields: [finish_id], references: [id])
+  finish_id  String
+  machine    Machine  @relation(fields: [machine_id], references: [id])
+  machine_id String
 }
 
-model Inbox {
-  id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  messages   Message[]
-  actor      Actor?
-}
-
-model Outbox {
-  id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  messages   Message[]
-  actor      Actor?
-}
-
-model Actor {
-  id         String      @id @default(uuid())
-  created_at DateTime    @default(now())
-  updated_at DateTime    @updatedAt
-  inbox      Inbox       @relation(fields: [inbox_id], references: [id])
-  inbox_id   String      @unique
-  outbox     Outbox      @relation(fields: [outbox_id], references: [id])
-  outbox_id  String      @unique
-  network    Network     @relation(fields: [network_id], references: [id])
+model Machine {
+  id         String       @id @default(uuid())
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
+  network    Network      @relation(fields: [network_id], references: [id])
   network_id String
-  type       Type?
-  variable   Variable?
-  expression Expression?
-  trajectory Trajectory?
+  state      Transition[]
+  Type       Type?
+  Variable   Variable?
+}
+
+model Signal {
+  id         String       @id @default(uuid())
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
+  value      String
+  starts     Transition[] @relation("transition_start")
+  finishes   Transition[] @relation("transition_finish")
+  events     Transition[] @relation("transition_event")
+  inputs     Input[]
+  output     Output[]
+}
+
+model Input {
+  id             String      @id @default(uuid())
+  created_at     DateTime    @default(now())
+  updated_at     DateTime    @updatedAt
+  signal         Signal      @relation(fields: [signal_id], references: [id])
+  signal_id      String
+  computation    Computation @relation(fields: [computation_id], references: [id])
+  computation_id String
+}
+
+model Output {
+  id             String      @id @default(uuid())
+  created_at     DateTime    @default(now())
+  updated_at     DateTime    @updatedAt
+  signal         Signal      @relation(fields: [signal_id], references: [id])
+  signal_id      String
+  computation    Computation @relation(fields: [computation_id], references: [id])
+  computation_id String      @unique
+}
+
+model Computation {
+  id          String   @id @default(uuid())
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  inputs      Input[]
+  output      Output?
+  computer    Computer @relation(fields: [computer_id], references: [id])
+  computer_id String
+}
+
+model Computer {
+  id           String        @id @default(uuid())
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @updatedAt
+  network      Network       @relation(fields: [network_id], references: [id], onDelete: Cascade)
+  network_id   String
+  computations Computation[]
 }
 
 model Simulation {
@@ -178,53 +128,59 @@ model Simulation {
   generations Generation[]
 }
 
-model Trajectory {
+model Generation {
   id            String     @id @default(uuid())
   created_at    DateTime   @default(now())
   updated_at    DateTime   @updatedAt
-  generation    Generation @relation(fields: [generation_id], references: [id])
-  generation_id String
-  parents       Ancestry[] @relation("ancestry_parent")
-  children      Ancestry[] @relation("ancestry_child")
-  actor         Actor      @relation(fields: [actor_id], references: [id])
-  actor_id      String     @unique
-}
-
-model Generation {
-  id            String       @id @default(uuid())
-  created_at    DateTime     @default(now())
-  updated_at    DateTime     @updatedAt
-  simulation    Simulation   @relation(fields: [simulation_id], references: [id])
+  simulation    Simulation @relation(fields: [simulation_id], references: [id])
   simulation_id String
-  previous      Transition?  @relation("to_generation")
-  next          Transition?  @relation("from_generation")
-  trajectories  Trajectory[]
+  parameter     String?
+  feedback      String?
+  previous      Evolution? @relation("to_generation")
+  next          Evolution? @relation("from_generation")
+  instances     Instance[]
 }
 
-model Transition {
+model Evolution {
   id         String     @id @default(uuid())
   created_at DateTime   @default(now())
   updated_at DateTime   @updatedAt
+  parameter  String?
+  feedback   String?
   from       Generation @relation("from_generation", fields: [from_id], references: [id])
   from_id    String     @unique
   to         Generation @relation("to_generation", fields: [to_id], references: [id])
   to_id      String     @unique
 }
 
-model Ancestry {
-  id         String     @id @default(uuid())
-  created_at DateTime   @default(now())
-  updated_at DateTime   @updatedAt
-  parent     Trajectory @relation("ancestry_parent", fields: [parent_id], references: [id])
-  parent_id  String
-  child      Trajectory @relation("ancestry_child", fields: [child_id], references: [id])
-  child_id   String
+model Instance {
+  id            String       @id @default(uuid())
+  created_at    DateTime     @default(now())
+  updated_at    DateTime     @updatedAt
+  generation    Generation   @relation(fields: [generation_id], references: [id])
+  generation_id String
+  parameter     String?
+  feedback      String?
+  parents       Trajectory[] @relation("trajectory_parent")
+  children      Trajectory[] @relation("trajectory_child")
 }
 
-model Network {
+model Trajectory {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  name       String
-  actors     Actor[]
+  parent     Instance @relation("trajectory_parent", fields: [parent_id], references: [id])
+  parent_id  String
+  child      Instance @relation("trajectory_child", fields: [child_id], references: [id])
+  child_id   String
+  parameter  String?
+  feedback   String?
+}
+
+model Network {
+  id         String     @id @default(uuid())
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  machines   Machine[]
+  computers  Computer[]
 }
