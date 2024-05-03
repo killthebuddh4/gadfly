@@ -40,44 +40,78 @@ model Child {
 }
 
 model Expression {
-  id          String     @id @default(uuid())
-  created_at  DateTime   @default(now())
-  updated_at  DateTime   @updatedAt
-  dependent   Variable[] @relation("variable_dependent")
-  independent Variable[] @relation("variable_independent")
-  bound       Variable[] @relation("variable_bound")
-  free        Variable[] @relation("variable_free")
+  id          String        @id @default(uuid())
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+  computer    Computer      @relation(fields: [computer_id], references: [id])
+  computer_id String        @unique
+  dependent   Dependent[]
+  independent Independent[]
+  bound       Bound[]
+  free        Free[]
+}
+
+model Free {
+  id            String     @id @default(uuid())
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+  expression    Expression @relation(fields: [expression_id], references: [id])
+  expression_id String
+  variable      Variable   @relation(fields: [variable_id], references: [id])
+  variable_id   String
+}
+
+model Independent {
+  id            String     @id @default(uuid())
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+  expression    Expression @relation(fields: [expression_id], references: [id])
+  expression_id String
+  variable      Variable   @relation(fields: [variable_id], references: [id])
+  variable_id   String
+}
+
+model Dependent {
+  id            String     @id @default(uuid())
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+  expression    Expression @relation(fields: [expression_id], references: [id])
+  expression_id String
+  variable      Variable   @relation(fields: [variable_id], references: [id])
+  variable_id   String
+}
+
+model Bound {
+  id            String     @id @default(uuid())
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+  expression    Expression @relation(fields: [expression_id], references: [id])
+  expression_id String
+  variable      Variable   @relation(fields: [variable_id], references: [id])
+  variable_id   String
 }
 
 model Type {
-  id          String     @id @default(uuid())
-  created_at  DateTime   @default(now())
-  updated_at  DateTime   @updatedAt
-  computer    Computer   @relation(fields: [computer_id], references: [id])
-  computer_id String     @unique
-  machine     Machine    @relation(fields: [machine_id], references: [id])
-  machine_id  String     @unique
-  instances   Variable[]
+  id         String     @id @default(uuid())
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  machine    Machine    @relation(fields: [machine_id], references: [id])
+  machine_id String     @unique
+  instances  Variable[]
 }
 
 model Variable {
-  id             String      @id @default(uuid())
-  created_at     DateTime    @default(now())
-  updated_at     DateTime    @updatedAt
-  computer       Computer    @relation(fields: [computer_id], references: [id])
-  computer_id    String      @unique
-  type           Type        @relation(fields: [type_id], references: [id])
-  type_id        String
-  machine        Machine     @relation(fields: [machine_id], references: [id])
-  machine_id     String      @unique
-  bound          Expression? @relation("variable_bound", fields: [bound_id], references: [id], onDelete: Cascade)
-  bound_id       String?
-  free           Expression? @relation("variable_free", fields: [free_id], references: [id], onDelete: Cascade)
-  free_id        String?
-  dependent      Expression? @relation("variable_dependent", fields: [dependent_id], references: [id], onDelete: Cascade)
-  dependent_id   String?
-  independent    Expression? @relation("variable_independent", fields: [independent_id], references: [id], onDelete: Cascade)
-  independent_id String?
+  id          String        @id @default(uuid())
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+  type        Type          @relation(fields: [type_id], references: [id])
+  type_id     String
+  machine     Machine       @relation(fields: [machine_id], references: [id])
+  machine_id  String        @unique
+  bound       Bound[]
+  dependent   Dependent[]
+  independent Independent[]
+  free        Free[]
 }
 
 model Transition {
@@ -119,8 +153,6 @@ model Machine {
   updated_at  DateTime     @updatedAt
   computer    Computer     @relation(fields: [computer_id], references: [id])
   computer_id String       @unique
-  network     Network      @relation(fields: [network_id], references: [id])
-  network_id  String
   state       Transition[]
   variables   Variable[]
   types       Type[]
@@ -193,9 +225,8 @@ model Computer {
   network        Network       @relation(fields: [network_id], references: [id], onDelete: Cascade)
   network_id     String
   computations   Computation[]
+  expression     Expression?
   process        Process?
-  variable       Variable?
-  type           Type?
   machine        Machine?
   generation     Generation?
 }
@@ -287,6 +318,5 @@ model Network {
   id         String     @id @default(uuid())
   created_at DateTime   @default(now())
   updated_at DateTime   @updatedAt
-  machines   Machine[]
   computers  Computer[]
 }
