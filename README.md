@@ -507,3 +507,11 @@ ACTOR_GEN_CPU
 ACTOR_GEN_DV
 EVOLUTION_MAP
 EVOLUTION_REDUCE
+
+# Notes 2024-05-02
+
+I think the core data model is _extremely close to v0.0.1_. The primitives we have right now cover a huge fraction of general purpose computing/source code. At the very bottom there is only two "atoms"--Value and Computer--and the rest of the model flows elegantly from there. The computation/expression side of things has a clean binding/coupling with simulation because only the two atoms ever need to be simulated. The simulation side of things is also itself elegant and makes sense and I think the _parameter/feedback_ "paradigm" is going to be a great start at the very least. So the __NEXT STEPS__:
+
+1. I started writing some endpoints and events, starting from the ground up "boot a network.". I need to just keep going with this: implement the core endpoints/events/operations that need to get done.
+
+2. Write down the core data model and protocol, clean up (among other things) this README.
