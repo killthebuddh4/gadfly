@@ -175,30 +175,6 @@ model State {
   finishes   Transition[] @relation("transition_finish")
 }
 
-model Description {
-  id         String     @id @default(uuid())
-  created_at DateTime   @default(now())
-  updated_at DateTime   @updatedAt
-  value      Value      @relation(fields: [value_id], references: [id])
-  value_id   String
-  computers  Computer[]
-}
-
-model Value {
-  id           String        @id @default(uuid())
-  created_at   DateTime      @default(now())
-  updated_at   DateTime      @updatedAt
-  value        String
-  inputs       Input[]
-  output       Output[]
-  parameters   Parameter[]
-  feedback     Feedback[]
-  states       State[]
-  events       Event[]
-  descriptions Description[]
-  muxes        Mux[]
-}
-
 model Input {
   id             String      @id @default(uuid())
   created_at     DateTime    @default(now())
@@ -230,102 +206,78 @@ model Computation {
 }
 
 model Computer {
-  id             String        @id @default(uuid())
-  created_at     DateTime      @default(now())
-  updated_at     DateTime      @updatedAt
-  pwned          Boolean       @default(false)
-  description    Description   @relation(fields: [description_id], references: [id])
-  description_id String
-  simulation     Simulation?   @relation(fields: [simulation_id], references: [id])
-  simulation_id  String?       @unique
-  network        Network       @relation(fields: [network_id], references: [id], onDelete: Cascade)
-  network_id     String
-  computations   Computation[]
-  expression     Expression?
-  machine        Machine?
-  actor          Actor?
-  generation     Generation?
-  root           Root?
+  id           String        @id @default(uuid())
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @updatedAt
+  pwned        Boolean       @default(false)
+  network      Network       @relation(fields: [network_id], references: [id], onDelete: Cascade)
+  network_id   String
+  computations Computation[]
+  expression   Expression?
+  machine      Machine?
+  actor        Actor?
+  root         Root?
 }
 
-model Parameter {
-  id           String       @id @default(uuid())
-  created_at   DateTime     @default(now())
-  updated_at   DateTime     @updatedAt
-  value        Value        @relation(fields: [value_id], references: [id])
-  value_id     String
-  simulations  Simulation[]
-  generations  Generation[]
-  evolutions   Evolution[]
-  trajectories Trajectory[]
+model Value {
+  id             String   @id @default(uuid())
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+  value          String
+  inputs         Input[]
+  output         Output[]
+  states         State[]
+  events         Event[]
+  muxes          Mux[]
+  node_parameter Node?    @relation("node_parameter")
+  node_feedback  Node?    @relation("node_feedback")
+  node_value     Node?    @relation("node_value")
+  edge_parameter Edge?    @relation("edge_parameter")
+  edge_feedback  Edge?    @relation("edge_feedback")
 }
 
-model Feedback {
-  id           String       @id @default(uuid())
-  created_at   DateTime     @default(now())
-  updated_at   DateTime     @updatedAt
-  value        Value        @relation(fields: [value_id], references: [id])
-  value_id     String
-  simulations  Simulation[]
-  generations  Generation[]
-  evolutions   Evolution[]
-  trajectories Trajectory[]
+model Tree {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  node       Node     @relation(fields: [node_id], references: [id])
+  node_id    String   @unique
 }
 
-model Simulation {
-  id            String       @id @default(uuid())
-  created_at    DateTime     @default(now())
-  updated_at    DateTime     @updatedAt
-  computer      Computer?
-  parameter     Parameter    @relation(fields: [parameter_id], references: [id])
-  parameter_id  String
-  feedback      Feedback     @relation(fields: [feedback_id], references: [id])
-  feedback_id   String
-  generation    Generation   @relation(fields: [generation_id], references: [id])
-  generation_id String
-  parents       Trajectory[] @relation("trajectory_parent")
-  children      Trajectory[] @relation("trajectory_child")
+model Graph {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  node       Node     @relation(fields: [node_id], references: [id])
+  node_id    String   @unique
 }
 
-model Generation {
-  id           String       @id @default(uuid())
-  created_at   DateTime     @default(now())
-  updated_at   DateTime     @updatedAt
-  computer     Computer     @relation(fields: [computer_id], references: [id])
-  computer_id  String       @unique
-  parameter    Parameter    @relation(fields: [parameter_id], references: [id])
-  parameter_id String
-  feedback     Feedback     @relation(fields: [feedback_id], references: [id])
-  feedback_id  String
-  previous     Evolution?   @relation("to_generation")
-  next         Evolution?   @relation("from_generation")
-  instances    Simulation[]
+model Node {
+  id           String   @id @default(uuid())
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  parents      Edge[]   @relation("edge_parent")
+  children     Edge[]   @relation("edge_child")
+  parameter    Value?   @relation("node_parameter", fields: [parameter_id], references: [id])
+  parameter_id String?  @unique
+  feedback     Value?   @relation("node_feedback", fields: [feedback_id], references: [id])
+  feedback_id  String?  @unique
+  value        Value?   @relation("node_value", fields: [value_id], references: [id])
+  value_id     String?  @unique
+  graph        Graph?
+  tree         Tree?
 }
 
-model Evolution {
-  id           String     @id @default(uuid())
-  created_at   DateTime   @default(now())
-  updated_at   DateTime   @updatedAt
-  parameter    Parameter  @relation(fields: [parameter_id], references: [id])
-  parameter_id String
-  feedback     Feedback   @relation(fields: [feedback_id], references: [id])
-  feedback_id  String
-  from         Generation @relation("from_generation", fields: [from_id], references: [id])
-  from_id      String     @unique
-  to           Generation @relation("to_generation", fields: [to_id], references: [id])
-  to_id        String     @unique
-}
-
-model Trajectory {
-  id           String     @id @default(uuid())
-  created_at   DateTime   @default(now())
-  updated_at   DateTime   @updatedAt
-  parent       Simulation @relation("trajectory_parent", fields: [parent_id], references: [id])
+model Edge {
+  id           String   @id @default(uuid())
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  parent       Node     @relation("edge_parent", fields: [parent_id], references: [id])
   parent_id    String
-  child        Simulation @relation("trajectory_child", fields: [child_id], references: [id])
+  child        Node     @relation("edge_child", fields: [child_id], references: [id])
   child_id     String
-  parameter    Parameter  @relation(fields: [parameter_id], references: [id])
-  parameter_id String
-  feedback     Feedback   @relation(fields: [feedback_id], references: [id])
-  feedback_id  String
+  parameter    Value    @relation("edge_parameter", fields: [parameter_id], references: [id])
+  parameter_id String   @unique
+  feedback     Value    @relation("edge_feedback", fields: [feedback_id], references: [id])
+  feedback_id  String   @unique
 }
