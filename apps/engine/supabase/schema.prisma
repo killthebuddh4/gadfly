@@ -171,8 +171,8 @@ model Value {
   id            String        @id @default(uuid())
   created_at    DateTime      @default(now())
   updated_at    DateTime      @updatedAt
-  simulation    Simulation    @relation(fields: [simulation_id], references: [id])
-  simulation_id String        @unique
+  simulation    Simulation?   @relation(fields: [simulation_id], references: [id])
+  simulation_id String?       @unique
   value         String
   inputs        Input[]
   output        Output[]
@@ -182,6 +182,12 @@ model Value {
   states        State[]
   events        Event[]
   descriptions  Description[]
+}
+
+model User {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 model Input {
@@ -220,8 +226,8 @@ model Computer {
   updated_at     DateTime      @updatedAt
   description    Description   @relation(fields: [description_id], references: [id])
   description_id String
-  simulation     Simulation    @relation(fields: [simulation_id], references: [id])
-  simulation_id  String        @unique
+  simulation     Simulation?   @relation(fields: [simulation_id], references: [id])
+  simulation_id  String?       @unique
   network        Network       @relation(fields: [network_id], references: [id], onDelete: Cascade)
   network_id     String
   computations   Computation[]
@@ -229,6 +235,7 @@ model Computer {
   process        Process?
   machine        Machine?
   generation     Generation?
+  daemon         Daemon?
 }
 
 model Parameter {
@@ -314,9 +321,20 @@ model Trajectory {
   feedback_id  String
 }
 
+model Daemon {
+  id          String   @id @default(uuid())
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  computer    Computer @relation(fields: [computer_id], references: [id])
+  computer_id String   @unique
+  network     Network  @relation(fields: [network_id], references: [id])
+  network_id  String   @unique
+}
+
 model Network {
   id         String     @id @default(uuid())
   created_at DateTime   @default(now())
   updated_at DateTime   @updatedAt
+  daemon     Daemon?
   computers  Computer[]
 }

@@ -1,4 +1,10 @@
 import express from "express";
+import { engine } from "../protocol/engine.js";
+import { prisma } from "../lib/prisma.js";
+import { z } from "zod";
+import { createNetwork } from "../protocol/createNetwork.js";
+
+engine();
 
 const app = express();
 
@@ -17,52 +23,31 @@ app.use(express.json());
 //   res.json({ ok: true, data });
 // });
 
-// app.post("/actor", async (req, res) => {
-//   const options = zCreate.parse(req.body);
-// });
+const zPostValue = z.object({
+  value: z.string(),
+});
 
-// app.get("/actor/:id", async (req, res) => {
-//   const actor = await getActor({ id: req.params.id });
-//   const description = await actor.describe();
-//   res.json({ ok: true, data: { actor: { description } } });
-// });
+app.post("/value", async (req, res) => {
+  const options = zPostValue.parse(req.body);
 
-// const zExec = z
-//   .object({
-//     name: z.string(),
-//     description: z.string(),
-//     inputs: z.array(z.string()),
-//     outputs: z.array(z.string()),
-//     constraints: z.array(z.string()),
-//   })
-//   .partial();
+  const created = await prisma.value.create({
+    data: {
+      value: options.value,
+    },
+  });
 
-// app.post("/actor/:id/exec", async (req, res) => {
-//   const actor = await getActor({ id: req.params.id });
-//   const options = zExec.parse(req.body);
-//   await actor.exec(options);
-//   const description = await actor.describe();
-//   res.json({ ok: true, data: { actor: { description } } });
-// });
+  res.json({ ok: true, data: created });
+});
 
-// const zPatch = z.object({ feedback: z.string() });
+const zCreateNetwork = z.object({ description: z.string() });
 
-// app.post("/actor/:id/patch", async (req, res) => {
-//   const actor = await getActor({ id: req.params.id });
-//   const options = zPatch.parse(req.body);
-//   await actor.patch(options);
-//   const description = await actor.describe();
-//   res.json({ ok: true, data: { actor: { description } } });
-// });
+app.post("/network", async (req, res) => {
+  const body = zCreateNetwork.parse(req.body);
 
-// const zCall = z.object({ inputs: z.array(z.string()) });
+  const data = await createNetwork({ description: body.description });
 
-// app.post("/actor/:id/call", async (req, res) => {
-//   const actor = await getActor({ id: req.params.id });
-//   const options = zCall.parse(req.body);
-//   const result = await actor.call({ inputs: options.inputs });
-//   res.json({ ok: true, data: { result } });
-// });
+  res.json({ ok: true, data });
+});
 
 app.listen(9999, () => {
   console.log("Server is running on port 9999");
