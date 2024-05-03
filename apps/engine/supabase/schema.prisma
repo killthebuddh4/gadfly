@@ -7,36 +7,40 @@ datasource db {
   url      = env("SUPABASE_CONN_STRING")
 }
 
-model Signal {
+model Network {
+  id         String     @id @default(uuid())
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  root       Root?
+  computers  Computer[]
+}
+
+model Actor {
+  id          String    @id @default(uuid())
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  computer    Computer  @relation(fields: [computer_id], references: [id])
+  computer_id String    @unique
+  messages    Message[]
+}
+
+model Message {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  code       String
+  actor      Actor?   @relation(fields: [actor_id], references: [id])
+  actor_id   String?
+  values     Mux[]
+}
+
+model Mux {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  message    Message  @relation(fields: [message_id], references: [id])
+  message_id String
   value      Value    @relation(fields: [value_id], references: [id])
-  value_id   String
-  source     Process  @relation("signal_source", fields: [source_id], references: [id])
-  source_id  String
-  target     Process  @relation("signal_target", fields: [target_id], references: [id])
-  target_id  String
-}
-
-model Process {
-  id          String   @id @default(uuid())
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  computer    Computer @relation(fields: [computer_id], references: [id])
-  computer_id String   @unique
-  sent        Signal[] @relation("signal_source")
-  received    Signal[] @relation("signal_target")
-  children    Child[]
-}
-
-model Child {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  parent     Process  @relation(fields: [parent_id], references: [id])
-  parent_id  String
+  value_id   String   @unique
 }
 
 model Expression {
@@ -45,6 +49,8 @@ model Expression {
   updated_at  DateTime      @updatedAt
   computer    Computer      @relation(fields: [computer_id], references: [id])
   computer_id String        @unique
+  machine     Machine       @relation(fields: [machine_id], references: [id])
+  machine_id  String        @unique
   dependent   Dependent[]
   independent Independent[]
   bound       Bound[]
@@ -114,6 +120,28 @@ model Variable {
   free        Free[]
 }
 
+model Root {
+  id          String   @id @default(uuid())
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  computer    Computer @relation(fields: [computer_id], references: [id])
+  computer_id String   @unique
+  network     Network  @relation(fields: [network_id], references: [id])
+  network_id  String   @unique
+}
+
+model Machine {
+  id          String       @id @default(uuid())
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+  computer    Computer     @relation(fields: [computer_id], references: [id])
+  computer_id String       @unique
+  state       Transition[]
+  variable    Variable?
+  type        Type?
+  expression  Expression?
+}
+
 model Transition {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
@@ -147,17 +175,6 @@ model State {
   finishes   Transition[] @relation("transition_finish")
 }
 
-model Machine {
-  id          String       @id @default(uuid())
-  created_at  DateTime     @default(now())
-  updated_at  DateTime     @updatedAt
-  computer    Computer     @relation(fields: [computer_id], references: [id])
-  computer_id String       @unique
-  state       Transition[]
-  variables   Variable[]
-  types       Type[]
-}
-
 model Description {
   id         String     @id @default(uuid())
   created_at DateTime   @default(now())
@@ -168,26 +185,18 @@ model Description {
 }
 
 model Value {
-  id            String        @id @default(uuid())
-  created_at    DateTime      @default(now())
-  updated_at    DateTime      @updatedAt
-  simulation    Simulation?   @relation(fields: [simulation_id], references: [id])
-  simulation_id String?       @unique
-  value         String
-  inputs        Input[]
-  output        Output[]
-  signals       Signal[]
-  parameters    Parameter[]
-  feedback      Feedback[]
-  states        State[]
-  events        Event[]
-  descriptions  Description[]
-}
-
-model User {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id           String        @id @default(uuid())
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @updatedAt
+  value        String
+  inputs       Input[]
+  output       Output[]
+  parameters   Parameter[]
+  feedback     Feedback[]
+  states       State[]
+  events       Event[]
+  descriptions Description[]
+  muxes        Mux[]
 }
 
 model Input {
@@ -224,6 +233,7 @@ model Computer {
   id             String        @id @default(uuid())
   created_at     DateTime      @default(now())
   updated_at     DateTime      @updatedAt
+  pwned          Boolean       @default(false)
   description    Description   @relation(fields: [description_id], references: [id])
   description_id String
   simulation     Simulation?   @relation(fields: [simulation_id], references: [id])
@@ -232,10 +242,10 @@ model Computer {
   network_id     String
   computations   Computation[]
   expression     Expression?
-  process        Process?
   machine        Machine?
+  actor          Actor?
   generation     Generation?
-  daemon         Daemon?
+  root           Root?
 }
 
 model Parameter {
@@ -267,7 +277,6 @@ model Simulation {
   created_at    DateTime     @default(now())
   updated_at    DateTime     @updatedAt
   computer      Computer?
-  value         Value?
   parameter     Parameter    @relation(fields: [parameter_id], references: [id])
   parameter_id  String
   feedback      Feedback     @relation(fields: [feedback_id], references: [id])
@@ -319,22 +328,4 @@ model Trajectory {
   parameter_id String
   feedback     Feedback   @relation(fields: [feedback_id], references: [id])
   feedback_id  String
-}
-
-model Daemon {
-  id          String   @id @default(uuid())
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  computer    Computer @relation(fields: [computer_id], references: [id])
-  computer_id String   @unique
-  network     Network  @relation(fields: [network_id], references: [id])
-  network_id  String   @unique
-}
-
-model Network {
-  id         String     @id @default(uuid())
-  created_at DateTime   @default(now())
-  updated_at DateTime   @updatedAt
-  daemon     Daemon?
-  computers  Computer[]
 }
