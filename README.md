@@ -515,3 +515,17 @@ I think the core data model is _extremely close to v0.0.1_. The primitives we ha
 1. I started writing some endpoints and events, starting from the ground up "boot a network.". I need to just keep going with this: implement the core endpoints/events/operations that need to get done.
 
 2. Write down the core data model and protocol, clean up (among other things) this README.
+
+# Notes 2024-05-03
+
+Continuing to drill into the core. I'm pretty happy because I'm not spinning in place, getting stuck, feeling lost (like I have been in the past). Rather, I feel like I've developed (and am continuing to develop) a very solid/robust mental image of what the system is supposed to look like. I feel like I'm drilling down into something that I know is there and I'm inching my towards.
+
+The very next thing I need to think about is the relationship between:
+
+- a node
+- a group of nodes
+- an edge
+- a group of edges
+- parameters, feedback, and values
+- a "decision"
+- a "computation"

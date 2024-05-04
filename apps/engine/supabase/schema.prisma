@@ -266,6 +266,15 @@ model Node {
   value_id     String?  @unique
   graph        Graph?
   tree         Tree?
+  groups       Nodes[]
+}
+
+model Nodes {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  node       Node     @relation(fields: [node_id], references: [id])
+  node_id    String   @unique
 }
 
 model Edge {
@@ -280,4 +289,13 @@ model Edge {
   parameter_id String   @unique
   feedback     Value    @relation("edge_feedback", fields: [feedback_id], references: [id])
   feedback_id  String   @unique
+  groups       Edges[]
+}
+
+model Edges {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  edge       Edge     @relation(fields: [edge_id], references: [id])
+  edge_id    String   @unique
 }
