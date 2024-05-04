@@ -7,23 +7,15 @@ datasource db {
   url      = env("SUPABASE_CONN_STRING")
 }
 
-model Network {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  graphs     Graph[]
-}
-
 model Value {
-  id          String       @id @default(uuid())
-  created_at  DateTime     @default(now())
-  updated_at  DateTime     @updatedAt
-  value       String
-  node        Node?
-  edge        Edge?
-  instruction Instruction?
-  signal      Signal?
-  feedback    Feedback?
+  id         String    @id @default(uuid())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  value      String
+  node       Node?
+  edge       Edge?
+  signal     Signal?
+  feedback   Feedback?
 }
 
 model Feedback {
@@ -41,7 +33,7 @@ model Signal {
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
   // Synthetic | Analytic
-  flow       String
+  direction  String
   value      Value     @relation(fields: [value_id], references: [id])
   value_id   String    @unique
   edge       Edge      @relation(fields: [edge_id], references: [id])
@@ -49,35 +41,28 @@ model Signal {
   feedback   Feedback?
 }
 
-model Actor {
-  id           String        @id @default(uuid())
-  created_at   DateTime      @default(now())
-  updated_at   DateTime      @updatedAt
-  transactions Transaction[]
-}
-
-model Transaction {
-  id           String        @id @default(uuid())
-  created_at   DateTime      @default(now())
-  updated_at   DateTime      @updatedAt
-  actor        Actor         @relation(fields: [actor_id], references: [id])
-  actor_id     String
-  instructions Instruction[]
-}
-
 model Instruction {
-  id             String      @id @default(uuid())
-  created_at     DateTime    @default(now())
-  updated_at     DateTime    @updatedAt
-  transaction    Transaction @relation(fields: [transaction_id], references: [id])
-  transaction_id String
-  code           Int
-  value          Value?      @relation(fields: [value_id], references: [id])
-  value_id       String?     @unique
-  target_node    Node?       @relation(fields: [target_node_id], references: [id])
-  target_node_id String?     @unique
-  target_edge    Edge?       @relation(fields: [target_edge_id], references: [id])
-  target_edge_id String?     @unique
+  id             String   @id @default(uuid())
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+  node           Node?    @relation("instruction_node", fields: [node_id], references: [id])
+  node_id        String?  @unique
+  operation      String
+  target_node    Node?    @relation("instruction_target_node", fields: [target_node_id], references: [id])
+  target_node_id String?
+  target_edge    Edge?    @relation("instruction_target_edge", fields: [target_edge_id], references: [id])
+  target_edge_id String?
+  result_node    Node?    @relation("instruction_result_node", fields: [result_node_id], references: [id])
+  result_node_id String?  @unique
+  result_edge    Edge?    @relation("instruction_result_edge", fields: [result_edge_id], references: [id])
+  result_edge_id String?  @unique
+}
+
+model Network {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  graphs     Graph[]
 }
 
 model Graph {
@@ -91,30 +76,33 @@ model Graph {
 }
 
 model Node {
-  id          String       @id @default(uuid())
-  created_at  DateTime     @default(now())
-  updated_at  DateTime     @updatedAt
-  graph       Graph        @relation(fields: [graph_id], references: [id])
+  id          String        @id @default(uuid())
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+  graph       Graph         @relation(fields: [graph_id], references: [id])
   graph_id    String
-  instruction Instruction?
-  parents     Edge[]       @relation("edge_parent")
-  children    Edge[]       @relation("edge_child")
-  value       Value?       @relation(fields: [value_id], references: [id])
-  value_id    String?      @unique
+  instruction Instruction?  @relation("instruction_node")
+  parents     Edge[]        @relation("edge_parent")
+  children    Edge[]        @relation("edge_child")
+  value       Value?        @relation(fields: [value_id], references: [id])
+  value_id    String?       @unique
+  targets     Instruction[] @relation("instruction_target_node")
+  results     Instruction[] @relation("instruction_result_node")
 }
 
 model Edge {
-  id          String       @id @default(uuid())
-  created_at  DateTime     @default(now())
-  updated_at  DateTime     @updatedAt
-  graph       Graph        @relation(fields: [graph_id], references: [id])
-  graph_id    String
-  instruction Instruction?
-  parent      Node         @relation("edge_parent", fields: [parent_id], references: [id])
-  parent_id   String
-  child       Node         @relation("edge_child", fields: [child_id], references: [id])
-  child_id    String
-  value       Value        @relation(fields: [value_id], references: [id])
-  value_id    String       @unique
-  signals     Signal[]
+  id         String        @id @default(uuid())
+  created_at DateTime      @default(now())
+  updated_at DateTime      @updatedAt
+  graph      Graph         @relation(fields: [graph_id], references: [id])
+  graph_id   String
+  targets    Instruction[] @relation("instruction_target_edge")
+  results    Instruction[] @relation("instruction_result_edge")
+  parent     Node          @relation("edge_parent", fields: [parent_id], references: [id])
+  parent_id  String
+  child      Node          @relation("edge_child", fields: [child_id], references: [id])
+  child_id   String
+  value      Value         @relation(fields: [value_id], references: [id])
+  value_id   String        @unique
+  signals    Signal[]
 }
