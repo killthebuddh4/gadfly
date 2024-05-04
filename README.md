@@ -529,3 +529,27 @@ The very next thing I need to think about is the relationship between:
 - parameters, feedback, and values
 - a "decision"
 - a "computation"
+
+
+# Notes 2024-05-03-01
+
+So I'm all the way down at the most basic primitives possible: we have
+
+- nodes and edges
+- a "computation" is defined as a set of input nodes and output nodes. one thing that's interesting about this is that we can build up computations incrementally and we can therefore validate/verify/backup incrementally.
+
+We have DAGs and trees. We need a primitive for generating these data structures. Basically a WAL that can be used to reconstruct/rewind the structure.
+
+Thinking about the fundamental kinds of DAGs. There's ways of generating a DAG and ways of executing a DAG. For example map/reduce (i.e. natural selection and/or experiments) is a way to generate AND execute a dag. But there's also a functional programming way to look at it (unfold, map, reduce) that's more about the FLOW of data.
+
+Then we have trees and their generation/execution. So we have like
+
+- computations
+- proofs
+- expressions (like a continuous-valued SAT circuit or something)
+
+I also need to think about the structure of dialectic. Is a dialectic a map/reduce DAG basically?
+
+__The reason this is important because it's super important that the primitives we choose can ergonomically model all the cases we need. If we the primitives are not ergonomic, THE PROMPTS WILL BE SUPER CONVOLUTED__
+
+In other words, I believe there is a very strong inverse correlation between how well our primitives map onto general purpose computation and how "PROMPTLESS" the system can be. And I think the PROMPTLESSNESS is a rough proxy for autonomy.

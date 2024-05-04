@@ -11,176 +11,174 @@ model Network {
   id         String     @id @default(uuid())
   created_at DateTime   @default(now())
   updated_at DateTime   @updatedAt
-  root       Root?
   computers  Computer[]
 }
 
-model Actor {
-  id          String    @id @default(uuid())
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
-  computer    Computer  @relation(fields: [computer_id], references: [id])
-  computer_id String    @unique
-  messages    Message[]
-}
+//   id          String    @id @default(uuid())
+//   created_at  DateTime  @default(now())
+//   updated_at  DateTime  @updatedAt
+//   computer    Computer  @relation(fields: [computer_id], references: [id])
+//   computer_id String    @unique
+//   messages    Message[]
+// }
 
-model Message {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  actor      Actor?   @relation(fields: [actor_id], references: [id])
-  actor_id   String?
-  values     Mux[]
-}
+// model Message {
+//   id         String   @id @default(uuid())
+//   created_at DateTime @default(now())
+//   updated_at DateTime @updatedAt
+//   actor      Actor?   @relation(fields: [actor_id], references: [id])
+//   actor_id   String?
+//   values     Mux[]
+// }
 
-model Mux {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  message    Message  @relation(fields: [message_id], references: [id])
-  message_id String
-  value      Value    @relation(fields: [value_id], references: [id])
-  value_id   String   @unique
-}
+// model Mux {
+//   id         String   @id @default(uuid())
+//   created_at DateTime @default(now())
+//   updated_at DateTime @updatedAt
+//   message    Message  @relation(fields: [message_id], references: [id])
+//   message_id String
+//   value      Value    @relation(fields: [value_id], references: [id])
+//   value_id   String   @unique
+// }
 
-model Expression {
-  id          String        @id @default(uuid())
-  created_at  DateTime      @default(now())
-  updated_at  DateTime      @updatedAt
-  computer    Computer      @relation(fields: [computer_id], references: [id])
-  computer_id String        @unique
-  machine     Machine       @relation(fields: [machine_id], references: [id])
-  machine_id  String        @unique
-  dependent   Dependent[]
-  independent Independent[]
-  bound       Bound[]
-  free        Free[]
-}
+// model Expression {
+//   id          String        @id @default(uuid())
+//   created_at  DateTime      @default(now())
+//   updated_at  DateTime      @updatedAt
+//   computer    Computer      @relation(fields: [computer_id], references: [id])
+//   computer_id String        @unique
+//   machine     Machine       @relation(fields: [machine_id], references: [id])
+//   machine_id  String        @unique
+//   dependent   Dependent[]
+//   independent Independent[]
+//   bound       Bound[]
+//   free        Free[]
+// }
 
-model Free {
-  id            String     @id @default(uuid())
-  created_at    DateTime   @default(now())
-  updated_at    DateTime   @updatedAt
-  expression    Expression @relation(fields: [expression_id], references: [id])
-  expression_id String
-  variable      Variable   @relation(fields: [variable_id], references: [id])
-  variable_id   String
-}
+// model Free {
+//   id            String     @id @default(uuid())
+//   created_at    DateTime   @default(now())
+//   updated_at    DateTime   @updatedAt
+//   expression    Expression @relation(fields: [expression_id], references: [id])
+//   expression_id String
+//   variable      Variable   @relation(fields: [variable_id], references: [id])
+//   variable_id   String
+// }
 
-model Independent {
-  id            String     @id @default(uuid())
-  created_at    DateTime   @default(now())
-  updated_at    DateTime   @updatedAt
-  expression    Expression @relation(fields: [expression_id], references: [id])
-  expression_id String
-  variable      Variable   @relation(fields: [variable_id], references: [id])
-  variable_id   String
-}
+// model Independent {
+//   id            String     @id @default(uuid())
+//   created_at    DateTime   @default(now())
+//   updated_at    DateTime   @updatedAt
+//   expression    Expression @relation(fields: [expression_id], references: [id])
+//   expression_id String
+//   variable      Variable   @relation(fields: [variable_id], references: [id])
+//   variable_id   String
+// }
 
-model Dependent {
-  id            String     @id @default(uuid())
-  created_at    DateTime   @default(now())
-  updated_at    DateTime   @updatedAt
-  expression    Expression @relation(fields: [expression_id], references: [id])
-  expression_id String
-  variable      Variable   @relation(fields: [variable_id], references: [id])
-  variable_id   String
-}
+// model Dependent {
+//   id            String     @id @default(uuid())
+//   created_at    DateTime   @default(now())
+//   updated_at    DateTime   @updatedAt
+//   expression    Expression @relation(fields: [expression_id], references: [id])
+//   expression_id String
+//   variable      Variable   @relation(fields: [variable_id], references: [id])
+//   variable_id   String
+// }
 
-model Bound {
-  id            String     @id @default(uuid())
-  created_at    DateTime   @default(now())
-  updated_at    DateTime   @updatedAt
-  expression    Expression @relation(fields: [expression_id], references: [id])
-  expression_id String
-  variable      Variable   @relation(fields: [variable_id], references: [id])
-  variable_id   String
-}
+// model Bound {
+//   id            String     @id @default(uuid())
+//   created_at    DateTime   @default(now())
+//   updated_at    DateTime   @updatedAt
+//   expression    Expression @relation(fields: [expression_id], references: [id])
+//   expression_id String
+//   variable      Variable   @relation(fields: [variable_id], references: [id])
+//   variable_id   String
+// }
 
-model Type {
-  id         String     @id @default(uuid())
-  created_at DateTime   @default(now())
-  updated_at DateTime   @updatedAt
-  machine    Machine    @relation(fields: [machine_id], references: [id])
-  machine_id String     @unique
-  instances  Variable[]
-}
+// model Type {
+//   id         String     @id @default(uuid())
+//   created_at DateTime   @default(now())
+//   updated_at DateTime   @updatedAt
+//   machine    Machine    @relation(fields: [machine_id], references: [id])
+//   machine_id String     @unique
+//   instances  Variable[]
+// }
 
-model Variable {
-  id          String        @id @default(uuid())
-  created_at  DateTime      @default(now())
-  updated_at  DateTime      @updatedAt
-  type        Type          @relation(fields: [type_id], references: [id])
-  type_id     String
-  machine     Machine       @relation(fields: [machine_id], references: [id])
-  machine_id  String        @unique
-  bound       Bound[]
-  dependent   Dependent[]
-  independent Independent[]
-  free        Free[]
-}
+// model Variable {
+//   id          String        @id @default(uuid())
+//   created_at  DateTime      @default(now())
+//   updated_at  DateTime      @updatedAt
+//   type        Type          @relation(fields: [type_id], references: [id])
+//   type_id     String
+//   machine     Machine       @relation(fields: [machine_id], references: [id])
+//   machine_id  String        @unique
+//   bound       Bound[]
+//   dependent   Dependent[]
+//   independent Independent[]
+//   free        Free[]
+// }
 
-model Root {
-  id          String   @id @default(uuid())
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  computer    Computer @relation(fields: [computer_id], references: [id])
-  computer_id String   @unique
-  network     Network  @relation(fields: [network_id], references: [id])
-  network_id  String   @unique
-}
+// model Root {
+//   id          String   @id @default(uuid())
+//   created_at  DateTime @default(now())
+//   updated_at  DateTime @updatedAt
+//   computer    Computer @relation(fields: [computer_id], references: [id])
+//   computer_id String   @unique
+//   network     Network  @relation(fields: [network_id], references: [id])
+//   network_id  String   @unique
+// }
 
-model Machine {
-  id          String       @id @default(uuid())
-  created_at  DateTime     @default(now())
-  updated_at  DateTime     @updatedAt
-  computer    Computer     @relation(fields: [computer_id], references: [id])
-  computer_id String       @unique
-  state       Transition[]
-  variable    Variable?
-  type        Type?
-  expression  Expression?
-}
+// model Machine {
+//   id          String       @id @default(uuid())
+//   created_at  DateTime     @default(now())
+//   updated_at  DateTime     @updatedAt
+//   computer    Computer     @relation(fields: [computer_id], references: [id])
+//   computer_id String       @unique
+//   state       Transition[]
+//   variable    Variable?
+//   type        Type?
+//   expression  Expression?
+// }
 
-model Transition {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  start      State    @relation("transition_start", fields: [start_id], references: [id])
-  start_id   String
-  finish     State    @relation("transition_finish", fields: [finish_id], references: [id])
-  finish_id  String
-  event      Event    @relation(fields: [event_id], references: [id])
-  event_id   String
-  machine    Machine  @relation(fields: [machine_id], references: [id])
-  machine_id String
-}
+// model Transition {
+//   id         String   @id @default(uuid())
+//   created_at DateTime @default(now())
+//   updated_at DateTime @updatedAt
+//   start      State    @relation("transition_start", fields: [start_id], references: [id])
+//   start_id   String
+//   finish     State    @relation("transition_finish", fields: [finish_id], references: [id])
+//   finish_id  String
+//   event      Event    @relation(fields: [event_id], references: [id])
+//   event_id   String
+//   machine    Machine  @relation(fields: [machine_id], references: [id])
+//   machine_id String
+// }
 
-model Event {
-  id          String       @id @default(uuid())
-  created_at  DateTime     @default(now())
-  updated_at  DateTime     @updatedAt
-  value       Value        @relation(fields: [value_id], references: [id])
-  value_id    String
-  transitions Transition[]
-}
+// model Event {
+//   id          String       @id @default(uuid())
+//   created_at  DateTime     @default(now())
+//   updated_at  DateTime     @updatedAt
+//   value       Value        @relation(fields: [value_id], references: [id])
+//   value_id    String
+//   transitions Transition[]
+// }
 
-model State {
-  id         String       @id @default(uuid())
-  created_at DateTime     @default(now())
-  updated_at DateTime     @updatedAt
-  value      Value        @relation(fields: [value_id], references: [id])
-  value_id   String
-  starts     Transition[] @relation("transition_start")
-  finishes   Transition[] @relation("transition_finish")
-}
+// model State {
+//   id         String       @id @default(uuid())
+//   created_at DateTime     @default(now())
+//   updated_at DateTime     @updatedAt
+//   value      Value        @relation(fields: [value_id], references: [id])
+//   value_id   String
+//   starts     Transition[] @relation("transition_start")
+//   finishes   Transition[] @relation("transition_finish")
+// }
 
 model Input {
   id             String      @id @default(uuid())
   created_at     DateTime    @default(now())
   updated_at     DateTime    @updatedAt
-  value          Value       @relation(fields: [value_id], references: [id])
-  value_id       String
+  node           Node        @relation(fields: [node_id], references: [id])
+  node_id        String
   computation    Computation @relation(fields: [computation_id], references: [id])
   computation_id String
 }
@@ -189,8 +187,8 @@ model Output {
   id             String      @id @default(uuid())
   created_at     DateTime    @default(now())
   updated_at     DateTime    @updatedAt
-  value          Value       @relation(fields: [value_id], references: [id])
-  value_id       String
+  node           Node        @relation(fields: [node_id], references: [id])
+  node_id        String
   computation    Computation @relation(fields: [computation_id], references: [id])
   computation_id String      @unique
 }
@@ -200,7 +198,7 @@ model Computation {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
   inputs      Input[]
-  output      Output?
+  output      Output[]
   computer    Computer @relation(fields: [computer_id], references: [id])
   computer_id String
 }
@@ -209,31 +207,18 @@ model Computer {
   id           String        @id @default(uuid())
   created_at   DateTime      @default(now())
   updated_at   DateTime      @updatedAt
-  pwned        Boolean       @default(false)
   network      Network       @relation(fields: [network_id], references: [id], onDelete: Cascade)
   network_id   String
   computations Computation[]
-  expression   Expression?
-  machine      Machine?
-  actor        Actor?
-  root         Root?
 }
 
 model Value {
-  id             String   @id @default(uuid())
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
-  value          String
-  inputs         Input[]
-  output         Output[]
-  states         State[]
-  events         Event[]
-  muxes          Mux[]
-  node_parameter Node?    @relation("node_parameter")
-  node_feedback  Node?    @relation("node_feedback")
-  node_value     Node?    @relation("node_value")
-  edge_parameter Edge?    @relation("edge_parameter")
-  edge_feedback  Edge?    @relation("edge_feedback")
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  value      String
+  node       Node?
+  edge       Edge?
 }
 
 model Tree {
@@ -253,49 +238,27 @@ model Graph {
 }
 
 model Node {
-  id           String   @id @default(uuid())
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
-  parents      Edge[]   @relation("edge_parent")
-  children     Edge[]   @relation("edge_child")
-  parameter    Value?   @relation("node_parameter", fields: [parameter_id], references: [id])
-  parameter_id String?  @unique
-  feedback     Value?   @relation("node_feedback", fields: [feedback_id], references: [id])
-  feedback_id  String?  @unique
-  value        Value?   @relation("node_value", fields: [value_id], references: [id])
-  value_id     String?  @unique
-  graph        Graph?
-  tree         Tree?
-  groups       Nodes[]
-}
-
-model Nodes {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  node       Node     @relation(fields: [node_id], references: [id])
-  node_id    String   @unique
+  value      Value?   @relation(fields: [value_id], references: [id])
+  value_id   String?  @unique
+  parents    Edge[]   @relation("edge_parent")
+  children   Edge[]   @relation("edge_child")
+  graph      Graph?
+  tree       Tree?
+  inputs     Input[]
+  output     Output[]
 }
 
 model Edge {
-  id           String   @id @default(uuid())
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
-  parent       Node     @relation("edge_parent", fields: [parent_id], references: [id])
-  parent_id    String
-  child        Node     @relation("edge_child", fields: [child_id], references: [id])
-  child_id     String
-  parameter    Value    @relation("edge_parameter", fields: [parameter_id], references: [id])
-  parameter_id String   @unique
-  feedback     Value    @relation("edge_feedback", fields: [feedback_id], references: [id])
-  feedback_id  String   @unique
-  groups       Edges[]
-}
-
-model Edges {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  edge       Edge     @relation(fields: [edge_id], references: [id])
-  edge_id    String   @unique
+  parent     Node     @relation("edge_parent", fields: [parent_id], references: [id])
+  parent_id  String
+  child      Node     @relation("edge_child", fields: [child_id], references: [id])
+  child_id   String
+  value      Value    @relation(fields: [value_id], references: [id])
+  value_id   String   @unique
 }
