@@ -4,7 +4,6 @@ import { Edge } from "./Edge.js";
 
 export type Graph = {
   id: () => Promise<string>;
-  type: () => Promise<string>;
   value: () => Promise<Value>;
   nodes: () => Promise<Node[]>;
   edges: () => Promise<Edge[]>;

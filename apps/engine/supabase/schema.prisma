@@ -12,27 +12,47 @@ model Type {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   type       String
-  graph      Graph?
-  node       Node?
-  edge       Edge?
+  values     Value[]
 }
 
 model Value {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id         String    @id @default(uuid())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  type       Type      @relation(fields: [type_id], references: [id])
+  type_id    String
   value      String
   graph      Graph?
   node       Node?
   edge       Edge?
+  Signal     Signal?
+  Feedback   Feedback?
+}
+
+model Signal {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  value      Value    @relation(fields: [value_id], references: [id])
+  value_id   String   @unique
+  edge       Edge     @relation(fields: [edge_id], references: [id])
+  edge_id    String   @unique
+}
+
+model Feedback {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  value      Value    @relation(fields: [value_id], references: [id])
+  value_id   String   @unique
+  edge       Edge     @relation(fields: [edge_id], references: [id])
+  edge_id    String   @unique
 }
 
 model Graph {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  type       Type     @relation(fields: [type_id], references: [id])
-  type_id    String   @unique
   value      Value    @relation(fields: [value_id], references: [id])
   value_id   String   @unique
   nodes      Node[]
@@ -44,8 +64,6 @@ model Node {
   updated_at DateTime @updatedAt
   graph      Graph    @relation(fields: [graph_id], references: [id])
   graph_id   String
-  type       Type     @relation(fields: [type_id], references: [id])
-  type_id    String   @unique
   parents    Edge[]   @relation("edge_parent")
   children   Edge[]   @relation("edge_child")
   value      Value?   @relation(fields: [value_id], references: [id])
@@ -53,15 +71,15 @@ model Node {
 }
 
 model Edge {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  parent     Node     @relation("edge_parent", fields: [parent_id], references: [id])
+  id         String    @id @default(uuid())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  parent     Node      @relation("edge_parent", fields: [parent_id], references: [id])
   parent_id  String
-  child      Node     @relation("edge_child", fields: [child_id], references: [id])
+  child      Node      @relation("edge_child", fields: [child_id], references: [id])
   child_id   String
-  type       Type     @relation(fields: [type_id], references: [id])
-  type_id    String   @unique
-  value      Value    @relation(fields: [value_id], references: [id])
-  value_id   String   @unique
+  value      Value     @relation(fields: [value_id], references: [id])
+  value_id   String    @unique
+  signal     Signal?
+  feedback   Feedback?
 }
