@@ -7,102 +7,61 @@ datasource db {
   url      = env("SUPABASE_CONN_STRING")
 }
 
-model Value {
-  id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
+model Type {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
   value      String
+  graph      Graph?
   node       Node?
   edge       Edge?
-  signal     Signal?
-  feedback   Feedback?
 }
 
-model Feedback {
+model Value {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  value      Value    @relation(fields: [value_id], references: [id])
-  value_id   String   @unique
-  signal     Signal   @relation(fields: [signal_id], references: [id])
-  signal_id  String   @unique
-}
-
-model Signal {
-  id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  // Synthetic | Analytic
-  direction  String
-  value      Value     @relation(fields: [value_id], references: [id])
-  value_id   String    @unique
-  edge       Edge      @relation(fields: [edge_id], references: [id])
-  edge_id    String
-  feedback   Feedback?
-}
-
-model Instruction {
-  id             String   @id @default(uuid())
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
-  node           Node?    @relation("instruction_node", fields: [node_id], references: [id])
-  node_id        String?  @unique
-  operation      String
-  target_node    Node?    @relation("instruction_target_node", fields: [target_node_id], references: [id])
-  target_node_id String?
-  target_edge    Edge?    @relation("instruction_target_edge", fields: [target_edge_id], references: [id])
-  target_edge_id String?
-  result_node    Node?    @relation("instruction_result_node", fields: [result_node_id], references: [id])
-  result_node_id String?  @unique
-  result_edge    Edge?    @relation("instruction_result_edge", fields: [result_edge_id], references: [id])
-  result_edge_id String?  @unique
-}
-
-model Network {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  graphs     Graph[]
+  value      String
+  graph      Graph?
+  node       Node?
+  edge       Edge?
 }
 
 model Graph {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  network    Network  @relation(fields: [network_id], references: [id])
-  network_id String
+  type       Type     @relation(fields: [type_id], references: [id])
+  type_id    String   @unique
+  value      Value    @relation(fields: [value_id], references: [id])
+  value_id   String   @unique
   nodes      Node[]
-  edges      Edge[]
 }
 
 model Node {
-  id          String        @id @default(uuid())
-  created_at  DateTime      @default(now())
-  updated_at  DateTime      @updatedAt
-  graph       Graph         @relation(fields: [graph_id], references: [id])
-  graph_id    String
-  instruction Instruction?  @relation("instruction_node")
-  parents     Edge[]        @relation("edge_parent")
-  children    Edge[]        @relation("edge_child")
-  value       Value?        @relation(fields: [value_id], references: [id])
-  value_id    String?       @unique
-  targets     Instruction[] @relation("instruction_target_node")
-  results     Instruction[] @relation("instruction_result_node")
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  graph      Graph    @relation(fields: [graph_id], references: [id])
+  graph_id   String
+  type       Type     @relation(fields: [type_id], references: [id])
+  type_id    String   @unique
+  parents    Edge[]   @relation("edge_parent")
+  children   Edge[]   @relation("edge_child")
+  value      Value?   @relation(fields: [value_id], references: [id])
+  value_id   String?  @unique
 }
 
 model Edge {
-  id         String        @id @default(uuid())
-  created_at DateTime      @default(now())
-  updated_at DateTime      @updatedAt
-  graph      Graph         @relation(fields: [graph_id], references: [id])
-  graph_id   String
-  targets    Instruction[] @relation("instruction_target_edge")
-  results    Instruction[] @relation("instruction_result_edge")
-  parent     Node          @relation("edge_parent", fields: [parent_id], references: [id])
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  parent     Node     @relation("edge_parent", fields: [parent_id], references: [id])
   parent_id  String
-  child      Node          @relation("edge_child", fields: [child_id], references: [id])
+  child      Node     @relation("edge_child", fields: [child_id], references: [id])
   child_id   String
-  value      Value         @relation(fields: [value_id], references: [id])
-  value_id   String        @unique
-  signals    Signal[]
+  type       Type     @relation(fields: [type_id], references: [id])
+  type_id    String   @unique
+  value      Value    @relation(fields: [value_id], references: [id])
+  value_id   String   @unique
 }
