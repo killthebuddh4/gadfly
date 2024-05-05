@@ -1,13 +1,11 @@
 import { Commit } from "./Commit.js";
-import { Operation } from "./Operation.js";
+import { Branch } from "./Branch.js";
 
 export type Program = {
-  versions: () => Promise<Commit[]>;
-  edit: (args: { target: Commit; operation: Operation }) => Promise<Commit>;
-  branch: (args: {
-    target: Commit;
-    operations: Operation[];
-  }) => Promise<Commit[]>;
-  merge: (args: { target: Commit[]; operation: Operation }) => Promise<Commit>;
-  execute: () => Promise<Commit>;
+  history: () => Promise<Branch>;
+  branches: () => Promise<Branch[]>;
+  patch: (args: { target: Branch; commit: Commit }) => Promise<void>;
+  branch: (args: { target: Commit; branches: Branch[] }) => Promise<void>;
+  merge: (args: { targets: Branch[]; commit: Commit }) => Promise<void>;
+  test: (args: { target: Branch }) => Promise<void>;
 };

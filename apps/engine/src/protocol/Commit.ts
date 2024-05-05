@@ -1,5 +1,5 @@
-import { Graph } from "../primitives/Graph.js";
+import { Node } from "../primitives/Node.js";
 
 export type Commit = {
-  node: () => Promise<Graph>;
+  node: () => Promise<Node>;
 };
