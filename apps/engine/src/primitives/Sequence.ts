@@ -1,5 +1,6 @@
-import { Graph } from "../../primitives/Graph.js";
+import { Graph } from "./Graph.js";
 import { Element } from "./Element.js";
+import { Result } from "./Result.js";
 
 export type Sequence = {
   graph: () => Promise<Graph>;
@@ -7,6 +8,5 @@ export type Sequence = {
   next: () => Promise<Sequence[]>;
   tail: () => Promise<Element>;
   head: () => Promise<Element>;
-  step: () => Promise<Element>;
-  map: () => Promise<Sequence[]>;
+  append: (element: Element) => Promise<Result>;
 };

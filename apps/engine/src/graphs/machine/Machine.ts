@@ -2,7 +2,7 @@ import { Graph } from "../../primitives/Graph.js";
 import { State } from "./State.js";
 import { Trajectory } from "./Trajectory.js";
 import { Transition } from "./Transition.js";
-import { Signal } from "./Signal.js";
+import { Result } from "../../primitives/Result.js";
 
 export type Machine = {
   graph: () => Promise<Graph>;
@@ -10,6 +10,8 @@ export type Machine = {
   terminal: () => Promise<State[]>;
   states: () => Promise<State[]>;
   trajectories: () => Promise<Trajectory[]>;
-  connect: (from: State, to: State) => Promise<void>;
-  signal: (state: State, signal: Signal) => Promise<Transition>;
+  add: (state: State) => Promise<Result>;
+  connect: (state: State) => Promise<Result>;
+  init: (state: State) => Promise<Trajectory>;
+  transition: (target: Trajectory, transition: Transition) => Promise<Result>;
 };

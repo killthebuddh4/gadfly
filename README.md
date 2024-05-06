@@ -553,3 +553,7 @@ I also need to think about the structure of dialectic. Is a dialectic a map/redu
 __The reason this is important because it's super important that the primitives we choose can ergonomically model all the cases we need. If we the primitives are not ergonomic, THE PROMPTS WILL BE SUPER CONVOLUTED__
 
 In other words, I believe there is a very strong inverse correlation between how well our primitives map onto general purpose computation and how "PROMPTLESS" the system can be. And I think the PROMPTLESSNESS is a rough proxy for autonomy.
+
+# 2024-05-06
+
+The way to think about the primitive data structures is that the top-most level that you might be interacting with needs to have the WRITE method that does the validations. When you add more wrappers it basically means you are adding constraints to the data structure, whatever the additional constraints are need to be in the wrapper validation.

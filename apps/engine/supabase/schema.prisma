@@ -25,6 +25,7 @@ model Value {
   graph      Graph?
   node       Node?
   edge       Edge?
+  Pointer    Pointer?
 }
 
 model Graph {
@@ -37,25 +38,39 @@ model Graph {
 }
 
 model Node {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  graph      Graph    @relation(fields: [graph_id], references: [id])
+  id         String    @id @default(uuid())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  graph      Graph     @relation(fields: [graph_id], references: [id])
   graph_id   String
-  parents    Edge[]   @relation("edge_parent")
-  children   Edge[]   @relation("edge_child")
-  value      Value?   @relation(fields: [value_id], references: [id])
-  value_id   String?  @unique
+  upstream   Edge[]    @relation("edge_to")
+  downstream Edge[]    @relation("edge_from")
+  parents    Pointer[] @relation("pointer_to")
+  children   Pointer[] @relation("pointer_from")
+  value      Value?    @relation(fields: [value_id], references: [id])
+  value_id   String?   @unique
 }
 
 model Edge {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  parent     Node     @relation("edge_parent", fields: [parent_id], references: [id])
-  parent_id  String
-  child      Node     @relation("edge_child", fields: [child_id], references: [id])
-  child_id   String
+  from       Node     @relation("edge_from", fields: [from_id], references: [id])
+  from_id    String
+  to         Node     @relation("edge_to", fields: [to_id], references: [id])
+  to_id      String
+  value      Value    @relation(fields: [value_id], references: [id])
+  value_id   String   @unique
+}
+
+model Pointer {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  from       Node     @relation("pointer_from", fields: [from_id], references: [id])
+  from_id    String
+  to         Node     @relation("pointer_to", fields: [to_id], references: [id])
+  to_id      String
   value      Value    @relation(fields: [value_id], references: [id])
   value_id   String   @unique
 }
