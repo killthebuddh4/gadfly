@@ -1,7 +1,7 @@
 import { Sequence } from "./Sequence.js";
 import { Graph } from "../../primitives/Graph.js";
 
-export type Dag = {
+export type Flow = {
   graph: () => Promise<Graph>;
   tail: () => Promise<Sequence>;
   heads: () => Promise<Sequence[]>;
