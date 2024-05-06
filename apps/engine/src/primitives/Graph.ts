@@ -7,6 +7,5 @@ export type Graph = {
   value: () => Promise<Value>;
   nodes: () => Promise<Node[]>;
   edges: () => Promise<Edge[]>;
-  addNode: (args: { edge: Edge; value: Value }) => Promise<Node>;
-  addEdge: (args: { node: Node; value: Value }) => Promise<Edge>;
+  append: (args: { node: Node; value: Value }) => Promise<Node>;
 };

@@ -16,37 +16,15 @@ model Type {
 }
 
 model Value {
-  id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  type       Type      @relation(fields: [type_id], references: [id])
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  type       Type     @relation(fields: [type_id], references: [id])
   type_id    String
   value      String
   graph      Graph?
   node       Node?
   edge       Edge?
-  signal     Signal?
-  feedback   Feedback?
-}
-
-model Signal {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  value      Value    @relation(fields: [value_id], references: [id])
-  value_id   String   @unique
-  edge       Edge     @relation(fields: [edge_id], references: [id])
-  edge_id    String   @unique
-}
-
-model Feedback {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  value      Value    @relation(fields: [value_id], references: [id])
-  value_id   String   @unique
-  edge       Edge     @relation(fields: [edge_id], references: [id])
-  edge_id    String   @unique
 }
 
 model Graph {
@@ -71,15 +49,13 @@ model Node {
 }
 
 model Edge {
-  id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  parent     Node      @relation("edge_parent", fields: [parent_id], references: [id])
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  parent     Node     @relation("edge_parent", fields: [parent_id], references: [id])
   parent_id  String
-  child      Node      @relation("edge_child", fields: [child_id], references: [id])
+  child      Node     @relation("edge_child", fields: [child_id], references: [id])
   child_id   String
-  value      Value     @relation(fields: [value_id], references: [id])
-  value_id   String    @unique
-  signal     Signal?
-  feedback   Feedback?
+  value      Value    @relation(fields: [value_id], references: [id])
+  value_id   String   @unique
 }
