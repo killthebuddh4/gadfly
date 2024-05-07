@@ -28,13 +28,23 @@ model Value {
   Pointer    Pointer?
 }
 
-model Graph {
+model Structure {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  value      Value    @relation(fields: [value_id], references: [id])
-  value_id   String   @unique
-  nodes      Node[]
+  type       String
+  graphs     Graph[]
+}
+
+model Graph {
+  id           String    @id @default(uuid())
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  structure    Structure @relation(fields: [structure_id], references: [id])
+  structure_id String
+  value        Value     @relation(fields: [value_id], references: [id])
+  value_id     String    @unique
+  nodes        Node[]
 }
 
 model Node {
