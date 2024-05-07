@@ -557,3 +557,23 @@ In other words, I believe there is a very strong inverse correlation between how
 # 2024-05-06
 
 The way to think about the primitive data structures is that the top-most level that you might be interacting with needs to have the WRITE method that does the validations. When you add more wrappers it basically means you are adding constraints to the data structure, whatever the additional constraints are need to be in the wrapper validation.
+
+# 2024-05-06-01
+
+So I've been mostly thinking about the form of an Expression as embedded inside an AST. You basically have 4 kinds of variables that need to be made consistent:
+
+- bound (lexically-scoped names)
+- free (arguments, but we don't really need these right now because we're not worried about code re-use)
+- independent (sub-trees in the AST, or arguments)
+- dependent (the result of the expression)
+
+And there's basically 3, maybe 4, forms:
+
+- parallel (all independent variables also don't depend on each other)
+- serial (some independent variables might depend on each other, i.e. they might bind earlier independent variables)
+- switch (pick a sub-tree to evaluate)
+- literal (no children)
+
+But I've been getting a little bit hung up on how the data actually flows through an expression. It's kind of weird when we're trying to generate them just-in-time because that's top down but data flows bottom up. Data flows top down in an AST via bindings...
+
+my son is awake, GTG.
