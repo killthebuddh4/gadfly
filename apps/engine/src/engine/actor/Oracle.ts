@@ -1,3 +1,5 @@
-import { Signal } from "../protocol-v0/actor/Signal.js";
+import { Actor } from "./Actor.js";
 
-export type Oracle = (args: { signal: Signal }) => Promise<Signal>;
+export type Oracle = {
+  actor: () => Promise<Actor>;
+};

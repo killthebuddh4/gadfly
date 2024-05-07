@@ -1,7 +1,7 @@
-import { Author } from "./Author.js";
-import { Daemon } from "./Daemon.js";
+import { Trajectory } from "../../primitives/Trajectory.js";
+import { Result } from "../../primitives/Result.js";
 
 export type Actor = {
-  author: () => Promise<Author>;
-  daemon: () => Promise<Daemon>;
+  run: (trajectory: Trajectory) => Promise<Result>;
+  trajectories: () => Promise<Trajectory[]>;
 };
