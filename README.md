@@ -595,3 +595,9 @@ upstream -> when you traverse CONT, the elements that come before THIS
 downstream -> when you traverse CONT, the elements that come after THIS
 parents -> when you traverse OWNER, the elements that come before THIS
 children -> when you traverse OWNER, the elements that come after THIS
+
+# NOTES 2024-05-08
+
+__primitives__ -> graphs and operations on graphs, can be fully understood on their own (i.e. they're not specific to gadfly)
+__engine__ -> graphs and operations that are specifically about driving the generation of other graphs
+__language__ -> graphs and operations that can be executed and whose values are essentially source code and are generated via the engine
