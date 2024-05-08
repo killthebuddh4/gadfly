@@ -1,10 +1,10 @@
 import { Graph } from "./Graph.js";
-import { Element } from "./Element.js";
 import { Result } from "./Result.js";
+import { Element } from "./Element.js";
 
-export type Sequence = {
+export type Sequence<G = Graph> = {
   unwrap: () => Promise<Graph>;
-  tail: () => Promise<Element>;
-  head: () => Promise<Element>;
-  append: (element: Element) => Promise<Result>;
+  tail: () => Promise<Element<G>>;
+  head: () => Promise<Element<G>>;
+  append: (element: Element<G>) => Promise<Result>;
 };

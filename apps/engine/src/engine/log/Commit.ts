@@ -1,9 +1,10 @@
 import { Graph } from "../../primitives/Graph.js";
-import { Log } from "./Log.js";
+import { Branch } from "./Branch.js";
 
-export type Commit = {
-  owner: () => Promise<Log>;
-  unwrap: () => Promise<Graph>;
-  parent: () => Promise<Commit | null>;
-  children: () => Promise<Commit[]>;
+export type Commit<G = Graph> = {
+  container: () => Promise<Branch>;
+  unwrap: () => Promise<G>;
+
+  upstream: () => Promise<Commit<G> | null>;
+  downstream: () => Promise<Commit<G>[]>;
 };

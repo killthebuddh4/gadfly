@@ -577,3 +577,21 @@ And there's basically 3, maybe 4, forms:
 But I've been getting a little bit hung up on how the data actually flows through an expression. It's kind of weird when we're trying to generate them just-in-time because that's top down but data flows bottom up. Data flows top down in an AST via bindings...
 
 my son is awake, GTG.
+
+# Patterns
+
+unwrap -> the more generic structure underlying THIS
+// POINTERS/EDGES aren't exactly the right way to describe
+// the difference between owner and container
+// One way to think about it is that upstream and downstream
+// both return THIS kind of graph, but parent and children may not
+// Also, container.tails and container.heads is always THIS type
+// but owner/parent/children are not (necessarily).
+owner -> the structure whose POINTERS lead to THIS
+container -> the structure whose EDGES lead to THIS
+tails -> the elements that begin traversals of THIS
+heads -> the elements that end traversals of THIS
+upstream -> when you traverse CONT, the elements that come before THIS
+downstream -> when you traverse CONT, the elements that come after THIS
+parents -> when you traverse OWNER, the elements that come before THIS
+children -> when you traverse OWNER, the elements that come after THIS

@@ -1,13 +1,14 @@
 import { Graph } from "./Graph.js";
-import { Element } from "./Element.js";
+import { State } from "./State.js";
 import { Result } from "./Result.js";
 
-export type Flow = {
+export type Flow<G = Graph> = {
   unwrap: () => Promise<Graph>;
-  tail: () => Promise<Graph>;
-  heads: () => Promise<Graph[]>;
-  append: (target: Graph, element: Element) => Promise<Result>;
-  map: (target: Graph, to: Graph[]) => Promise<Result>;
-  reduce: (targets: Graph[], to: Graph) => Promise<Result>;
-  fork: (target: Graph, flow: Flow) => Promise<Result>;
+
+  tails: () => Promise<State<G>[]>;
+  heads: () => Promise<State<G>[]>;
+
+  append: (target: State<G>, state: State<G>) => Promise<Result>;
+  map: (target: State<G>, to: State<G>[]) => Promise<Result>;
+  reduce: (targets: State<G>[], to: State<G>) => Promise<Result>;
 };

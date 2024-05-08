@@ -8,7 +8,7 @@ export type Graph = {
   value: () => Promise<Value>;
   nodes: () => Promise<Node[]>;
   edges: () => Promise<Edge[]>;
-  pointers: () => Promise<Pointer[]>;
+  upstream: () => Promise<Graph[]>;
+  downstream: () => Promise<Graph[]>;
   append: (args: { node: Node; value: Value }) => Promise<Node>;
-  read: () => Promise<Value | null>;
 };
