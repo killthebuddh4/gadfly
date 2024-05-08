@@ -1,4 +1,4 @@
-import { Graph } from "../../primitives/Graph.js";
+import { Graph } from "../primitives/Graph.js";
 import { Branch } from "./Branch.js";
 
 export type Commit<G = Graph> = {

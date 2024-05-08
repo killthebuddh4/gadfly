@@ -1,11 +1,11 @@
-import { Node } from "../../primitives/Node.js";
-import { Graph } from "../../primitives/Graph.js";
-import { Result } from "../../primitives/Result.js";
+import { Node } from "../primitives/Node.js";
+import { Graph } from "../primitives/Graph.js";
+import { Result } from "../primitives/Result.js";
 import { Trajectory } from "../../engine/Trajectory.js";
-import { Constraint } from "../Constraint.js";
-import { Comment } from "../Comment.js";
-import { Type } from "../Type.js";
-import { Expression } from "../expression/Expression.js";
+import { Constraint } from "./Constraint.js";
+import { Comment } from "./Comment.js";
+import { Type } from "./Type.js";
+import { Expression } from "./Expression.js";
 
 /* TODO Input/Output/etc should be their own types
  * so that their methods can have the right types. */

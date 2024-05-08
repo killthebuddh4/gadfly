@@ -1,9 +1,9 @@
-import { Tree } from "../../primitives/Tree.js";
-import { Node } from "../../primitives/Node.js";
-import { Flow } from "../../primitives/Flow.js";
+import { Tree } from "../primitives/Tree.js";
+import { Node } from "../primitives/Node.js";
+import { Flow } from "../primitives/Flow.js";
 import { Trajectory } from "../../engine/Trajectory.js";
-import { Result } from "../../primitives/Result.js";
-import { Comment } from "../Comment.js";
+import { Result } from "../primitives/Result.js";
+import { Comment } from "./Comment.js";
 
 export type Expression = {
   owner: () => Promise<Expression>;

@@ -1,8 +1,8 @@
-import { Flow } from "../../primitives/Flow.js";
+import { Flow } from "../primitives/Flow.js";
 import { Commit } from "./Commit.js";
 import { Branch } from "./Branch.js";
-import { Graph } from "../../primitives/Graph.js";
-import { Result } from "../../primitives/Result.js";
+import { Graph } from "../primitives/Graph.js";
+import { Result } from "../primitives/Result.js";
 
 export type Log<G = Graph> = {
   unwrap: () => Promise<Flow<Branch<G>>>;

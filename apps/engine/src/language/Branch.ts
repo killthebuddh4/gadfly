@@ -1,7 +1,7 @@
-import { Sequence } from "../../primitives/Sequence.js";
+import { Sequence } from "../primitives/Sequence.js";
 import { Commit } from "./Commit.js";
 import { Log } from "./Log.js";
-import { Graph } from "../../primitives/Graph.js";
+import { Graph } from "../primitives/Graph.js";
 
 export type Branch<G = Graph> = {
   container: () => Promise<Log<G>>;

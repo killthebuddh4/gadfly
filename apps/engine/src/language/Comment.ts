@@ -1,6 +1,6 @@
 import { Node } from "../primitives/Node.js";
-import { Lambda } from "./lambda/Lambda.js";
-import { Expression } from "./expression/Expression.js";
+import { Lambda } from "./Lambda.js";
+import { Expression } from "./Expression.js";
 
 export type Comment = {
   owner: () => Promise<Lambda | Expression>;
