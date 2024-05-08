@@ -1,6 +1,6 @@
 import { Graph } from "../../primitives/Graph.js";
 import { State } from "./State.js";
-import { Trajectory } from "../../primitives/Trajectory.js";
+import { Trajectory } from "../Trajectory.js";
 import { Transition } from "./Transition.js";
 import { Result } from "../../primitives/Result.js";
 

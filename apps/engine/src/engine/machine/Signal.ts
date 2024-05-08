@@ -5,6 +5,6 @@ import { State } from "./State.js";
 export type Signal = {
   owner: () => Promise<Transition>;
   unwrap: () => Promise<Node>;
-  previous: () => Promise<State>;
-  next: () => Promise<State>;
+  parent: () => Promise<State>;
+  child: () => Promise<State>;
 };

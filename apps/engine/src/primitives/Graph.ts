@@ -10,4 +10,5 @@ export type Graph = {
   edges: () => Promise<Edge[]>;
   pointers: () => Promise<Pointer[]>;
   append: (args: { node: Node; value: Value }) => Promise<Node>;
+  read: () => Promise<Value | null>;
 };

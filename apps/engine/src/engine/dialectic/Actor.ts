@@ -1,4 +1,4 @@
-import { Trajectory } from "../../primitives/Trajectory.js";
+import { Trajectory } from "../Trajectory.js";
 import { Result } from "../../primitives/Result.js";
 
 export type Actor = {

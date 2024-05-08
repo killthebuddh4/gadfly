@@ -1,9 +1,9 @@
-import { Node } from "./Node.js";
+import { Graph } from "./Graph.js";
 import { Sequence } from "./Sequence.js";
 
 export type Element = {
   owner: () => Promise<Sequence>;
-  unwrap: () => Promise<Node>;
-  prev: () => Promise<Element | null>;
-  next: () => Promise<Element | null>;
+  unwrap: () => Promise<Graph>;
+  parent: () => Promise<Element | null>;
+  child: () => Promise<Element | null>;
 };

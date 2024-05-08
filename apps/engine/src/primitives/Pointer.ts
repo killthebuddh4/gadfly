@@ -6,6 +6,6 @@ export type Pointer = {
   owner: () => Promise<Graph>;
   id: () => Promise<string>;
   value: () => Promise<Value>;
-  from: () => Promise<Node>;
-  to: () => Promise<Node>;
+  from: () => Promise<Graph>;
+  to: () => Promise<Graph>;
 };

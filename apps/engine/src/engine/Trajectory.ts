@@ -1,6 +1,6 @@
-import { Graph } from "./Graph.js";
-import { Sequence } from "./Sequence.js";
-import { Result } from "./Result.js";
+import { Graph } from "../primitives/Graph.js";
+import { Sequence } from "../primitives/Sequence.js";
+import { Result } from "../primitives/Result.js";
 
 export type Trajectory = {
   owner: () => Promise<Graph>;

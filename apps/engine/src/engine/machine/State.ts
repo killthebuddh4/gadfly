@@ -4,6 +4,6 @@ import { Machine } from "./Machine.js";
 export type State = {
   owner: () => Promise<Machine>;
   unwrap: () => Promise<Node>;
-  upstream: () => Promise<State[]>;
-  downstream: () => Promise<State[]>;
+  parents: () => Promise<State[]>;
+  children: () => Promise<State[]>;
 };

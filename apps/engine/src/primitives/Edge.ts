@@ -7,5 +7,5 @@ export type Edge = {
   id: () => Promise<string>;
   value: () => Promise<Value>;
   from: () => Promise<Node>;
-  to: () => Promise<Node>;
+  to: () => Promise<Node | null>;
 };

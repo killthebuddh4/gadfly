@@ -5,6 +5,7 @@ import { Graph } from "./Graph.js";
 
 export type Node = {
   owner: () => Promise<Graph>;
+  read: () => Promise<Value | null>;
   id: () => Promise<string>;
   value: () => Promise<Value>;
   upstream: () => Promise<Edge[]>;

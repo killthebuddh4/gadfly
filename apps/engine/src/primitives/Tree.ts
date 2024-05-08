@@ -1,12 +1,10 @@
 import { Graph } from "./Graph.js";
-import { Sequence } from "./Sequence.js";
-import { Element } from "./Element.js";
 import { Result } from "./Result.js";
 
 export type Tree = {
   unwrap: () => Promise<Graph>;
-  tail: () => Promise<Sequence>;
-  heads: () => Promise<Element[]>;
-  append: (target: Sequence, element: Element) => Promise<Result>;
-  map: (target: Sequence, to: Sequence[]) => Promise<Result>;
+  tail: () => Promise<Graph>;
+  heads: () => Promise<Graph[]>;
+  append: (target: Graph, graph: Graph) => Promise<Result>;
+  map: (target: Graph, to: Graph[]) => Promise<Result>;
 };
