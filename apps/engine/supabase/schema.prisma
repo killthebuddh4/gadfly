@@ -16,16 +16,17 @@ model Type {
 }
 
 model Value {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  type       Type     @relation(fields: [type_id], references: [id])
+  id         String     @id @default(uuid())
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  type       Type       @relation(fields: [type_id], references: [id])
   type_id    String
   value      String
   graph      Graph?
   node       Node?
   edge       Edge?
-  Pointer    Pointer?
+  pointer    Pointer?
+  operation  Operation?
 }
 
 model Structure {
@@ -45,20 +46,20 @@ model Graph {
   value        Value     @relation(fields: [value_id], references: [id])
   value_id     String    @unique
   nodes        Node[]
+  upstream     Pointer[] @relation("pointer_to")
+  downstream   Pointer[] @relation("pointer_from")
 }
 
 model Node {
-  id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  graph      Graph     @relation(fields: [graph_id], references: [id])
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  graph      Graph    @relation(fields: [graph_id], references: [id])
   graph_id   String
-  upstream   Edge[]    @relation("edge_to")
-  downstream Edge[]    @relation("edge_from")
-  parents    Pointer[] @relation("pointer_to")
-  children   Pointer[] @relation("pointer_from")
-  value      Value?    @relation(fields: [value_id], references: [id])
-  value_id   String?   @unique
+  upstream   Edge[]   @relation("edge_to")
+  downstream Edge[]   @relation("edge_from")
+  value      Value?   @relation(fields: [value_id], references: [id])
+  value_id   String?  @unique
 }
 
 model Edge {
@@ -73,14 +74,25 @@ model Edge {
   value_id   String   @unique
 }
 
+model Operation {
+  id         String    @id @default(uuid())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  value      Value     @relation(fields: [value_id], references: [id])
+  value_id   String    @unique
+  pointers   Pointer[]
+}
+
 model Pointer {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  from       Node     @relation("pointer_from", fields: [from_id], references: [id])
-  from_id    String
-  to         Node     @relation("pointer_to", fields: [to_id], references: [id])
-  to_id      String
-  value      Value    @relation(fields: [value_id], references: [id])
-  value_id   String   @unique
+  id           String    @id @default(uuid())
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  operation    Operation @relation(fields: [operation_id], references: [id])
+  operation_id String
+  from         Graph     @relation("pointer_from", fields: [from_id], references: [id])
+  from_id      String
+  to           Graph     @relation("pointer_to", fields: [to_id], references: [id])
+  to_id        String
+  value        Value     @relation(fields: [value_id], references: [id])
+  value_id     String    @unique
 }

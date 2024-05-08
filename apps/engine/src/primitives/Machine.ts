@@ -1,18 +1,32 @@
 import { Graph } from "./Graph.js";
 import { Phase } from "./Phase.js";
-import { Sequence } from "./Sequence.js";
 import { Result } from "./Result.js";
+import { Transition } from "./Transition.js";
+import { Append } from "./Append.js";
 
 export type Machine<G = Graph> = {
-  unwrap: () => Promise<G>;
-  initial: () => Promise<Phase<G>[]>;
-  terminal: () => Promise<Phase<G>[]>;
-  states: () => Promise<Phase<G>[]>;
-  add: (state: Phase<G>) => Promise<Result>;
-  connect: (from: Phase<G>, to: Phase<G>) => Promise<Result>;
-  init: (state: Phase<G>) => Promise<Trajectory<G>>;
-  transition: (target: Trajectory<G>, to: Phase<G>) => Promise<Result>;
-  trajectories: () => Promise<Trajectory<G>[]>;
-};
+  unwrap: () => Promise<Graph>;
 
-type Trajectory<G> = Sequence<Phase<G>>;
+  tails: () => Promise<Phase<G>[]>;
+  heads: () => Promise<Phase<G>[]>;
+
+  phases: {
+    read: () => Promise<Phase<G>[]>;
+
+    append: {
+      request: (request: Append) => Promise<Result>;
+      generate: (target: Append) => Promise<Phase<G>>;
+      apply: (phase: Phase<G>) => Promise<Result>;
+    };
+  };
+
+  transitions: {
+    read: () => Promise<Transition<G>[]>;
+
+    append: {
+      request: (request: Append) => Promise<Result>;
+      generate: (target: Append) => Promise<Transition<G>>;
+      apply: (transition: Transition<G>) => Promise<Result>;
+    };
+  };
+};
