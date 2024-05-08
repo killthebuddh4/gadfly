@@ -6,9 +6,8 @@ import { Result } from "../../primitives/Result.js";
 import { Comment } from "../Comment.js";
 
 export type Expression = {
-  tree: () => Promise<Tree>;
-  node: () => Promise<Node>;
-  flow: () => Promise<Flow>;
+  owner: () => Promise<Expression>;
+  unwrap: () => Promise<Flow>;
 
   comment: () => Promise<Comment>;
 

@@ -22,7 +22,7 @@ The graph data structures we use can be sorted into layers:
 
 1. base layer (Graph, Node, Edge) - basic graphs without any enforced structure
 2. structural layer (Sequence, Flow, and Tree) - graphs with just a little bit of enforced structure
-3. state layer (Repo, Machine) - structural graphs used to generate (and trace) the state of other graphs
+3. state layer (Log, Machine) - structural graphs used to generate (and trace) the state of other graphs
 4. dialectic layer - graphs used to generate nodes in other graphs
 5. language layer - graphs which represent Gadfly language constructs.
 

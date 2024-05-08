@@ -4,7 +4,7 @@ import { Element } from "./Element.js";
 import { Result } from "./Result.js";
 
 export type Tree = {
-  graph: () => Promise<Graph>;
+  unwrap: () => Promise<Graph>;
   tail: () => Promise<Sequence>;
   heads: () => Promise<Element[]>;
   append: (target: Sequence, element: Element) => Promise<Result>;

@@ -8,7 +8,7 @@ import { Type } from "../Type.js";
 import { Expression } from "../expression/Expression.js";
 
 export type Lambda = {
-  graph: () => Promise<Graph>;
+  unwrap: () => Promise<Graph>;
 
   comment: {
     read: () => Promise<Comment>;
