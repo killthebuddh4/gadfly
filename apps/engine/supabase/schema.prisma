@@ -8,12 +8,19 @@ datasource db {
 }
 
 model Type {
-  id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  type       String
-  values     Value[]
-  pointers   Pointer[]
+  id          String       @id @default(uuid())
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+  type        Int
+  values      Value[]
+  graphs      Graph[]
+  nodes       Node[]
+  edges       Edge[]
+  operations  Operation[]
+  transitions Transition[]
+  executions  Execution[]
+  phases      Phase[]
+  pointers    Pointer[]
 }
 
 model Value {
@@ -30,12 +37,15 @@ model Value {
   transition Transition?
   execution  Execution?
   pointers   Pointer[]
+  Phase      Phase?
 }
 
 model Graph {
   id         String       @id @default(uuid())
   created_at DateTime     @default(now())
   updated_at DateTime     @updatedAt
+  type       Type         @relation(fields: [type_id], references: [id])
+  type_id    String
   value      Value?       @relation(fields: [value_id], references: [id])
   value_id   String?      @unique
   nodes      Node[]
@@ -52,6 +62,8 @@ model Node {
   graph_id   String
   upstream   Edge[]    @relation("edge_to")
   downstream Edge[]    @relation("edge_from")
+  type       Type      @relation(fields: [type_id], references: [id])
+  type_id    String
   value      Value?    @relation(fields: [value_id], references: [id])
   value_id   String?   @unique
   phase      Phase?
@@ -68,6 +80,8 @@ model Edge {
   from_id      String
   to           Node?     @relation("edge_to", fields: [to_id], references: [id])
   to_id        String?
+  type         Type      @relation(fields: [type_id], references: [id])
+  type_id      String
   value        Value?    @relation(fields: [value_id], references: [id])
   value_id     String?   @unique
   operation    Operation @relation(fields: [operation_id], references: [id])
@@ -79,6 +93,8 @@ model Operation {
   id         String    @id @default(uuid())
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
+  type       Type      @relation(fields: [type_id], references: [id])
+  type_id    String
   value      Value?    @relation(fields: [value_id], references: [id])
   value_id   String?   @unique
   edges      Edge[]
@@ -93,26 +109,32 @@ model Trajectory {
   graph_id   String
 }
 
+model Execution {
+  id          String       @id @default(uuid())
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+  type        Type         @relation(fields: [type_id], references: [id])
+  type_id     String
+  value       Value?       @relation(fields: [value_id], references: [id])
+  value_id    String?      @unique
+  transitions Transition[]
+  pointers    Pointer[]
+}
+
 model Phase {
   id         String       @id @default(uuid())
   created_at DateTime     @default(now())
   updated_at DateTime     @updatedAt
   node       Node         @relation(fields: [node_id], references: [id])
   node_id    String       @unique
+  type       Type         @relation(fields: [type_id], references: [id])
+  type_id    String
+  value      Value?       @relation(fields: [value_id], references: [id])
+  value_id   String?      @unique
   pointer    Pointer      @relation(fields: [pointer_id], references: [id])
   pointer_id String       @unique
   upstream   Transition[] @relation("transition_to")
   downstream Transition[] @relation("transition_from")
-}
-
-model Execution {
-  id          String       @id @default(uuid())
-  created_at  DateTime     @default(now())
-  updated_at  DateTime     @updatedAt
-  value       Value?       @relation(fields: [value_id], references: [id])
-  value_id    String?      @unique
-  transitions Transition[]
-  pointers    Pointer[]
 }
 
 model Transition {
@@ -125,6 +147,8 @@ model Transition {
   from_id      String
   to           Phase?    @relation("transition_to", fields: [to_id], references: [id])
   to_id        String?
+  type         Type      @relation(fields: [type_id], references: [id])
+  type_id      String
   value        Value?    @relation(fields: [value_id], references: [id])
   value_id     String?   @unique
   pointers     Pointer[]
