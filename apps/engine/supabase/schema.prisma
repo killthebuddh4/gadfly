@@ -7,76 +7,68 @@ datasource db {
   url      = env("SUPABASE_CONN_STRING")
 }
 
-model Synthesis {
+model Trajectory {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  graph      Graph    @relation(fields: [graph_id], references: [id])
+  graph_id   String   @unique
+  actor      Actor    @relation(fields: [actor_id], references: [id])
+  actor_id   String   @unique
+}
+
+model Actor {
+  id         String      @id @default(uuid())
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  graph      Graph?
+  node       Node?
+  pointer    Pointer?
+  branch     Branch?
+  edge       Edge?
+  value      Value?
+  type       Type?
+  trajectory Trajectory?
+}
+
+model Type {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  type       String
+  values     Value[]
+  actor      Actor    @relation(fields: [actor_id], references: [id])
+  actor_id   String   @unique
+}
+
+model Value {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   type       Type     @relation(fields: [type_id], references: [id])
   type_id    String
-  value      Value?   @relation(fields: [value_id], references: [id])
-  value_id   String?  @unique
-}
-
-model Type {
-  id         String      @id @default(uuid())
-  created_at DateTime    @default(now())
-  updated_at DateTime    @updatedAt
-  type       String
-  syntheses  Synthesis[]
-}
-
-model Value {
-  id         String      @id @default(uuid())
-  created_at DateTime    @default(now())
-  updated_at DateTime    @updatedAt
   value      String
-  synthesis  Synthesis?
+  actor      Actor    @relation(fields: [actor_id], references: [id])
+  actor_id   String   @unique
   graph      Graph?
   node       Node?
   edge       Edge?
+  branch     Branch?
   pointer    Pointer?
-  generation Generation?
-  actor      Actor?
-  message    Message?
-}
-
-model Message {
-  id          String   @id @default(uuid())
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  dialogue    Dialogue @relation(fields: [dialogue_id], references: [id])
-  dialogue_id String
-  value       Value?   @relation(fields: [value_id], references: [id])
-  value_id    String?  @unique
-  actor       Actor?   @relation(fields: [actor_id], references: [id])
-  actor_id    String?
-}
-
-model Dialogue {
-  id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  messages   Message[]
-}
-
-model Actor {
-  id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  value      Value?    @relation(fields: [value_id], references: [id])
-  value_id   String?   @unique
-  messages   Message[]
 }
 
 model Graph {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  value      Value?   @relation(fields: [value_id], references: [id])
-  value_id   String?  @unique
+  id         String      @id @default(uuid())
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  value      Value?      @relation(fields: [value_id], references: [id])
+  value_id   String?     @unique
   nodes      Node[]
   edges      Edge[]
+  trajectory Trajectory?
   pointer    Pointer?
+  actor      Actor       @relation(fields: [actor_id], references: [id])
+  actor_id   String      @unique
 }
 
 model Node {
@@ -89,6 +81,8 @@ model Node {
   downstream Edge[]   @relation("edge_from")
   value      Value?   @relation(fields: [value_id], references: [id])
   value_id   String?  @unique
+  actor      Actor    @relation(fields: [actor_id], references: [id])
+  actor_id   String   @unique
   pointer    Pointer?
 }
 
@@ -100,32 +94,37 @@ model Edge {
   graph_id   String
   from       Node     @relation("edge_from", fields: [from_id], references: [id])
   from_id    String
-  to         Node     @relation("edge_to", fields: [to_id], references: [id])
-  to_id      String
-  value      Value    @relation(fields: [value_id], references: [id])
-  value_id   String   @unique
+  to         Node?    @relation("edge_to", fields: [to_id], references: [id])
+  to_id      String?
+  value      Value?   @relation(fields: [value_id], references: [id])
+  value_id   String?  @unique
+  branch     Branch   @relation(fields: [branch_id], references: [id])
+  branch_id  String   @unique
+  actor      Actor    @relation(fields: [actor_id], references: [id])
+  actor_id   String   @unique
 }
 
-model Generation {
-  id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  value      Value     @relation(fields: [value_id], references: [id])
-  value_id   String    @unique
-  pointers   Pointer[]
+model Branch {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  value      Value?   @relation(fields: [value_id], references: [id])
+  value_id   String?  @unique
+  edges      Edge[]
+  actor      Actor    @relation(fields: [actor_id], references: [id])
+  actor_id   String   @unique
 }
 
-// A POINTER MUST ALWAYS POINT TO A GRAPH THAT IS A LOG
 model Pointer {
-  id            String     @id @default(uuid())
-  created_at    DateTime   @default(now())
-  updated_at    DateTime   @updatedAt
-  value         Value      @relation(fields: [value_id], references: [id])
-  value_id      String     @unique
-  generation    Generation @relation(fields: [generation_id], references: [id])
-  generation_id String
-  node          Node       @relation(fields: [node_id], references: [id])
-  node_id       String     @unique
-  to            Graph      @relation(fields: [to_id], references: [id])
-  to_id         String     @unique
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  value      Value?   @relation(fields: [value_id], references: [id])
+  value_id   String?  @unique
+  node       Node     @relation(fields: [node_id], references: [id])
+  node_id    String   @unique
+  graph      Graph    @relation(fields: [graph_id], references: [id])
+  graph_id   String   @unique
+  actor      Actor    @relation(fields: [actor_id], references: [id])
+  actor_id   String   @unique
 }

@@ -612,15 +612,24 @@ __QUESTIONS TO NOODLE ON IN THE NIGHT:__
 
 We have primitives and we have a few constructs that wrap or extend them, but we don't want to take it too far. How is the next layer up structured? i.e. it's maybe not natural to think of a lambda as a graph in and of itself, but it composes a few different graphs. An expression kind of does work naturally as a graph but that might be the highest level up before it becomes unwieldy.
 
+FORK
 - every TIMELINE has a SEER which is responsible for learning across branches
-- every TIMELINE has a GHOST which drives the log, talks to the SEER and other GHOSTs
+
+GRAPH
+- every GRAPH has a GHOST which drives the GRAPH
+SYNTHESIS
 - every SYNTHESIS is done by an ORACLE
-- every OBJECT has a DAEMON which understands the local structure of the graph
-- every OBJECT has a SEER which helps the GHOST decide what to do according to the high-level simulation
+
+NODE
+- every NODE has a DAEMON which understands the local structure of the graph
+
+ENVIRONMENT
+
 - every OBJECT has a SAGE who is able to understand empirical data and generate feedback
 
 SEER, GHOST, ORACLE, DAEMON, SAGE
 
-5 * 4 * 3 * 2
+5 * 5 * 4 * 4 * 3 * 3 * 2 * 2
 
-120
+
+120 ^ 120 = 12000 * 1.2 = 14400
