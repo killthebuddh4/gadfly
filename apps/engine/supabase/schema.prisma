@@ -7,14 +7,6 @@ datasource db {
   url      = env("SUPABASE_CONN_STRING")
 }
 
-model Type {
-  id         String      @id @default(uuid())
-  created_at DateTime    @default(now())
-  updated_at DateTime    @updatedAt
-  type       String
-  syntheses  Synthesis[]
-}
-
 model Synthesis {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
@@ -23,6 +15,14 @@ model Synthesis {
   type_id    String
   value      Value?   @relation(fields: [value_id], references: [id])
   value_id   String?  @unique
+}
+
+model Type {
+  id         String      @id @default(uuid())
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  type       String
+  syntheses  Synthesis[]
 }
 
 model Value {
@@ -36,6 +36,36 @@ model Value {
   edge       Edge?
   pointer    Pointer?
   generation Generation?
+  actor      Actor?
+  message    Message?
+}
+
+model Message {
+  id          String   @id @default(uuid())
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  dialogue    Dialogue @relation(fields: [dialogue_id], references: [id])
+  dialogue_id String
+  value       Value?   @relation(fields: [value_id], references: [id])
+  value_id    String?  @unique
+  actor       Actor?   @relation(fields: [actor_id], references: [id])
+  actor_id    String?
+}
+
+model Dialogue {
+  id         String    @id @default(uuid())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  messages   Message[]
+}
+
+model Actor {
+  id         String    @id @default(uuid())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  value      Value?    @relation(fields: [value_id], references: [id])
+  value_id   String?   @unique
+  messages   Message[]
 }
 
 model Graph {
@@ -90,12 +120,12 @@ model Pointer {
   id            String     @id @default(uuid())
   created_at    DateTime   @default(now())
   updated_at    DateTime   @updatedAt
+  value         Value      @relation(fields: [value_id], references: [id])
+  value_id      String     @unique
   generation    Generation @relation(fields: [generation_id], references: [id])
   generation_id String
   node          Node       @relation(fields: [node_id], references: [id])
   node_id       String     @unique
   to            Graph      @relation(fields: [to_id], references: [id])
   to_id         String     @unique
-  value         Value      @relation(fields: [value_id], references: [id])
-  value_id      String     @unique
 }
