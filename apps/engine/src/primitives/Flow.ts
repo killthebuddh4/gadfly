@@ -12,6 +12,8 @@ export type Flow<G = Graph> = {
   heads: () => Promise<State<G>[]>;
 
   states: {
+    read: () => Promise<State<G>[]>;
+
     append: {
       request: (request: Append) => Promise<Result>;
       generate: (target: Append) => Promise<State<G>>;

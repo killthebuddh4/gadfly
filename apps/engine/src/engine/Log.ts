@@ -1,44 +1,36 @@
 import { Flow } from "../primitives/Flow.js";
-import { Commit } from "./Commit.js";
 import { Branch } from "./Branch.js";
 import { Graph } from "../primitives/Graph.js";
 import { Result } from "../primitives/Result.js";
+import { Append } from "../primitives/Append.js";
+import { Expand } from "../primitives/Expand.js";
+import { Reduce } from "../primitives/Reduce.js";
 
 export type Log<G = Graph> = {
   unwrap: () => Promise<Flow<Branch<G>>>;
 
-  container: () => Promise<Log<G> | null>;
-  upstream: () => Promise<Log<G>[]>;
-  downstream: () => Promise<Log<G>[]>;
-
-  tail: () => Promise<Branch<G>>;
+  tails: () => Promise<Branch<G>[]>;
   heads: () => Promise<Branch<G>[]>;
 
-  commit: {
-    generate: (target: Branch<G>) => Promise<Commit<G>>;
-    apply: (target: Branch<G>, commit: Commit<G>) => Promise<Result>;
-  };
+  branches: {
+    read: () => Promise<Branch<G>[]>;
 
-  branch: {
-    generate: () => Promise<Branch<G>>;
-    apply: (target: Commit<G>, branch: Branch<G>) => Promise<Result>;
-  };
+    append: {
+      request: (request: Append) => Promise<Result>;
+      generate: (target: Append) => Promise<Branch<G>>;
+      apply: (branch: Branch<G>) => Promise<Result>;
+    };
 
-  merge: {
-    generate: (targets: Branch<G>[]) => Promise<Branch<G>>;
-    apply: (
-      targets: Branch<G>[],
-      branch: Branch<G>,
-      commit: Commit<G>,
-    ) => Promise<Result>;
-  };
+    expand: {
+      request: (request: Expand) => Promise<Result>;
+      generate: (target: Expand) => Promise<Branch<G>[]>;
+      apply: (branches: Branch<G>[]) => Promise<Result>;
+    };
 
-  fork: {
-    generate: (target: Branch<G>) => Promise<Log<G>>;
-    apply: (
-      target: Branch<G>,
-      log: Log<G>,
-      commit: Commit<G>,
-    ) => Promise<Result>;
+    reduce: {
+      request: (request: Reduce) => Promise<Result>;
+      generate: (target: Reduce) => Promise<Branch<G>>;
+      apply: (branch: Branch<G>) => Promise<Result>;
+    };
   };
 };

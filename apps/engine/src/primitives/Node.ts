@@ -1,4 +1,3 @@
-import { Edge } from "./Edge.js";
 import { Value } from "./Value.js";
 import { Graph } from "./Graph.js";
 

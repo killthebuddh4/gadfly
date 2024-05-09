@@ -1,4 +1,4 @@
-import { Actor } from "../engine/Actor.js";
+import { Actor } from "./Actor.js";
 
 export type Ghost = {
   actor: () => Promise<Actor>;

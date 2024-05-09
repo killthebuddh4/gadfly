@@ -601,3 +601,14 @@ children -> when you traverse OWNER, the elements that come after THIS
 __primitives__ -> graphs and operations on graphs, can be fully understood on their own (i.e. they're not specific to gadfly)
 __engine__ -> graphs and operations that are specifically about driving the generation of other graphs
 __language__ -> graphs and operations that can be executed and whose values are essentially source code and are generated via the engine
+
+# NOTES 2024-05-09
+
+__QUESTIONS TO NOODLE ON IN THE NIGHT:__
+
+- What, literally and specifically does unwrap mean?
+- How, literally and specifically does a graph become a node become a value?
+- How, literally and specifically is a graph (or other construct) related to a log that manages its state?
+
+We have primitives and we have a few constructs that wrap or extend them, but we don't want to take it too far. How is the next layer up structured? i.e. it's maybe not natural to think of a lambda as a graph in and of itself, but it composes a few different graphs. An expression kind of does work naturally as a graph but that might be the highest level up before it becomes unwieldy.
+
