@@ -1,4 +1,4 @@
-import { Sequence } from "../graphs/Sequence.js";
+import { Sequence } from "../graphs/sequence/Sequence.js";
 import { Commit } from "./Commit.js";
 import { Log } from "./Log.js";
 import { Graph } from "../primitives/Graph.js";

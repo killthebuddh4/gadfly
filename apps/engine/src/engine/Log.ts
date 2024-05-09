@@ -1,4 +1,4 @@
-import { Flow } from "../graphs/Flow.js";
+import { Flow } from "../graphs/flow/Flow.js";
 import { Branch } from "./Branch.js";
 import { Graph } from "../primitives/Graph.js";
 import { Result } from "../primitives/Result.js";

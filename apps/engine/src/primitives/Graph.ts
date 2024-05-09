@@ -11,8 +11,7 @@ export type Graph = {
   value: () => Promise<Value | null>;
   nodes: () => Promise<Node[]>;
   edges: () => Promise<Edge[]>;
-  upstream: () => Promise<Pointer[]>;
-  downstream: () => Promise<Pointer[]>;
+  pointer: () => Promise<Pointer | null>;
 
   synthesize: {
     value: {

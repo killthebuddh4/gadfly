@@ -39,15 +39,14 @@ model Value {
 }
 
 model Graph {
-  id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  value      Value?    @relation(fields: [value_id], references: [id])
-  value_id   String?   @unique
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  value      Value?   @relation(fields: [value_id], references: [id])
+  value_id   String?  @unique
   nodes      Node[]
   edges      Edge[]
-  upstream   Pointer[] @relation("pointer_to")
-  downstream Pointer[] @relation("pointer_from")
+  pointer    Pointer?
 }
 
 model Node {
@@ -60,7 +59,7 @@ model Node {
   downstream Edge[]   @relation("edge_from")
   value      Value?   @relation(fields: [value_id], references: [id])
   value_id   String?  @unique
-  pointers   Pointer?
+  pointer    Pointer?
 }
 
 model Edge {
@@ -86,6 +85,7 @@ model Generation {
   pointers   Pointer[]
 }
 
+// A POINTER MUST ALWAYS POINT TO A GRAPH THAT IS A LOG
 model Pointer {
   id            String     @id @default(uuid())
   created_at    DateTime   @default(now())
@@ -94,10 +94,8 @@ model Pointer {
   generation_id String
   node          Node       @relation(fields: [node_id], references: [id])
   node_id       String     @unique
-  from          Graph      @relation("pointer_from", fields: [from_id], references: [id])
-  from_id       String
-  to            Graph      @relation("pointer_to", fields: [to_id], references: [id])
-  to_id         String
+  to            Graph      @relation(fields: [to_id], references: [id])
+  to_id         String     @unique
   value         Value      @relation(fields: [value_id], references: [id])
   value_id      String     @unique
 }

@@ -1,5 +1,5 @@
-import { Flow } from "../graphs/Flow.js";
-import { Machine } from "../graphs/Machine.js";
+import { Flow } from "../graphs/flow/Flow.js";
+import { Machine } from "../graphs/machine/Machine.js";
 import { Actor } from "./Actor.js";
 
 export type Dialectic = {
