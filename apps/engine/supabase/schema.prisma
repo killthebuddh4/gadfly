@@ -7,124 +7,148 @@ datasource db {
   url      = env("SUPABASE_CONN_STRING")
 }
 
+model Type {
+  id         String    @id @default(uuid())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  type       String
+  values     Value[]
+  pointers   Pointer[]
+}
+
+model Value {
+  id         String      @id @default(uuid())
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  type       Type        @relation(fields: [type_id], references: [id])
+  type_id    String
+  value      String
+  graph      Graph?
+  node       Node?
+  edge       Edge?
+  operation  Operation?
+  transition Transition?
+  execution  Execution?
+  pointers   Pointer[]
+}
+
+model Graph {
+  id         String       @id @default(uuid())
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
+  value      Value?       @relation(fields: [value_id], references: [id])
+  value_id   String?      @unique
+  nodes      Node[]
+  edges      Edge[]
+  pointers   Pointer[]
+  Trajectory Trajectory[]
+}
+
+model Node {
+  id         String    @id @default(uuid())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  graph      Graph     @relation(fields: [graph_id], references: [id])
+  graph_id   String
+  upstream   Edge[]    @relation("edge_to")
+  downstream Edge[]    @relation("edge_from")
+  value      Value?    @relation(fields: [value_id], references: [id])
+  value_id   String?   @unique
+  phase      Phase?
+  pointers   Pointer[]
+}
+
+model Edge {
+  id           String    @id @default(uuid())
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  graph        Graph     @relation(fields: [graph_id], references: [id])
+  graph_id     String
+  from         Node      @relation("edge_from", fields: [from_id], references: [id])
+  from_id      String
+  to           Node?     @relation("edge_to", fields: [to_id], references: [id])
+  to_id        String?
+  value        Value?    @relation(fields: [value_id], references: [id])
+  value_id     String?   @unique
+  operation    Operation @relation(fields: [operation_id], references: [id])
+  operation_id String    @unique
+  pointers     Pointer[]
+}
+
+model Operation {
+  id         String    @id @default(uuid())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  value      Value?    @relation(fields: [value_id], references: [id])
+  value_id   String?   @unique
+  edges      Edge[]
+  pointers   Pointer[]
+}
+
 model Trajectory {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   graph      Graph    @relation(fields: [graph_id], references: [id])
-  graph_id   String   @unique
-  actor      Actor    @relation(fields: [actor_id], references: [id])
-  actor_id   String   @unique
-}
-
-model Actor {
-  id         String      @id @default(uuid())
-  created_at DateTime    @default(now())
-  updated_at DateTime    @updatedAt
-  graph      Graph?
-  node       Node?
-  pointer    Pointer?
-  branch     Branch?
-  edge       Edge?
-  value      Value?
-  type       Type?
-  trajectory Trajectory?
-}
-
-model Type {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  type       String
-  values     Value[]
-  actor      Actor    @relation(fields: [actor_id], references: [id])
-  actor_id   String   @unique
-}
-
-model Value {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  type       Type     @relation(fields: [type_id], references: [id])
-  type_id    String
-  value      String
-  actor      Actor    @relation(fields: [actor_id], references: [id])
-  actor_id   String   @unique
-  graph      Graph?
-  node       Node?
-  edge       Edge?
-  branch     Branch?
-  pointer    Pointer?
-}
-
-model Graph {
-  id         String      @id @default(uuid())
-  created_at DateTime    @default(now())
-  updated_at DateTime    @updatedAt
-  value      Value?      @relation(fields: [value_id], references: [id])
-  value_id   String?     @unique
-  nodes      Node[]
-  edges      Edge[]
-  trajectory Trajectory?
-  pointer    Pointer?
-  actor      Actor       @relation(fields: [actor_id], references: [id])
-  actor_id   String      @unique
-}
-
-model Node {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  graph      Graph    @relation(fields: [graph_id], references: [id])
   graph_id   String
-  upstream   Edge[]   @relation("edge_to")
-  downstream Edge[]   @relation("edge_from")
-  value      Value?   @relation(fields: [value_id], references: [id])
-  value_id   String?  @unique
-  actor      Actor    @relation(fields: [actor_id], references: [id])
-  actor_id   String   @unique
-  pointer    Pointer?
 }
 
-model Edge {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  graph      Graph    @relation(fields: [graph_id], references: [id])
-  graph_id   String
-  from       Node     @relation("edge_from", fields: [from_id], references: [id])
-  from_id    String
-  to         Node?    @relation("edge_to", fields: [to_id], references: [id])
-  to_id      String?
-  value      Value?   @relation(fields: [value_id], references: [id])
-  value_id   String?  @unique
-  branch     Branch   @relation(fields: [branch_id], references: [id])
-  branch_id  String   @unique
-  actor      Actor    @relation(fields: [actor_id], references: [id])
-  actor_id   String   @unique
+model Phase {
+  id         String       @id @default(uuid())
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
+  node       Node         @relation(fields: [node_id], references: [id])
+  node_id    String       @unique
+  pointer    Pointer      @relation(fields: [pointer_id], references: [id])
+  pointer_id String       @unique
+  upstream   Transition[] @relation("transition_to")
+  downstream Transition[] @relation("transition_from")
 }
 
-model Branch {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  value      Value?   @relation(fields: [value_id], references: [id])
-  value_id   String?  @unique
-  edges      Edge[]
-  actor      Actor    @relation(fields: [actor_id], references: [id])
-  actor_id   String   @unique
+model Execution {
+  id          String       @id @default(uuid())
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+  value       Value?       @relation(fields: [value_id], references: [id])
+  value_id    String?      @unique
+  transitions Transition[]
+  pointers    Pointer[]
+}
+
+model Transition {
+  id           String    @id @default(uuid())
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  execution    Execution @relation(fields: [execution_id], references: [id])
+  execution_id String
+  from         Phase     @relation("transition_from", fields: [from_id], references: [id])
+  from_id      String
+  to           Phase?    @relation("transition_to", fields: [to_id], references: [id])
+  to_id        String?
+  value        Value?    @relation(fields: [value_id], references: [id])
+  value_id     String?   @unique
+  pointers     Pointer[]
 }
 
 model Pointer {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  value      Value?   @relation(fields: [value_id], references: [id])
-  value_id   String?  @unique
-  node       Node     @relation(fields: [node_id], references: [id])
-  node_id    String   @unique
-  graph      Graph    @relation(fields: [graph_id], references: [id])
-  graph_id   String   @unique
-  actor      Actor    @relation(fields: [actor_id], references: [id])
-  actor_id   String   @unique
+  id            String      @id @default(uuid())
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
+  phase         Phase?
+  value         Value?      @relation(fields: [value_id], references: [id])
+  value_id      String?
+  type          Type?       @relation(fields: [type_id], references: [id])
+  type_id       String?
+  node          Node?       @relation(fields: [node_id], references: [id])
+  node_id       String?
+  graph         Graph?      @relation(fields: [graph_id], references: [id])
+  graph_id      String?
+  edge          Edge?       @relation(fields: [edge_id], references: [id])
+  edge_id       String?
+  operation     Operation?  @relation(fields: [operation_id], references: [id])
+  operation_id  String?
+  transition    Transition? @relation(fields: [transition_id], references: [id])
+  transition_id String?
+  execution     Execution?  @relation(fields: [execution_id], references: [id])
+  execution_id  String?
 }
