@@ -1,15 +1,12 @@
-import { Node } from "./Node.js";
-import { Value } from "./Value.js";
-import { Graph } from "./Graph.js";
+import { Pointer } from "./Pointer.js";
 import { Synthesis } from "./Synthesis.js";
+import { Value } from "./Value.js";
 import { Result } from "./Result.js";
 
-export type Edge = {
+export type Generation = {
   id: () => Promise<string>;
-  graph: () => Promise<Graph>;
-  value: () => Promise<Value | null>;
-  from: () => Promise<Node>;
-  to: () => Promise<Node | null>;
+  value: () => Promise<string>;
+  pointers: () => Promise<Pointer[]>;
 
   synthesize: {
     value: {

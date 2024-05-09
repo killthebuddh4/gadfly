@@ -1,10 +1,11 @@
-import { Graph } from "./Graph.js";
+import { Graph } from "../primitives/Graph.js";
 import { Leaf } from "./Leaf.js";
-import { Result } from "./Result.js";
-import { Expand } from "./Expand.js";
+import { Result } from "../primitives/Result.js";
+import { Expand } from "../primitives/operation/Expand.js";
 
 export type Tree<G = Graph> = {
   unwrap: () => Promise<Graph>;
+
   tail: () => Promise<Leaf<G>>;
   heads: () => Promise<Leaf<G>[]>;
 

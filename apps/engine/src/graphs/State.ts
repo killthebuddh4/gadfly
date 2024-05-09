@@ -1,5 +1,5 @@
 import { Flow } from "./Flow.js";
-import { Graph } from "./Graph.js";
+import { Graph } from "../primitives/Graph.js";
 
 export type State<G = Graph> = {
   unwrap: () => Promise<G>;

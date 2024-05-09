@@ -1,5 +1,5 @@
 import { Machine } from "./Machine.js";
-import { Graph } from "./Graph.js";
+import { Graph } from "../primitives/Graph.js";
 import { Transition } from "./Transition.js";
 
 export type Phase<G = Graph> = {

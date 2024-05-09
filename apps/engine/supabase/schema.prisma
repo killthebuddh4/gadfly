@@ -8,46 +8,46 @@ datasource db {
 }
 
 model Type {
+  id         String      @id @default(uuid())
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  type       String
+  syntheses  Synthesis[]
+}
+
+model Synthesis {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  type       String
-  values     Value[]
+  type       Type     @relation(fields: [type_id], references: [id])
+  type_id    String
+  value      Value?   @relation(fields: [value_id], references: [id])
+  value_id   String?  @unique
 }
 
 model Value {
-  id         String     @id @default(uuid())
-  created_at DateTime   @default(now())
-  updated_at DateTime   @updatedAt
-  type       Type       @relation(fields: [type_id], references: [id])
-  type_id    String
+  id         String      @id @default(uuid())
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
   value      String
+  synthesis  Synthesis?
   graph      Graph?
   node       Node?
   edge       Edge?
   pointer    Pointer?
-  operation  Operation?
-}
-
-model Structure {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  type       String
-  graphs     Graph[]
+  generation Generation?
 }
 
 model Graph {
-  id           String    @id @default(uuid())
-  created_at   DateTime  @default(now())
-  updated_at   DateTime  @updatedAt
-  structure    Structure @relation(fields: [structure_id], references: [id])
-  structure_id String
-  value        Value     @relation(fields: [value_id], references: [id])
-  value_id     String    @unique
-  nodes        Node[]
-  upstream     Pointer[] @relation("pointer_to")
-  downstream   Pointer[] @relation("pointer_from")
+  id         String    @id @default(uuid())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  value      Value?    @relation(fields: [value_id], references: [id])
+  value_id   String?   @unique
+  nodes      Node[]
+  edges      Edge[]
+  upstream   Pointer[] @relation("pointer_to")
+  downstream Pointer[] @relation("pointer_from")
 }
 
 model Node {
@@ -60,12 +60,15 @@ model Node {
   downstream Edge[]   @relation("edge_from")
   value      Value?   @relation(fields: [value_id], references: [id])
   value_id   String?  @unique
+  pointers   Pointer?
 }
 
 model Edge {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  graph      Graph    @relation(fields: [graph_id], references: [id])
+  graph_id   String
   from       Node     @relation("edge_from", fields: [from_id], references: [id])
   from_id    String
   to         Node     @relation("edge_to", fields: [to_id], references: [id])
@@ -74,7 +77,7 @@ model Edge {
   value_id   String   @unique
 }
 
-model Operation {
+model Generation {
   id         String    @id @default(uuid())
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
@@ -84,15 +87,17 @@ model Operation {
 }
 
 model Pointer {
-  id           String    @id @default(uuid())
-  created_at   DateTime  @default(now())
-  updated_at   DateTime  @updatedAt
-  operation    Operation @relation(fields: [operation_id], references: [id])
-  operation_id String
-  from         Graph     @relation("pointer_from", fields: [from_id], references: [id])
-  from_id      String
-  to           Graph     @relation("pointer_to", fields: [to_id], references: [id])
-  to_id        String
-  value        Value     @relation(fields: [value_id], references: [id])
-  value_id     String    @unique
+  id            String     @id @default(uuid())
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+  generation    Generation @relation(fields: [generation_id], references: [id])
+  generation_id String
+  node          Node       @relation(fields: [node_id], references: [id])
+  node_id       String     @unique
+  from          Graph      @relation("pointer_from", fields: [from_id], references: [id])
+  from_id       String
+  to            Graph      @relation("pointer_to", fields: [to_id], references: [id])
+  to_id         String
+  value         Value      @relation(fields: [value_id], references: [id])
+  value_id      String     @unique
 }

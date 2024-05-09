@@ -1,4 +1,4 @@
-import { Graph } from "./Graph.js";
+import { Graph } from "../primitives/Graph.js";
 import { Sequence } from "./Sequence.js";
 
 export type Element<G = Graph> = {

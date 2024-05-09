@@ -1,13 +1,16 @@
-import { Flow } from "../primitives/Flow.js";
+import { Flow } from "../graphs/Flow.js";
 import { Branch } from "./Branch.js";
 import { Graph } from "../primitives/Graph.js";
 import { Result } from "../primitives/Result.js";
-import { Append } from "../primitives/Append.js";
-import { Expand } from "../primitives/Expand.js";
-import { Reduce } from "../primitives/Reduce.js";
+import { Append } from "../primitives/operation/Append.js";
+import { Expand } from "../primitives/operation/Expand.js";
+import { Reduce } from "../primitives/operation/Reduce.js";
 
 export type Log<G = Graph> = {
-  unwrap: () => Promise<Flow<Branch<G>>>;
+  log: () => Promise<Log<G>>;
+
+  wrap: (flow: Flow) => Promise<Flow<Log<G>>>;
+  unwrap: () => Promise<Flow>;
 
   tails: () => Promise<Branch<G>[]>;
   heads: () => Promise<Branch<G>[]>;

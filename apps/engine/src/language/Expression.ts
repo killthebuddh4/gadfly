@@ -1,9 +1,8 @@
-import { Flow } from "../primitives/Flow.js";
+import { Flow } from "../graphs/Flow.js";
 
 export type Expression = {
-  owner: () => Promise<Expression>;
-
   unwrap: () => Promise<Flow<Expression>>;
+
   tail: () => Promise<Expression>;
   heads: () => Promise<Expression[]>;
 

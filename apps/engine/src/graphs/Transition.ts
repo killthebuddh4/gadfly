@@ -1,4 +1,4 @@
-import { Graph } from "./Graph.js";
+import { Graph } from "../primitives/Graph.js";
 import { Machine } from "./Machine.js";
 import { Phase } from "./Phase.js";
 

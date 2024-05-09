@@ -1,9 +1,9 @@
-import { Graph } from "./Graph.js";
+import { Graph } from "../primitives/Graph.js";
 import { State } from "./State.js";
-import { Result } from "./Result.js";
-import { Append } from "./Append.js";
-import { Expand } from "./Expand.js";
-import { Reduce } from "./Reduce.js";
+import { Result } from "../primitives/Result.js";
+import { Append } from "../primitives/operation/Append.js";
+import { Expand } from "../primitives/operation/Expand.js";
+import { Reduce } from "../primitives/operation/Reduce.js";
 
 export type Flow<G = Graph> = {
   unwrap: () => Promise<Graph>;

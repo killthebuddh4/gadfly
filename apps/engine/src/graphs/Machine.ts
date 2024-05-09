@@ -1,8 +1,8 @@
-import { Graph } from "./Graph.js";
+import { Graph } from "../primitives/Graph.js";
 import { Phase } from "./Phase.js";
-import { Result } from "./Result.js";
+import { Result } from "../primitives/Result.js";
 import { Transition } from "./Transition.js";
-import { Append } from "./Append.js";
+import { Append } from "../primitives/operation/Append.js";
 
 export type Machine<G = Graph> = {
   unwrap: () => Promise<Graph>;

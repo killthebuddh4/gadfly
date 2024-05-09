@@ -1,5 +1,5 @@
-import { Flow } from "../primitives/Flow.js";
-import { Machine } from "../primitives/Machine.js";
+import { Flow } from "../graphs/Flow.js";
+import { Machine } from "../graphs/Machine.js";
 import { Actor } from "./Actor.js";
 
 export type Dialectic = {

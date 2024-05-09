@@ -1,7 +1,7 @@
-import { Graph } from "./Graph.js";
-import { Result } from "./Result.js";
+import { Graph } from "../primitives/Graph.js";
+import { Result } from "../primitives/Result.js";
 import { Element } from "./Element.js";
-import { Append } from "./Append.js";
+import { Append } from "../primitives/operation/Append.js";
 
 export type Sequence<G = Graph> = {
   unwrap: () => Promise<Graph>;
