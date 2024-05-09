@@ -1,9 +1,9 @@
-import { Graph } from "../../primitives/Graph.js";
+import { Graph } from "../primitives/Graph.js";
 import { State } from "./State.js";
-import { Result } from "../../primitives/Result.js";
-import { Generation } from "../../primitives/Generation.js";
-import { Synthesis } from "../../primitives/Synthesis.js";
-import { Value } from "../../primitives/Value.js";
+import { Result } from "../primitives/Result.js";
+import { Generation } from "../primitives/Generation.js";
+import { Synthesis } from "../primitives/Synthesis.js";
+import { Value } from "../primitives/Value.js";
 
 export type Flow<S> = {
   unwrap: () => Promise<Graph>;

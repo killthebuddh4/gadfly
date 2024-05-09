@@ -1,7 +1,7 @@
-import { Graph } from "../../primitives/Graph.js";
+import { Graph } from "../primitives/Graph.js";
 import { Phase } from "./Phase.js";
-import { Result } from "../../primitives/Result.js";
-import { Generation } from "../../primitives/Generation.js";
+import { Result } from "../primitives/Result.js";
+import { Generation } from "../primitives/Generation.js";
 
 export type Machine<S> = {
   unwrap: () => Promise<Graph>;

@@ -1,8 +1,8 @@
-import { Sequence } from "../graphs/sequence/Sequence.js";
+import { Sequence } from "../structures/Sequence.js";
 import { Commit } from "./Commit.js";
 import { Log } from "./Log.js";
 import { Graph } from "../primitives/Graph.js";
-import { Append } from "../primitives/operation/Append.js";
+import { Append } from "../protocol/primitives/operation/Append.js";
 import { Result } from "../primitives/Result.js";
 
 export type Branch<G = Graph> = {
