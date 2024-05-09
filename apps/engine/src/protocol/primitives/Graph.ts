@@ -2,48 +2,39 @@ import { Node } from "./Node.js";
 import { Value } from "./Value.js";
 import { Edge } from "./Edge.js";
 import { Pointer } from "./Pointer.js";
-import { Generation } from "./Generation.js";
+import { Operation } from "./Operation.js";
 import { Result } from "./Result.js";
-import { Synthesis } from "./Synthesis.js";
 
 export type Graph = {
   id: () => Promise<string>;
   value: () => Promise<Value | null>;
   nodes: () => Promise<Node[]>;
   edges: () => Promise<Edge[]>;
-  pointer: () => Promise<Pointer | null>;
+  references: () => Promise<Pointer[]>;
 
-  synthesize: {
-    value: {
-      request: () => Promise<Synthesis>;
-      synthesize: (target: Synthesis) => Promise<Value>;
-      apply: (value: Value) => Promise<Result>;
-    };
-  };
-
-  generation: {
+  operations: {
     nodes: {
       append: {
-        request: (target: Node) => Promise<Generation>;
-        generate: (target: Generation) => Promise<Node>;
+        request: (target: Node) => Promise<Operation>;
+        generate: (target: Operation) => Promise<Node>;
         apply: (node: Node) => Promise<Result>;
       };
 
       expand: {
-        request: (target: Node) => Promise<Generation>;
-        generate: (target: Generation) => Promise<Node[]>;
+        request: (target: Node) => Promise<Operation>;
+        generate: (target: Operation) => Promise<Node[]>;
         apply: (nodes: Node[]) => Promise<Result>;
       };
 
       map: {
-        request: (target: Node[]) => Promise<Generation>;
-        generate: (target: Generation) => Promise<Node[]>;
+        request: (target: Node[]) => Promise<Operation>;
+        generate: (target: Operation) => Promise<Node[]>;
         apply: (nodes: Node[]) => Promise<Result>;
       };
 
       reduce: {
-        request: (target: Node[]) => Promise<Generation>;
-        generate: (target: Generation) => Promise<Node>;
+        request: (target: Node[]) => Promise<Operation>;
+        generate: (target: Operation) => Promise<Node>;
         apply: (node: Node) => Promise<Result>;
       };
     };

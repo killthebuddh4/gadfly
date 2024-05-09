@@ -1,8 +1,7 @@
 import { Node } from "./Node.js";
 import { Value } from "./Value.js";
 import { Graph } from "./Graph.js";
-import { Synthesis } from "./Synthesis.js";
-import { Result } from "./Result.js";
+import { Pointer } from "./Pointer.js";
 
 export type Edge = {
   id: () => Promise<string>;
@@ -10,12 +9,5 @@ export type Edge = {
   value: () => Promise<Value | null>;
   from: () => Promise<Node>;
   to: () => Promise<Node | null>;
-
-  synthesize: {
-    value: {
-      request: () => Promise<Synthesis>;
-      synthesize: (target: Synthesis) => Promise<Value>;
-      apply: (value: Value) => Promise<Result>;
-    };
-  };
+  references: () => Promise<Pointer[]>;
 };

@@ -1,9 +1,7 @@
 import { Graph } from "../primitives/Graph.js";
 import { Result } from "../primitives/Result.js";
 import { Element } from "./Element.js";
-import { Synthesis } from "../primitives/Synthesis.js";
-import { Value } from "../primitives/Value.js";
-import { Generation } from "../primitives/Generation.js";
+import { Operation } from "../primitives/Operation.js";
 
 export type Sequence<S> = {
   unwrap: () => Promise<Graph>;
@@ -13,19 +11,11 @@ export type Sequence<S> = {
     head: () => Promise<Element<S>>;
   };
 
-  synthesize: {
-    value: {
-      request: () => Promise<Synthesis>;
-      synthesize: (target: Synthesis) => Promise<Value>;
-      apply: (value: Value) => Promise<Result>;
-    };
-  };
-
-  generation: {
+  operation: {
     elements: {
       append: {
-        request: (target: Element<S>) => Promise<Generation>;
-        generate: (target: Generation) => Promise<Element<S>>;
+        request: (target: Element<S>) => Promise<Operation>;
+        generate: (target: Operation) => Promise<Element<S>>;
         apply: (node: Element<S>) => Promise<Result>;
       };
     };
