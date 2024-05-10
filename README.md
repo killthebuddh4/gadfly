@@ -639,3 +639,13 @@ TOP DOWN -> GHOST
 BOTTOM UP  -> DAEMON
 ACROSS BRANCHES -> SEER
 ACROSS NODES -> SAGE
+
+# NOTES 2024-05-10
+
+The base layer data model is DONE. It turned out that what we needed was literally the most basic/generic. We have graphs, nodes, edges, types, and values + exactly one table that mapes nodes to other rows (this enables meta-graphs like graphs-of-graphs or graphs-of-values or graphs-of-edges).
+
+_The super cool thing about graphs is that we can have very formal/strict local structure so we can write function-calling prompts that are actually pretty crisp and (I predict) reliable._
+
+So I can actually use where we're at now as a kind of checkpoint that I can demo. The two things I can demo are autonomous generation and traversal. What I think I'm going to demo is generating and traversing graphs that are supposed to be shapes or letters. It's actually going to be pretty cool. I'm going to see if I can get the models to generate graphs that clearly map to shapes and letters. For example a circle would be a cycle where every node has exactly 1 edge in and out. That would be MVP 0.0. MVP 0.1 I think could be having angles, so we could turn a circle into a triangle or something like that. Then we could do letters, then words, then (I think this would be the real cool demo) we could have the language model "read" by traversing the graphs.
+
+__I think the above will actually be a really cool demo and I may want to update my YC application and/or share the demo publicly, even though it's very far from auto-program-synthesis.__
