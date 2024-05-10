@@ -8,16 +8,17 @@ datasource db {
 }
 
 model Type {
-  id         String      @id @default(uuid())
-  created_at DateTime    @default(now())
-  updated_at DateTime    @updatedAt
-  type       Int
-  values     Value[]
-  graphs     Graph[]
-  nodes      Node[]
-  edges      Edge[]
-  operations Operation[]
-  references Pointer[]
+  id          String      @id @default(uuid())
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+  code        Int
+  description String
+  values      Value[]
+  graphs      Graph[]
+  nodes       Node[]
+  edges       Edge[]
+  operations  Operation[]
+  references  Pointer[]
 }
 
 model Value {

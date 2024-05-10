@@ -8,6 +8,7 @@ import { Pointer } from "./Pointer.js";
 export type Type = {
   id: () => Promise<string>;
   type: () => Promise<number>;
+  description: () => Promise<string>;
   values: () => Promise<Value[]>;
   graphs: () => Promise<Graph[]>;
   nodes: () => Promise<Node[]>;

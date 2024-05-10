@@ -19,12 +19,13 @@ router.get("/:id", async (req, res) => {
 });
 
 const zCreateBody = z.object({
-  type: z.number().int().positive(),
+  code: z.number().int().positive(),
+  description: z.string(),
 });
 
 router.post("/", async (req, res) => {
   const body = zCreateBody.parse(req.body);
-  const data = await create({ type: body.type });
+  const data = await create({ code: body.code, description: body.description });
 
   res.json({ ok: true, data });
 });
