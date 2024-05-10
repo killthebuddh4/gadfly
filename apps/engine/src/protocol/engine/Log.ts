@@ -1,39 +1,35 @@
 import { Flow } from "../structures/Flow.js";
 import { Branch } from "./Branch.js";
-import { Graph } from "../primitives/Graph.js";
-import { Result } from "../primitives/Result.js";
-import { Append } from "../protocol/primitives/operation/Append.js";
-import { Expand } from "../protocol/primitives/operation/Expand.js";
-import { Reduce } from "../protocol/primitives/operation/Reduce.js";
+import { Result } from "../graphs/types/Result.js";
+import { Operation } from "../graphs/types/Operation.js";
 
-export type Log<G = Graph> = {
-  log: () => Promise<Log<G>>;
+export type Log<S> = {
+  unwrap: () => Promise<Flow<Branch<S>>>;
 
-  wrap: (flow: Flow) => Promise<Flow<Log<G>>>;
-  unwrap: () => Promise<Flow>;
+  log: {
+    tail: () => Promise<Branch<S>[]>;
+    heads: () => Promise<Branch<S>[]>;
+  };
 
-  tails: () => Promise<Branch<G>[]>;
-  heads: () => Promise<Branch<G>[]>;
+  operation: {
+    branches: {
+      append: {
+        request: (request: Operation) => Promise<Result>;
+        generate: (target: Operation) => Promise<Branch<S>>;
+        apply: (branch: Branch<S>) => Promise<Result>;
+      };
 
-  branches: {
-    read: () => Promise<Branch<G>[]>;
+      expand: {
+        request: (request: Operation) => Promise<Result>;
+        generate: (target: Operation) => Promise<Branch<S>[]>;
+        apply: (branches: Branch<S>[]) => Promise<Result>;
+      };
 
-    append: {
-      request: (request: Append) => Promise<Result>;
-      generate: (target: Append) => Promise<Branch<G>>;
-      apply: (branch: Branch<G>) => Promise<Result>;
-    };
-
-    expand: {
-      request: (request: Expand) => Promise<Result>;
-      generate: (target: Expand) => Promise<Branch<G>[]>;
-      apply: (branches: Branch<G>[]) => Promise<Result>;
-    };
-
-    reduce: {
-      request: (request: Reduce) => Promise<Result>;
-      generate: (target: Reduce) => Promise<Branch<G>>;
-      apply: (branch: Branch<G>) => Promise<Result>;
+      reduce: {
+        request: (request: Operation) => Promise<Result>;
+        generate: (target: Operation) => Promise<Branch<S>>;
+        apply: (branch: Branch<S>) => Promise<Result>;
+      };
     };
   };
 };

@@ -1,10 +1,10 @@
-import { Graph } from "../primitives/Graph.js";
 import { Branch } from "./Branch.js";
+import { Element } from "../structures/Element.js";
+import { Artifact } from "./Artifact.js";
 
-export type Commit<G = Graph> = {
-  unwrap: () => Promise<G>;
-
-  container: () => Promise<Branch<G>>;
-  upstream: () => Promise<Commit<G> | null>;
-  downstream: () => Promise<Commit<G> | null>;
+export type Commit<S> = {
+  unwrap: () => Promise<Element<Artifact<S>>>;
+  container: () => Promise<Branch<S>>;
+  upstream: () => Promise<Commit<S> | null>;
+  downstream: () => Promise<Commit<S> | null>;
 };

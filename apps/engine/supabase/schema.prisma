@@ -48,19 +48,19 @@ model Graph {
 }
 
 model Node {
-  id         String     @id @default(uuid())
-  created_at DateTime   @default(now())
-  updated_at DateTime   @updatedAt
-  graph      Graph      @relation(fields: [graph_id], references: [id])
+  id         String    @id @default(uuid())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  graph      Graph     @relation(fields: [graph_id], references: [id])
   graph_id   String
-  upstream   Edge[]     @relation("edge_to")
-  downstream Edge[]     @relation("edge_from")
-  type       Type       @relation(fields: [type_id], references: [id])
+  upstream   Edge[]    @relation("edge_to")
+  downstream Edge[]    @relation("edge_from")
+  type       Type      @relation(fields: [type_id], references: [id])
   type_id    String
-  value      Value?     @relation(fields: [value_id], references: [id])
-  value_id   String?    @unique
-  reference  Reference?
-  references Pointer[]
+  value      Value?    @relation(fields: [value_id], references: [id])
+  value_id   String?   @unique
+  pointer    Pointer?  @relation("pointer_from")
+  references Pointer[] @relation("pointer_node")
 }
 
 model Edge {
@@ -94,26 +94,17 @@ model Operation {
   references Pointer[]
 }
 
-model Reference {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  node       Node     @relation(fields: [node_id], references: [id])
-  node_id    String   @unique
-  pointer    Pointer  @relation(fields: [pointer_id], references: [id])
-  pointer_id String   @unique
-}
-
 model Pointer {
   id           String     @id @default(uuid())
   created_at   DateTime   @default(now())
   updated_at   DateTime   @updatedAt
-  reference    Reference?
+  from         Node       @relation("pointer_from", fields: [from_id], references: [id])
+  from_id      String     @unique
   value        Value?     @relation(fields: [value_id], references: [id])
   value_id     String?
   type         Type?      @relation(fields: [type_id], references: [id])
   type_id      String?
-  node         Node?      @relation(fields: [node_id], references: [id])
+  node         Node?      @relation("pointer_node", fields: [node_id], references: [id])
   node_id      String?
   graph        Graph?     @relation(fields: [graph_id], references: [id])
   graph_id     String?

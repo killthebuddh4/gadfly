@@ -1,13 +1,15 @@
-import { Graph } from "../primitives/Graph.js";
+import { Graph } from "../graphs/types/Graph.js";
 import { Phase } from "./Phase.js";
-import { Result } from "../primitives/Result.js";
-import { Operation } from "../primitives/Operation.js";
+import { Result } from "../graphs/types/Result.js";
+import { Operation } from "../graphs/types/Operation.js";
 
 export type Machine<S> = {
   unwrap: () => Promise<Graph>;
 
-  tails: () => Promise<Phase<S>[]>;
-  heads: () => Promise<Phase<S>[]>;
+  machine: {
+    tails: () => Promise<Phase<S>[]>;
+    heads: () => Promise<Phase<S>[]>;
+  };
 
   operation: {
     phases: {

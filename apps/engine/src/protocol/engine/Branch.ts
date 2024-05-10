@@ -1,27 +1,26 @@
 import { Sequence } from "../structures/Sequence.js";
 import { Commit } from "./Commit.js";
 import { Log } from "./Log.js";
-import { Graph } from "../primitives/Graph.js";
-import { Append } from "../protocol/primitives/operation/Append.js";
-import { Result } from "../primitives/Result.js";
+import { Operation } from "../graphs/types/Operation.js";
+import { Result } from "../graphs/types/Result.js";
 
-export type Branch<G = Graph> = {
-  unwrap: () => Promise<Sequence<Commit<G>>>;
+export type Branch<S> = {
+  unwrap: () => Promise<Sequence<Commit<S>>>;
 
-  tail: () => Promise<Commit<G> | null>;
-  head: () => Promise<Commit<G> | null>;
+  tail: () => Promise<Commit<S> | null>;
+  head: () => Promise<Commit<S> | null>;
 
-  container: () => Promise<Log<G>>;
-  upstream: () => Promise<Branch<G>[]>;
-  downstream: () => Promise<Branch<G>[]>;
+  container: () => Promise<Log<S>>;
+  upstream: () => Promise<Branch<S>[] | null>;
+  downstream: () => Promise<Branch<S>[] | null>;
 
-  commits: {
-    read: () => Promise<Commit<G>[]>;
-
-    append: {
-      request: (request: Append) => Promise<Result>;
-      generate: (target: Append) => Promise<Commit<G>>;
-      apply: (commit: Commit<G>) => Promise<Result>;
+  operation: {
+    commits: {
+      append: {
+        request: () => Promise<Operation>;
+        generate: (target: Operation) => Promise<Commit<S>>;
+        apply: (commit: Commit<S>) => Promise<Result>;
+      };
     };
   };
 };

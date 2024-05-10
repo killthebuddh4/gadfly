@@ -2,7 +2,6 @@ import { Value } from "./Value.js";
 import { Type } from "./Type.js";
 import { Graph } from "./Graph.js";
 import { Edge } from "./Edge.js";
-import { Reference } from "./Reference.js";
 import { Pointer } from "./Pointer.js";
 
 export type Node = {
@@ -13,5 +12,5 @@ export type Node = {
   upstream: () => Promise<Edge[]>;
   downstream: () => Promise<Edge[]>;
   references: () => Promise<Pointer[]>;
-  reference: () => Promise<Reference | null>;
+  pointer: () => Promise<Pointer | null>;
 };

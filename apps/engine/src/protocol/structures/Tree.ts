@@ -1,8 +1,7 @@
-import { Graph } from "../primitives/Graph.js";
+import { Graph } from "../graphs/types/Graph.js";
 import { Leaf } from "./Leaf.js";
-import { Result } from "../primitives/Result.js";
-import { Operation } from "../primitives/Operation.js";
-import { Value } from "../primitives/Value.js";
+import { Result } from "../graphs/types/Result.js";
+import { Operation } from "../graphs/types/Operation.js";
 
 export type Tree<S> = {
   unwrap: () => Promise<Graph>;
