@@ -1,5 +1,5 @@
 import express from "express";
-import { heads } from "../edge/heads.js";
+import { heads } from "./heads.js";
 import { tails } from "./tails.js";
 import { z } from "zod";
 

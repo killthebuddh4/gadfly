@@ -1,6 +1,6 @@
 import { prisma } from "../../../../lib/prisma.js";
 
-export const upstream = async ({ id }: { id: string }) => {
+export const downstream = async ({ id }: { id: string }) => {
   const pointer = await prisma.pointer.findUnique({
     include: {
       node: true,
