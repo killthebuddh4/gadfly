@@ -25,7 +25,7 @@ const zCreateBody = z.object({
   graph: z.string().uuid(),
   from: z.string().uuid(),
   type: z.string().uuid(),
-  operation: z.string().uuid(),
+  generation: z.string().uuid(),
 });
 
 router.post("/", async (req, res) => {
@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
     graph: body.graph,
     from: body.from,
     type: body.type,
-    operation: body.operation,
+    generation: body.generation,
   });
 
   res.json({ ok: true, data });

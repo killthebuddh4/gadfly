@@ -8,7 +8,7 @@ export const downstream = async ({ id }: { id: string }) => {
       type: true,
       graph: true,
       edge: true,
-      operation: true,
+      generation: true,
     },
     where: {
       id,
@@ -54,10 +54,10 @@ export const downstream = async ({ id }: { id: string }) => {
     };
   }
 
-  if (pointer.operation !== null) {
+  if (pointer.generation !== null) {
     return {
-      table: "operation",
-      operation: pointer.operation,
+      table: "generation",
+      generation: pointer.generation,
     };
   }
 

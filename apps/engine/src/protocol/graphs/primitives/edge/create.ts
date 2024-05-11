@@ -4,12 +4,12 @@ export const create = async ({
   graph,
   from,
   type,
-  operation,
+  generation,
 }: {
   graph: string;
   from: string;
   type: string;
-  operation: string;
+  generation: string;
 }) => {
   return prisma.edge.create({
     data: {
@@ -28,9 +28,9 @@ export const create = async ({
           id: type,
         },
       },
-      operation: {
+      generation: {
         connect: {
-          id: operation,
+          id: generation,
         },
       },
     },

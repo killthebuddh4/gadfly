@@ -1,7 +1,7 @@
 import { Sequence } from "../structures/Sequence.js";
 import { Commit } from "./Commit.js";
 import { Log } from "./Log.js";
-import { Operation } from "../graphs/types/Operation.js";
+import { Generation } from "../graphs/types/Generation.js";
 import { Result } from "../graphs/types/Result.js";
 
 export type Branch<S> = {
@@ -17,8 +17,8 @@ export type Branch<S> = {
   operation: {
     commits: {
       append: {
-        request: () => Promise<Operation>;
-        generate: (target: Operation) => Promise<Commit<S>>;
+        request: () => Promise<Generation>;
+        generate: (target: Generation) => Promise<Commit<S>>;
         apply: (commit: Commit<S>) => Promise<Result>;
       };
     };

@@ -2,7 +2,7 @@ import { Value } from "./Value.js";
 import { Node } from "./Node.js";
 import { Edge } from "./Edge.js";
 import { Graph } from "./Graph.js";
-import { Operation } from "./Operation.js";
+import { Generation } from "./Generation.js";
 import { Pointer } from "./Pointer.js";
 
 export type Type = {
@@ -13,6 +13,6 @@ export type Type = {
   graphs: () => Promise<Graph[]>;
   nodes: () => Promise<Node[]>;
   edges: () => Promise<Edge[]>;
-  operations: () => Promise<Operation[]>;
+  operations: () => Promise<Generation[]>;
   references: () => Promise<Pointer[]>;
 };

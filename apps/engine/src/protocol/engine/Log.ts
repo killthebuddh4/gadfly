@@ -1,7 +1,7 @@
 import { Flow } from "../structures/Flow.js";
 import { Branch } from "./Branch.js";
 import { Result } from "../graphs/types/Result.js";
-import { Operation } from "../graphs/types/Operation.js";
+import { Generation } from "../graphs/types/Generation.js";
 
 export type Log<S> = {
   unwrap: () => Promise<Flow<Branch<S>>>;
@@ -14,20 +14,20 @@ export type Log<S> = {
   operation: {
     branches: {
       append: {
-        request: (request: Operation) => Promise<Result>;
-        generate: (target: Operation) => Promise<Branch<S>>;
+        request: (request: Generation) => Promise<Result>;
+        generate: (target: Generation) => Promise<Branch<S>>;
         apply: (branch: Branch<S>) => Promise<Result>;
       };
 
       expand: {
-        request: (request: Operation) => Promise<Result>;
-        generate: (target: Operation) => Promise<Branch<S>[]>;
+        request: (request: Generation) => Promise<Result>;
+        generate: (target: Generation) => Promise<Branch<S>[]>;
         apply: (branches: Branch<S>[]) => Promise<Result>;
       };
 
       reduce: {
-        request: (request: Operation) => Promise<Result>;
-        generate: (target: Operation) => Promise<Branch<S>>;
+        request: (request: Generation) => Promise<Result>;
+        generate: (target: Generation) => Promise<Branch<S>>;
         apply: (branch: Branch<S>) => Promise<Result>;
       };
     };

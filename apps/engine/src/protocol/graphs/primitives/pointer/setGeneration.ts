@@ -1,20 +1,20 @@
 import { prisma } from "../../../../lib/prisma.js";
 
-export const setValue = async ({
+export const setGeneration = async ({
   id,
-  value,
+  generation,
 }: {
   id: string;
-  value: string;
+  generation: string;
 }) => {
-  return prisma.operation.update({
+  return prisma.pointer.update({
     where: {
       id,
     },
     data: {
-      value: {
+      generation: {
         connect: {
-          id: value,
+          id: generation,
         },
       },
     },

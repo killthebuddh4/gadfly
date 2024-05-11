@@ -3,7 +3,7 @@ import { Edge } from "./Edge.js";
 import { Pointer } from "./Pointer.js";
 import { Type } from "./Type.js";
 
-export type Operation = {
+export type Generation = {
   id: () => Promise<string>;
   type: () => Promise<Type>;
   value: () => Promise<Value>;

@@ -2,7 +2,7 @@ import { Node } from "./Node.js";
 import { Value } from "./Value.js";
 import { Edge } from "./Edge.js";
 import { Pointer } from "./Pointer.js";
-import { Operation } from "./Operation.js";
+import { Generation } from "./Generation.js";
 import { Result } from "./Result.js";
 
 export type Graph = {
@@ -15,26 +15,26 @@ export type Graph = {
   operations: {
     nodes: {
       append: {
-        request: (target: Node) => Promise<Operation>;
-        generate: (target: Operation) => Promise<Node>;
+        request: (target: Node) => Promise<Generation>;
+        generate: (target: Generation) => Promise<Node>;
         apply: (node: Node) => Promise<Result>;
       };
 
       expand: {
-        request: (target: Node) => Promise<Operation>;
-        generate: (target: Operation) => Promise<Node[]>;
+        request: (target: Node) => Promise<Generation>;
+        generate: (target: Generation) => Promise<Node[]>;
         apply: (nodes: Node[]) => Promise<Result>;
       };
 
       map: {
-        request: (target: Node[]) => Promise<Operation>;
-        generate: (target: Operation) => Promise<Node[]>;
+        request: (target: Node[]) => Promise<Generation>;
+        generate: (target: Generation) => Promise<Node[]>;
         apply: (nodes: Node[]) => Promise<Result>;
       };
 
       reduce: {
-        request: (target: Node[]) => Promise<Operation>;
-        generate: (target: Operation) => Promise<Node>;
+        request: (target: Node[]) => Promise<Generation>;
+        generate: (target: Generation) => Promise<Node>;
         apply: (node: Node) => Promise<Result>;
       };
     };

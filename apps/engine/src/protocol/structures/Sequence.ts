@@ -1,7 +1,7 @@
 import { Graph } from "../graphs/types/Graph.js";
 import { Result } from "../graphs/types/Result.js";
 import { Element } from "./Element.js";
-import { Operation } from "../graphs/types/Operation.js";
+import { Generation } from "../graphs/types/Generation.js";
 
 export type Sequence<S> = {
   unwrap: () => Promise<Graph>;
@@ -14,8 +14,8 @@ export type Sequence<S> = {
   operation: {
     elements: {
       append: {
-        request: (target: Element<S>) => Promise<Operation>;
-        generate: (target: Operation) => Promise<Element<S>>;
+        request: (target: Element<S>) => Promise<Generation>;
+        generate: (target: Generation) => Promise<Element<S>>;
         apply: (node: Element<S>) => Promise<Result>;
       };
     };

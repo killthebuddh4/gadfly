@@ -1,8 +1,8 @@
 import { prisma } from "../../../../lib/prisma.js";
-import { heads as headEdges } from "../node/heads.js";
+import { tails as tailEdges } from "../node/tails.js";
 
-export const heads = async ({ ids }: { ids: string[] }) => {
-  const operations = await prisma.operation.findMany({
+export const tails = async ({ ids }: { ids: string[] }) => {
+  const generations = await prisma.generation.findMany({
     include: {
       edges: {
         include: {
@@ -17,13 +17,15 @@ export const heads = async ({ ids }: { ids: string[] }) => {
     },
   });
 
-  const nodes = operations.flatMap((op) => op.edges.map((edge) => edge.from));
+  const nodes = generations.flatMap((gen) =>
+    gen.edges.map((edge) => edge.from),
+  );
 
-  const edges = await headEdges({
+  const edges = await tailEdges({
     ids: nodes.map((node) => node.id),
   });
 
-  return prisma.operation.findMany({
+  return prisma.generation.findMany({
     where: {
       edges: {
         some: {
