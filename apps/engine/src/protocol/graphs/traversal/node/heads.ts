@@ -1,7 +1,14 @@
 import { Edge } from "@prisma/client";
 import { prisma } from "../../../../lib/prisma.js";
 
-export const heads = async (args: {
+export const heads = async ({ ids }: { ids: string[] }) => {
+  return _heads({
+    ids,
+    found: [],
+  });
+};
+
+const _heads = async (args: {
   ids: string[];
   found: Edge[];
 }): Promise<Edge[]> => {
@@ -29,7 +36,7 @@ export const heads = async (args: {
   if (notHeads.length === 0) {
     return [...args.found, ...found];
   } else {
-    return heads({
+    return _heads({
       ids: notHeads.map((edge) => edge.to.id),
       found: [...args.found, ...found],
     });

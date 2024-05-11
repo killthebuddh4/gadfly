@@ -1,7 +1,14 @@
 import { Node } from "@prisma/client";
 import { prisma } from "../../../../lib/prisma.js";
 
-export const heads = async (args: {
+export const heads = async ({ ids }: { ids: string[] }) => {
+  return _heads({
+    ids,
+    found: [],
+  });
+};
+
+const _heads = async (args: {
   ids: string[];
   found: Node[];
 }): Promise<Node[]> => {
@@ -31,7 +38,7 @@ export const heads = async (args: {
   if (notHeads.length === 0) {
     return [...args.found, ...found];
   } else {
-    return heads({
+    return _heads({
       ids: nodes.flatMap((node) => node.downstream.map((edge) => edge.id)),
       found: [...args.found, ...found],
     });

@@ -1,8 +1,8 @@
 import { prisma } from "../../../../lib/prisma.js";
 import { heads as headEdges } from "../node/heads.js";
 
-export const heads = async ({ id }: { id: string }) => {
-  const operation = await prisma.operation.findUnique({
+export const heads = async ({ ids }: { ids: string[] }) => {
+  const operations = await prisma.operation.findMany({
     include: {
       edges: {
         include: {
@@ -11,19 +11,16 @@ export const heads = async ({ id }: { id: string }) => {
       },
     },
     where: {
-      id,
+      id: {
+        in: ids,
+      },
     },
   });
 
-  if (operation === null) {
-    throw new Error(`Operation not found: ${id}`);
-  }
-
-  const nodes = operation.edges.map((edge) => edge.from);
+  const nodes = operations.flatMap((op) => op.edges.map((edge) => edge.from));
 
   const edges = await headEdges({
     ids: nodes.map((node) => node.id),
-    found: [],
   });
 
   return prisma.operation.findMany({
