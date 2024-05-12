@@ -649,3 +649,29 @@ _The super cool thing about graphs is that we can have very formal/strict local 
 So I can actually use where we're at now as a kind of checkpoint that I can demo. The two things I can demo are autonomous generation and traversal. What I think I'm going to demo is generating and traversing graphs that are supposed to be shapes or letters. It's actually going to be pretty cool. I'm going to see if I can get the models to generate graphs that clearly map to shapes and letters. For example a circle would be a cycle where every node has exactly 1 edge in and out. That would be MVP 0.0. MVP 0.1 I think could be having angles, so we could turn a circle into a triangle or something like that. Then we could do letters, then words, then (I think this would be the real cool demo) we could have the language model "read" by traversing the graphs.
 
 __I think the above will actually be a really cool demo and I may want to update my YC application and/or share the demo publicly, even though it's very far from auto-program-synthesis.__
+
+# NOTES 2024-05-11
+
+So the base layer graphs API is getting pretty close to done. Here's some things I'm thinking.
+
+Primitives is the set of minimal endpoints that can be combined to do "anything". In some sense, everything else is a helper.
+
+Traversal is endpoints for graph traversal.
+
+There's also "generation" endpoints which are endpoints that assume you are "inside" the graph and trying to do something.
+
+So "primitives", "traversal", and "generation" are the 3 fundamental categories. It's like tools, "stuff for graphs that already exist", and "stuff for graphs that we want to exist".
+
+I'm working through the basic API pattern we need. Which is something like:
+
+- read
+- options
+- suggestions
+- simulation/selection (autonomous)
+- selection/generation (manual)
+
+what is the human-in-the-loop version?
+
+"what can i do", "what should i do", "show me some examples", "pick one", "do it"
+
+Something like that. Anyways, so those are the kind of threads weaving through my thoughts at the moment. The idea is to end up with a highly interactive system that has multiple levels and where each level is mapped more or less perfectly onto the lower level. It may end up being the case that the levels are actually themselves autonomous. This could be a useful technique for managing divergence and for improving locality (and reducing context).
