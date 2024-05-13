@@ -1,9 +1,9 @@
 import { Edge } from "@prisma/client";
 import { prisma } from "../../../../lib/prisma.js";
 
-export const tails = async (args: { ids: string[] }): Promise<Edge[]> => {
+export const tails = async ({ id }: { id: string }): Promise<Edge[]> => {
   return _tails({
-    ids: args.ids,
+    ids: [id],
     found: [],
   });
 };

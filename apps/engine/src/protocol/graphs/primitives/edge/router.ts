@@ -3,6 +3,10 @@ import { create } from "./create.js";
 import { read } from "./read.js";
 import { setTo } from "./setTo.js";
 import { setValue } from "./setValue.js";
+import { downstream } from "./downstream.js";
+import { upstream } from "./upstream.js";
+import { heads } from "./heads.js";
+import { tails } from "./tails.js";
 import { z } from "zod";
 
 export const router = express.Router();
@@ -77,6 +81,50 @@ router.post("/:id/value", async (req, res) => {
     id: params.id,
     value: body.value,
   });
+
+  res.json({ ok: true, data });
+});
+
+const zDownstreamParams = z.object({
+  id: z.string().uuid(),
+});
+
+router.get("/downstream", async (req, res) => {
+  const params = zDownstreamParams.parse(req.query);
+  const data = await downstream({ id: params.id });
+
+  res.json({ ok: true, data });
+});
+
+const zUpstreamParams = z.object({
+  id: z.string().uuid(),
+});
+
+router.get("/upstream", async (req, res) => {
+  const params = zUpstreamParams.parse(req.query);
+  const data = await upstream({ id: params.id });
+
+  res.json({ ok: true, data });
+});
+
+const zHeadsParams = z.object({
+  id: z.string().uuid(),
+});
+
+router.get("/heads", async (req, res) => {
+  const params = zHeadsParams.parse(req.query);
+  const data = await heads({ id: params.id });
+
+  res.json({ ok: true, data });
+});
+
+const zTailsParams = z.object({
+  id: z.string().uuid(),
+});
+
+router.get("/tails", async (req, res) => {
+  const params = zTailsParams.parse(req.query);
+  const data = await tails({ id: params.id });
 
   res.json({ ok: true, data });
 });

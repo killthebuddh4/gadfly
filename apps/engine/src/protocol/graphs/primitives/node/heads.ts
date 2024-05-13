@@ -1,9 +1,9 @@
 import { Edge } from "@prisma/client";
 import { prisma } from "../../../../lib/prisma.js";
 
-export const heads = async ({ ids }: { ids: string[] }) => {
+export const heads = async ({ id }: { id: string }) => {
   return _heads({
-    ids,
+    ids: [id],
     found: [],
   });
 };

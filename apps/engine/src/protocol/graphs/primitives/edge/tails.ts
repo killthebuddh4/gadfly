@@ -1,23 +1,23 @@
 import { Node } from "@prisma/client";
 import { prisma } from "../../../../lib/prisma.js";
 
-export const heads = async ({ ids }: { ids: string[] }) => {
-  return _heads({
-    ids,
+export const tails = async ({ id }: { id: string }) => {
+  return _tails({
+    ids: [id],
     found: [],
   });
 };
 
-const _heads = async (args: {
+export const _tails = async (args: {
   ids: string[];
   found: Node[];
 }): Promise<Node[]> => {
   const nodes = await prisma.node.findMany({
     include: {
-      downstream: true,
+      upstream: true,
     },
     where: {
-      upstream: {
+      downstream: {
         some: {
           id: {
             in: args.ids,
@@ -28,18 +28,18 @@ const _heads = async (args: {
   });
 
   const found = nodes.filter((node) => {
-    return node.downstream.length === 0;
+    return node.upstream.length === 0;
   });
 
-  const notHeads = nodes.filter((node) => {
-    return node.downstream.length > 0;
+  const notTails = nodes.filter((node) => {
+    return node.upstream.length > 0;
   });
 
-  if (notHeads.length === 0) {
+  if (notTails.length === 0) {
     return [...args.found, ...found];
   } else {
-    return _heads({
-      ids: nodes.flatMap((node) => node.downstream.map((edge) => edge.id)),
+    return _tails({
+      ids: nodes.flatMap((node) => node.upstream.map((edge) => edge.id)),
       found: [...args.found, ...found],
     });
   }
