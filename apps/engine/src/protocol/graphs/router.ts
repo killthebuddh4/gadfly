@@ -3,7 +3,7 @@ import { router as edgePrimitivesRouter } from "./primitives/edge/router.js";
 import { router as graphPrimitivesRouter } from "./primitives/graph/router.js";
 import { router as pointerPrimitivesRouter } from "./primitives/pointer/router.js";
 import { router as typePrimitivesRouter } from "./primitives/type/router.js";
-import { router as generationPrimitivesRouter } from "./primitives/generation/router.js";
+import { router as operationPrimitivesRouter } from "./primitives/operation/router.js";
 import { router as nodePrimitivesRouter } from "./primitives/node/router.js";
 import { router as valuePrimitivesRouter } from "./primitives/value/router.js";
 
@@ -13,6 +13,6 @@ router.use("/edge", edgePrimitivesRouter);
 router.use("/graph", graphPrimitivesRouter);
 router.use("/pointer", pointerPrimitivesRouter);
 router.use("/type", typePrimitivesRouter);
-router.use("/generation", generationPrimitivesRouter);
+router.use("/operation", operationPrimitivesRouter);
 router.use("/node", nodePrimitivesRouter);
 router.use("/value", valuePrimitivesRouter);

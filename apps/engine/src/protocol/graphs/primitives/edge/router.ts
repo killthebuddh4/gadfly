@@ -3,6 +3,11 @@ import { create } from "./create.js";
 import { read } from "./read.js";
 import { setTo } from "./setTo.js";
 import { setValue } from "./setValue.js";
+import { graph } from "./graph.js";
+import { type } from "./type.js";
+import { value } from "./value.js";
+import { from } from "./from.js";
+import { to } from "./to.js";
 import { z } from "zod";
 
 export const router = express.Router();
@@ -77,6 +82,61 @@ router.post("/:id/value", async (req, res) => {
     id: params.id,
     value: body.value,
   });
+
+  res.json({ ok: true, data });
+});
+
+const zGraphParams = z.object({
+  id: z.string().uuid(),
+});
+
+router.get("/graph", async (req, res) => {
+  const params = zGraphParams.parse(req.query);
+  const data = await graph({ id: params.id });
+
+  res.json({ ok: true, data });
+});
+
+const zTypeParams = z.object({
+  id: z.string().uuid(),
+});
+
+router.get("/type", async (req, res) => {
+  const params = zTypeParams.parse(req.query);
+  const data = await type({ id: params.id });
+
+  res.json({ ok: true, data });
+});
+
+const zValueParams = z.object({
+  id: z.string().uuid(),
+});
+
+router.get("/value", async (req, res) => {
+  const params = zValueParams.parse(req.query);
+  const data = await value({ id: params.id });
+
+  res.json({ ok: true, data });
+});
+
+const zFromParams = z.object({
+  id: z.string().uuid(),
+});
+
+router.get("/from", async (req, res) => {
+  const params = zFromParams.parse(req.query);
+  const data = await from({ id: params.id });
+
+  res.json({ ok: true, data });
+});
+
+const zToParams = z.object({
+  id: z.string().uuid(),
+});
+
+router.get("/to", async (req, res) => {
+  const params = zToParams.parse(req.query);
+  const data = await to({ id: params.id });
 
   res.json({ ok: true, data });
 });

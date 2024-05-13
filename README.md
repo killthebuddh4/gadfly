@@ -542,7 +542,7 @@ We have DAGs and trees. We need a primitive for generating these data structures
 
 Thinking about the fundamental kinds of DAGs. There's ways of generating a DAG and ways of executing a DAG. For example map/reduce (i.e. natural selection and/or experiments) is a way to generate AND execute a dag. But there's also a functional programming way to look at it (unfold, map, reduce) that's more about the FLOW of data.
 
-Then we have trees and their generation/execution. So we have like
+Then we have trees and their operation/execution. So we have like
 
 - computations
 - proofs
@@ -599,7 +599,7 @@ children -> when you traverse OWNER, the elements that come after THIS
 # NOTES 2024-05-08
 
 __primitives__ -> graphs and operations on graphs, can be fully understood on their own (i.e. they're not specific to gadfly)
-__engine__ -> graphs and operations that are specifically about driving the generation of other graphs
+__engine__ -> graphs and operations that are specifically about driving the operation of other graphs
 __language__ -> graphs and operations that can be executed and whose values are essentially source code and are generated via the engine
 
 # NOTES 2024-05-09
@@ -646,7 +646,7 @@ The base layer data model is DONE. It turned out that what we needed was literal
 
 _The super cool thing about graphs is that we can have very formal/strict local structure so we can write function-calling prompts that are actually pretty crisp and (I predict) reliable._
 
-So I can actually use where we're at now as a kind of checkpoint that I can demo. The two things I can demo are autonomous generation and traversal. What I think I'm going to demo is generating and traversing graphs that are supposed to be shapes or letters. It's actually going to be pretty cool. I'm going to see if I can get the models to generate graphs that clearly map to shapes and letters. For example a circle would be a cycle where every node has exactly 1 edge in and out. That would be MVP 0.0. MVP 0.1 I think could be having angles, so we could turn a circle into a triangle or something like that. Then we could do letters, then words, then (I think this would be the real cool demo) we could have the language model "read" by traversing the graphs.
+So I can actually use where we're at now as a kind of checkpoint that I can demo. The two things I can demo are autonomous operation and traversal. What I think I'm going to demo is generating and traversing graphs that are supposed to be shapes or letters. It's actually going to be pretty cool. I'm going to see if I can get the models to generate graphs that clearly map to shapes and letters. For example a circle would be a cycle where every node has exactly 1 edge in and out. That would be MVP 0.0. MVP 0.1 I think could be having angles, so we could turn a circle into a triangle or something like that. Then we could do letters, then words, then (I think this would be the real cool demo) we could have the language model "read" by traversing the graphs.
 
 __I think the above will actually be a really cool demo and I may want to update my YC application and/or share the demo publicly, even though it's very far from auto-program-synthesis.__
 
@@ -658,9 +658,9 @@ Primitives is the set of minimal endpoints that can be combined to do "anything"
 
 Traversal is endpoints for graph traversal.
 
-There's also "generation" endpoints which are endpoints that assume you are "inside" the graph and trying to do something.
+There's also "operation" endpoints which are endpoints that assume you are "inside" the graph and trying to do something.
 
-So "primitives", "traversal", and "generation" are the 3 fundamental categories. It's like tools, "stuff for graphs that already exist", and "stuff for graphs that we want to exist".
+So "primitives", "traversal", and "operation" are the 3 fundamental categories. It's like tools, "stuff for graphs that already exist", and "stuff for graphs that we want to exist".
 
 I'm working through the basic API pattern we need. Which is something like:
 
@@ -668,7 +668,7 @@ I'm working through the basic API pattern we need. Which is something like:
 - options
 - suggestions
 - simulation/selection (autonomous)
-- selection/generation (manual)
+- selection/operation (manual)
 
 what is the human-in-the-loop version?
 

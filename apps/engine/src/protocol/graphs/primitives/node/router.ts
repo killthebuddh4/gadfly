@@ -5,6 +5,9 @@ import { setValue } from "./setValue.js";
 import { read } from "./read.js";
 import { downstream } from "./downstream.js";
 import { upstream } from "./upstream.js";
+import { graph } from "./graph.js";
+import { type } from "./type.js";
+import { value } from "./value.js";
 
 export const router = express.Router();
 
@@ -70,6 +73,39 @@ const zUpstreamParams = z.object({
 router.get("/upstream", async (req, res) => {
   const params = zUpstreamParams.parse(req.query);
   const data = await upstream({ id: params.id });
+
+  res.json({ ok: true, data });
+});
+
+const zGraphParams = z.object({
+  id: z.string().uuid(),
+});
+
+router.get("/graph", async (req, res) => {
+  const params = zGraphParams.parse(req.query);
+  const data = await graph({ id: params.id });
+
+  res.json({ ok: true, data });
+});
+
+const zTypeParams = z.object({
+  id: z.string().uuid(),
+});
+
+router.get("/type", async (req, res) => {
+  const params = zTypeParams.parse(req.query);
+  const data = await type({ id: params.id });
+
+  res.json({ ok: true, data });
+});
+
+const zValueParams = z.object({
+  id: z.string().uuid(),
+});
+
+router.get("/value", async (req, res) => {
+  const params = zValueParams.parse(req.query);
+  const data = await value({ id: params.id });
 
   res.json({ ok: true, data });
 });

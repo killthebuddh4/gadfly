@@ -1,7 +1,7 @@
 import { prisma } from "../../../../lib/prisma.js";
 
 export const type = async ({ id }: { id: string }) => {
-  const edge = await prisma.edge.findUnique({
+  const value = await prisma.value.findUnique({
     include: {
       type: true,
     },
@@ -10,9 +10,9 @@ export const type = async ({ id }: { id: string }) => {
     },
   });
 
-  if (edge === null) {
-    throw new Error(`Edge not found for id: ${id}`);
+  if (value === null) {
+    throw new Error(`Value not found for id: ${id}`);
   }
 
-  return edge.type;
+  return value.type;
 };

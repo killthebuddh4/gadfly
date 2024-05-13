@@ -1,9 +1,9 @@
 import { prisma } from "../../../../lib/prisma.js";
 
-export const to = async ({ id }: { id: string }) => {
+export const graph = async ({ id }: { id: string }) => {
   const edge = await prisma.edge.findUnique({
     include: {
-      to: true,
+      graph: true,
     },
     where: {
       id,
@@ -14,5 +14,5 @@ export const to = async ({ id }: { id: string }) => {
     throw new Error(`Edge not found for id: ${id}`);
   }
 
-  return edge.to;
+  return edge.graph;
 };

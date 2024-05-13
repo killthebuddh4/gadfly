@@ -12,6 +12,6 @@ export type Value = {
   graph: () => Promise<Graph | null>;
   node: () => Promise<Node | null>;
   edge: () => Promise<Edge | null>;
-  generation: () => Promise<Generation | null>;
+  operation: () => Promise<Generation | null>;
   references: () => Promise<Pointer[]>;
 };
