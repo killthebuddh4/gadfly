@@ -2,8 +2,10 @@ import express from "express";
 import { z } from "zod";
 import { read } from "./read.js";
 import { create } from "./create.js";
-import { heads } from "./heads.js";
-import { tails } from "./tails.js";
+import { heads } from "./nodes.js";
+import { edges } from "./edges.js";
+import { type } from "./type.js";
+import { value } from "./value.js";
 import { setValue } from "./setValue.js";
 
 export const router = express.Router();
@@ -51,24 +53,46 @@ router.post("/:id/value", async (req, res) => {
   res.json({ ok: true, data });
 });
 
-const zHeadsParams = z.object({
+const zNodesParams = z.object({
   id: z.string().uuid(),
 });
 
-router.get("/heads", async (req, res) => {
-  const params = zHeadsParams.parse(req.query);
+router.get("/nodes", async (req, res) => {
+  const params = zNodesParams.parse(req.query);
   const data = await heads({ id: params.id });
 
   res.json({ ok: true, data });
 });
 
-const zTailsParams = z.object({
+const zEdgesParams = z.object({
   id: z.string().uuid(),
 });
 
-router.get("/tails", async (req, res) => {
-  const params = zTailsParams.parse(req.query);
-  const data = await tails({ id: params.id });
+router.get("/edges", async (req, res) => {
+  const params = zEdgesParams.parse(req.query);
+  const data = await edges({ id: params.id });
+
+  res.json({ ok: true, data });
+});
+
+const zTypePrams = z.object({
+  id: z.string().uuid(),
+});
+
+router.get("/type", async (req, res) => {
+  const params = zTypePrams.parse(req.query);
+  const data = await type({ id: params.id });
+
+  res.json({ ok: true, data });
+});
+
+const zValueParams = z.object({
+  id: z.string().uuid(),
+});
+
+router.get("/value", async (req, res) => {
+  const params = zValueParams.parse(req.query);
+  const data = await value({ id: params.id });
 
   res.json({ ok: true, data });
 });

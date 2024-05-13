@@ -1,7 +1,7 @@
 import { prisma } from "../../../../lib/prisma.js";
 
 export const create = async ({ type }: { type: string }) => {
-  return prisma.generation.create({
+  return prisma.operation.create({
     data: {
       type: {
         connect: {

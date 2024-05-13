@@ -7,7 +7,7 @@ export const setValue = async ({
   id: string;
   value: string;
 }) => {
-  return prisma.generation.update({
+  return prisma.operation.update({
     where: {
       id,
     },

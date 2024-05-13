@@ -1,9 +1,9 @@
 import { prisma } from "../../../../lib/prisma.js";
 
-export const downstream = async ({ id }: { id: string }) => {
+export const graph = async ({ id }: { id: string }) => {
   const node = await prisma.node.findUnique({
     include: {
-      downstream: true,
+      graph: true,
     },
     where: {
       id,
@@ -11,8 +11,8 @@ export const downstream = async ({ id }: { id: string }) => {
   });
 
   if (node === null) {
-    throw new Error(`Node not found: ${id}`);
+    throw new Error(`Node not found for id: ${id}`);
   }
 
-  return node.downstream;
+  return node.graph;
 };
