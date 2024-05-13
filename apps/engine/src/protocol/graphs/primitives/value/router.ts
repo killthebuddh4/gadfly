@@ -3,6 +3,7 @@ import { z } from "zod";
 import { create } from "./create.js";
 import { read } from "./read.js";
 import { type } from "./type.js";
+import { value } from "./value.js";
 
 export const router = express.Router();
 
@@ -38,6 +39,17 @@ const zTypeParams = z.object({
 router.get("/:id/type", async (req, res) => {
   const params = zTypeParams.parse(req.params);
   const data = await type({ id: params.id });
+
+  res.json({ ok: true, data });
+});
+
+const zValueParams = z.object({
+  id: z.string().uuid(),
+});
+
+router.get("/:id/value", async (req, res) => {
+  const params = zValueParams.parse(req.params);
+  const data = await value({ id: params.id });
 
   res.json({ ok: true, data });
 });

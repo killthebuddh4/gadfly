@@ -8,6 +8,7 @@ import { type } from "./type.js";
 import { value } from "./value.js";
 import { from } from "./from.js";
 import { to } from "./to.js";
+import { operation } from "./operation.js";
 import { z } from "zod";
 
 export const router = express.Router();
@@ -90,8 +91,8 @@ const zGraphParams = z.object({
   id: z.string().uuid(),
 });
 
-router.get("/graph", async (req, res) => {
-  const params = zGraphParams.parse(req.query);
+router.get("/:id/graph", async (req, res) => {
+  const params = zGraphParams.parse(req.params);
   const data = await graph({ id: params.id });
 
   res.json({ ok: true, data });
@@ -101,8 +102,8 @@ const zTypeParams = z.object({
   id: z.string().uuid(),
 });
 
-router.get("/type", async (req, res) => {
-  const params = zTypeParams.parse(req.query);
+router.get("/:id/type", async (req, res) => {
+  const params = zTypeParams.parse(req.params);
   const data = await type({ id: params.id });
 
   res.json({ ok: true, data });
@@ -112,8 +113,8 @@ const zValueParams = z.object({
   id: z.string().uuid(),
 });
 
-router.get("/value", async (req, res) => {
-  const params = zValueParams.parse(req.query);
+router.get("/:id/value", async (req, res) => {
+  const params = zValueParams.parse(req.params);
   const data = await value({ id: params.id });
 
   res.json({ ok: true, data });
@@ -123,8 +124,8 @@ const zFromParams = z.object({
   id: z.string().uuid(),
 });
 
-router.get("/from", async (req, res) => {
-  const params = zFromParams.parse(req.query);
+router.get("/:id/from", async (req, res) => {
+  const params = zFromParams.parse(req.params);
   const data = await from({ id: params.id });
 
   res.json({ ok: true, data });
@@ -134,9 +135,16 @@ const zToParams = z.object({
   id: z.string().uuid(),
 });
 
-router.get("/to", async (req, res) => {
-  const params = zToParams.parse(req.query);
+router.get("/:id/to", async (req, res) => {
+  const params = zToParams.parse(req.params);
   const data = await to({ id: params.id });
+
+  res.json({ ok: true, data });
+});
+
+router.get("/:id/operation", async (req, res) => {
+  const params = zToParams.parse(req.params);
+  const data = await operation({ id: params.id });
 
   res.json({ ok: true, data });
 });

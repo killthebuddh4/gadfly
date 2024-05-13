@@ -3,6 +3,8 @@ import { z } from "zod";
 import { create } from "./create.js";
 import { setValue } from "./setValue.js";
 import { read } from "./read.js";
+import { edges } from "./edges.js";
+import { type } from "./type.js";
 
 export const router = express.Router();
 
@@ -42,6 +44,28 @@ router.post("/:id/value", async (req, res) => {
   const params = zSetValueParams.parse(req.params);
   const body = zSetValueBody.parse(req.body);
   const data = await setValue({ id: params.id, value: body.value });
+
+  res.json({ ok: true, data });
+});
+
+const zEdgesParams = z.object({
+  id: z.string().uuid(),
+});
+
+router.get("/:id/edges", async (req, res) => {
+  const params = zEdgesParams.parse(req.params);
+  const data = await edges({ id: params.id });
+
+  res.json({ ok: true, data });
+});
+
+const zTypeParams = z.object({
+  id: z.string().uuid(),
+});
+
+router.get("/:id/type", async (req, res) => {
+  const params = zTypeParams.parse(req.params);
+  const data = await type({ id: params.id });
 
   res.json({ ok: true, data });
 });

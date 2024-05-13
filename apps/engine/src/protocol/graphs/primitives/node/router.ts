@@ -59,8 +59,8 @@ const zDownstreamParams = z.object({
   id: z.string().uuid(),
 });
 
-router.get("/downstream", async (req, res) => {
-  const params = zDownstreamParams.parse(req.query);
+router.get("/:id/downstream", async (req, res) => {
+  const params = zDownstreamParams.parse(req.params);
   const data = await downstream({ id: params.id });
 
   res.json({ ok: true, data });
@@ -70,8 +70,8 @@ const zUpstreamParams = z.object({
   id: z.string().uuid(),
 });
 
-router.get("/upstream", async (req, res) => {
-  const params = zUpstreamParams.parse(req.query);
+router.get("/:id/upstream", async (req, res) => {
+  const params = zUpstreamParams.parse(req.params);
   const data = await upstream({ id: params.id });
 
   res.json({ ok: true, data });
@@ -81,8 +81,8 @@ const zGraphParams = z.object({
   id: z.string().uuid(),
 });
 
-router.get("/graph", async (req, res) => {
-  const params = zGraphParams.parse(req.query);
+router.get("/:id/graph", async (req, res) => {
+  const params = zGraphParams.parse(req.params);
   const data = await graph({ id: params.id });
 
   res.json({ ok: true, data });
@@ -92,8 +92,8 @@ const zTypeParams = z.object({
   id: z.string().uuid(),
 });
 
-router.get("/type", async (req, res) => {
-  const params = zTypeParams.parse(req.query);
+router.get("/:id/type", async (req, res) => {
+  const params = zTypeParams.parse(req.params);
   const data = await type({ id: params.id });
 
   res.json({ ok: true, data });
@@ -103,8 +103,8 @@ const zValueParams = z.object({
   id: z.string().uuid(),
 });
 
-router.get("/value", async (req, res) => {
-  const params = zValueParams.parse(req.query);
+router.get("/:id/value", async (req, res) => {
+  const params = zValueParams.parse(req.params);
   const data = await value({ id: params.id });
 
   res.json({ ok: true, data });
