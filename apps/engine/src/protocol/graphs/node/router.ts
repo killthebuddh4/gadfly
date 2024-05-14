@@ -2,36 +2,21 @@ import express from "express";
 import { z } from "zod";
 import { create as createRoot } from "./root/create.js";
 import { read as readRoot } from "./root/read.js";
-import { generate as generateRoot } from "./root/generate.js";
 import { interpret as interpretRoot } from "./root/interpret.js";
 import { read as readGraph } from "./graph/read.js";
 import { interpret as interpretGraph } from "./graph/interpret.js";
-import { generate as generateGraph } from "./graph/generate.js";
 import { read as readType } from "./type/read.js";
 import { interpret as interpretType } from "./type/interpret.js";
-import { generate as generateType } from "./type/generate.js";
 import { read as readValue } from "./value/read.js";
-import { write as writeValue } from "./value/write.js";
 import { interpret as interpretValue } from "./value/interpret.js";
-import { generate as generateValue } from "./value/generate.js";
 import { read as readUpstream } from "./upstream/read.js";
-import { write as writeUpstream } from "./upstream/write.js";
 import { interpret as interpretUpstream } from "./upstream/interpret.js";
-import { generate as generateUpstream } from "./upstream/generate.js";
 import { read as readDownstream } from "./downstream/read.js";
-import { write as writeDownstream } from "./downstream/write.js";
 import { interpret as interpretDownstream } from "./downstream/interpret.js";
-import { generate as generateDownstream } from "./downstream/generate.js";
 
 export const router = express.Router();
 
 router.use(express.json());
-
-router.post("/generate", async (req, res) => {
-  const data = await generateRoot();
-
-  res.json({ ok: true, data });
-});
 
 const zCreateRootBody = z.object({
   graph: z.string().uuid(),
@@ -92,17 +77,6 @@ router.get("/:id/graph/interpret", async (req, res) => {
   res.json({ ok: true, data });
 });
 
-const zGenerateGraphParams = z.object({
-  id: z.string().uuid(),
-});
-
-router.post("/:id/graph/generate", async (req, res) => {
-  const params = zGenerateGraphParams.parse(req.params);
-  const data = await generateGraph({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
 const zReadTypeParams = z.object({
   id: z.string().uuid(),
 });
@@ -125,17 +99,6 @@ router.get("/:id/type/interpret", async (req, res) => {
   res.json({ ok: true, data });
 });
 
-const zGenerateTypeParams = z.object({
-  id: z.string().uuid(),
-});
-
-router.post("/:id/type/generate", async (req, res) => {
-  const params = zGenerateTypeParams.parse(req.params);
-  const data = await generateType({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
 const zReadValueParams = z.object({
   id: z.string().uuid(),
 });
@@ -143,22 +106,6 @@ const zReadValueParams = z.object({
 router.get("/:id/value", async (req, res) => {
   const params = zReadValueParams.parse(req.params);
   const data = await readValue({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
-const zWriteValueParams = z.object({
-  id: z.string().uuid(),
-});
-
-const zWriteValueBody = z.object({
-  value: z.string().uuid(),
-});
-
-router.post("/:id/value", async (req, res) => {
-  const params = zWriteValueParams.parse(req.params);
-  const body = zWriteValueBody.parse(req.body);
-  const data = await writeValue({ id: params.id, value: body.value });
 
   res.json({ ok: true, data });
 });
@@ -174,17 +121,6 @@ router.get("/:id/value/interpret", async (req, res) => {
   res.json({ ok: true, data });
 });
 
-const zGenerateValueParams = z.object({
-  id: z.string().uuid(),
-});
-
-router.post("/:id/value/generate", async (req, res) => {
-  const params = zGenerateValueParams.parse(req.params);
-  const data = await generateValue({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
 const zReadUpstreamParams = z.object({
   id: z.string().uuid(),
 });
@@ -192,22 +128,6 @@ const zReadUpstreamParams = z.object({
 router.get("/:id/upstream", async (req, res) => {
   const params = zReadUpstreamParams.parse(req.params);
   const data = await readUpstream({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
-const zWriteUpstreamParams = z.object({
-  id: z.string().uuid(),
-});
-
-const zWriteUpstreamBody = z.object({
-  upstream: z.string().uuid(),
-});
-
-router.post("/:id/upstream", async (req, res) => {
-  const params = zWriteUpstreamParams.parse(req.params);
-  const body = zWriteUpstreamBody.parse(req.body);
-  const data = await writeUpstream({ id: params.id, upstream: body.upstream });
 
   res.json({ ok: true, data });
 });
@@ -223,17 +143,6 @@ router.get("/:id/upstream/interpret", async (req, res) => {
   res.json({ ok: true, data });
 });
 
-const zGenerateUpstreamParams = z.object({
-  id: z.string().uuid(),
-});
-
-router.post("/:id/upstream/generate", async (req, res) => {
-  const params = zGenerateUpstreamParams.parse(req.params);
-  const data = await generateUpstream({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
 const zReadDownstreamParams = z.object({
   id: z.string().uuid(),
 });
@@ -245,25 +154,6 @@ router.get("/:id/downstream", async (req, res) => {
   res.json({ ok: true, data });
 });
 
-const zWriteDownstreamParams = z.object({
-  id: z.string().uuid(),
-});
-
-const zWriteDownstreamBody = z.object({
-  downstream: z.array(z.string().uuid()),
-});
-
-router.post("/:id/downstream", async (req, res) => {
-  const params = zWriteDownstreamParams.parse(req.params);
-  const body = zWriteDownstreamBody.parse(req.body);
-  const data = await writeDownstream({
-    id: params.id,
-    downstream: body.downstream,
-  });
-
-  res.json({ ok: true, data });
-});
-
 const zInterpretDownstreamParams = z.object({
   id: z.string().uuid(),
 });
@@ -271,17 +161,6 @@ const zInterpretDownstreamParams = z.object({
 router.get("/:id/downstream/interpret", async (req, res) => {
   const params = zInterpretDownstreamParams.parse(req.params);
   const data = await interpretDownstream({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
-const zGenerateDownstreamParams = z.object({
-  id: z.string().uuid(),
-});
-
-router.post("/:id/downstream/generate", async (req, res) => {
-  const params = zGenerateDownstreamParams.parse(req.params);
-  const data = await generateDownstream({ id: params.id });
 
   res.json({ ok: true, data });
 });

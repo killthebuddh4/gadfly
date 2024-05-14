@@ -1,6 +1,6 @@
 import { prisma } from "../../../../lib/prisma.js";
 
-export const write = ({ id, to }: { id: string; to: string }) => {
+export const write = async ({ id, to }: { id: string; to: string }) => {
   return prisma.edge.update({
     where: {
       id,

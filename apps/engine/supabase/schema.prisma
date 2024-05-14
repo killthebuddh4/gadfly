@@ -8,30 +8,29 @@ datasource db {
 }
 
 model Type {
-  id          String      @id @default(uuid())
-  created_at  DateTime    @default(now())
-  updated_at  DateTime    @updatedAt
+  id          String    @id @default(uuid())
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
   code        Int
   description String
   values      Value[]
   graphs      Graph[]
   nodes       Node[]
   edges       Edge[]
-  operations  Operation[]
-  references  Pointer[]
+  pointers    Pointer[] @relation("pointer_type")
+  references  Pointer[] @relation("pointer_to_type")
 }
 
 model Value {
-  id         String     @id @default(uuid())
-  created_at DateTime   @default(now())
-  updated_at DateTime   @updatedAt
-  type       Type       @relation(fields: [type_id], references: [id])
+  id         String    @id @default(uuid())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  type       Type      @relation(fields: [type_id], references: [id])
   type_id    String
   value      String
   graph      Graph?
   node       Node?
   edge       Edge?
-  operation  Operation?
   references Pointer[]
 }
 
@@ -41,8 +40,8 @@ model Graph {
   updated_at DateTime  @updatedAt
   type       Type      @relation(fields: [type_id], references: [id])
   type_id    String
-  value      Value?    @relation(fields: [value_id], references: [id])
-  value_id   String?   @unique
+  value      Value     @relation(fields: [value_id], references: [id])
+  value_id   String    @unique
   nodes      Node[]
   edges      Edge[]
   references Pointer[]
@@ -54,63 +53,49 @@ model Node {
   updated_at DateTime  @updatedAt
   graph      Graph     @relation(fields: [graph_id], references: [id])
   graph_id   String
-  upstream   Edge[]    @relation("edge_to")
-  downstream Edge[]    @relation("edge_from")
   type       Type      @relation(fields: [type_id], references: [id])
   type_id    String
-  value      Value?    @relation(fields: [value_id], references: [id])
-  value_id   String?   @unique
+  value      Value     @relation(fields: [value_id], references: [id])
+  value_id   String    @unique
+  upstream   Edge[]    @relation("edge_to")
+  downstream Edge[]    @relation("edge_from")
   pointer    Pointer?  @relation("pointer_from")
-  references Pointer[] @relation("pointer_node")
+  references Pointer[] @relation("pointer_to_node")
 }
 
 model Edge {
-  id           String    @id @default(uuid())
-  created_at   DateTime  @default(now())
-  updated_at   DateTime  @updatedAt
-  graph        Graph     @relation(fields: [graph_id], references: [id])
-  graph_id     String
-  from         Node      @relation("edge_from", fields: [from_id], references: [id])
-  from_id      String
-  to           Node?     @relation("edge_to", fields: [to_id], references: [id])
-  to_id        String?
-  type         Type      @relation(fields: [type_id], references: [id])
-  type_id      String
-  value        Value?    @relation(fields: [value_id], references: [id])
-  value_id     String?   @unique
-  operation    Operation @relation(fields: [operation_id], references: [id])
-  operation_id String    @unique
-  references   Pointer[]
-}
-
-model Operation {
   id         String    @id @default(uuid())
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
+  graph      Graph     @relation(fields: [graph_id], references: [id])
+  graph_id   String
   type       Type      @relation(fields: [type_id], references: [id])
   type_id    String
-  value      Value?    @relation(fields: [value_id], references: [id])
-  value_id   String?   @unique
-  edges      Edge[]
+  value      Value     @relation(fields: [value_id], references: [id])
+  value_id   String    @unique
+  from       Node      @relation("edge_from", fields: [from_id], references: [id])
+  from_id    String
+  to         Node?     @relation("edge_to", fields: [to_id], references: [id])
+  to_id      String?
   references Pointer[]
 }
 
 model Pointer {
-  id           String     @id @default(uuid())
-  created_at   DateTime   @default(now())
-  updated_at   DateTime   @updatedAt
-  from         Node       @relation("pointer_from", fields: [from_id], references: [id])
-  from_id      String     @unique
-  value        Value?     @relation(fields: [value_id], references: [id])
-  value_id     String?
-  type         Type?      @relation(fields: [type_id], references: [id])
-  type_id      String?
-  node         Node?      @relation("pointer_node", fields: [node_id], references: [id])
-  node_id      String?
-  graph        Graph?     @relation(fields: [graph_id], references: [id])
-  graph_id     String?
-  edge         Edge?      @relation(fields: [edge_id], references: [id])
-  edge_id      String?
-  operation    Operation? @relation(fields: [operation_id], references: [id])
-  operation_id String?
+  id          String   @id @default(uuid())
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  type        Type     @relation("pointer_type", fields: [type_id], references: [id])
+  type_id     String
+  from        Node     @relation("pointer_from", fields: [from_id], references: [id])
+  from_id     String   @unique
+  to_value    Value?   @relation(fields: [to_value_id], references: [id])
+  to_value_id String?
+  to_type     Type?    @relation("pointer_to_type", fields: [to_type_id], references: [id])
+  to_type_id  String?
+  to_node     Node?    @relation("pointer_to_node", fields: [to_node_id], references: [id])
+  to_node_id  String?
+  to_graph    Graph?   @relation(fields: [to_graph_id], references: [id])
+  to_graph_id String?
+  to_edge     Edge?    @relation(fields: [to_edge_id], references: [id])
+  to_edge_id  String?
 }
