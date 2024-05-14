@@ -75,8 +75,8 @@ model Edge {
   value_id   String    @unique
   from       Node      @relation("edge_from", fields: [from_id], references: [id])
   from_id    String
-  to         Node?     @relation("edge_to", fields: [to_id], references: [id])
-  to_id      String?
+  to         Node      @relation("edge_to", fields: [to_id], references: [id])
+  to_id      String
   references Pointer[]
 }
 
