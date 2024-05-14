@@ -1,1 +1,2 @@
-export const create = async ({ ids }: { ids: string[] }) => null;
+export const create = async ({ from, to }: { from: string[]; to: string[] }) =>
+  null;

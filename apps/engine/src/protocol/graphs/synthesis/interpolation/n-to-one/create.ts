@@ -1,1 +1,1 @@
-export const create = ({ ids }: { ids: string[] }) => null;
+export const create = ({ from, to }: { from: string[]; to: string }) => null;
