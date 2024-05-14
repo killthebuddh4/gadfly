@@ -1,5 +1,5 @@
 import express from "express";
-import { router } from "../protocol/graphs/primitives/router.js";
+import { router } from "../protocol/primitives/router.js";
 
 const app = express();
 
