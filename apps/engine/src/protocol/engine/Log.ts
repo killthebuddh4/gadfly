@@ -1,7 +1,7 @@
-import { Flow } from "../structures/flow/Flow.js";
+import { Flow } from "../types/Flow.js";
 import { Branch } from "./Branch.js";
-import { Result } from "../graphs/types/Result.js";
-import { Generation } from "../graphs/types/Generation.js";
+import { Result } from "../types/Result.js";
+import { Generation } from "../types/Generation.js";
 
 export type Log<S> = {
   unwrap: () => Promise<Flow<Branch<S>>>;

@@ -1,4 +1,4 @@
-import { Tree } from "../tree/Tree.js";
+import { Tree } from "./Tree.js";
 
 export type Leaf<S> = {
   unwrap: () => Promise<S>;

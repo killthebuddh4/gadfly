@@ -1,8 +1,8 @@
-import { Sequence } from "../structures/sequence/Sequence.js";
+import { Sequence } from "../types/Sequence.js";
 import { Commit } from "./Commit.js";
 import { Log } from "./Log.js";
-import { Generation } from "../graphs/types/Generation.js";
-import { Result } from "../graphs/types/Result.js";
+import { Generation } from "../types/Generation.js";
+import { Result } from "../types/Result.js";
 
 export type Branch<S> = {
   unwrap: () => Promise<Sequence<Commit<S>>>;

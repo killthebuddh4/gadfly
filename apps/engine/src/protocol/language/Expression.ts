@@ -1,4 +1,4 @@
-import { Flow } from "../structures/flow/Flow.js";
+import { Flow } from "../types/Flow.js";
 
 export type Expression = {
   unwrap: () => Promise<Flow<Expression>>;
