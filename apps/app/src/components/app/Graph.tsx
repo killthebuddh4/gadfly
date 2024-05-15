@@ -45,7 +45,7 @@ export const Graph = ({ id }: { id: string }) => {
           nodes.data.map((node, i) => ({
             id: node.id,
             data: {},
-            position: { x: 0, y: i * 100 },
+            position: { x: 100, y: 100 + i * 100 },
           })),
         );
       }
@@ -80,8 +80,13 @@ export const Graph = ({ id }: { id: string }) => {
   );
 
   return (
-    <div className="h-[50vh] w-[50vw] border border-gray-500">
+    <div className="h-[70vh] w-[70vw]">
       <ReactFlow
+        style={{
+          backgroundColor: "white",
+          padding: "1rem",
+          borderRadius: "2rem",
+        }}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         nodes={flowNodes}
