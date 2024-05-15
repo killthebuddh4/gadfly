@@ -1,7 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import ReactFlow, { Controls, Background } from "reactflow";
+import { useState, useEffect, useCallback } from "react";
+import ReactFlow, {
+  Controls,
+  Background,
+  applyNodeChanges,
+  applyEdgeChanges,
+  NodeChange,
+  EdgeChange,
+} from "reactflow";
 import {
   readRootClient,
   readEdgesClient,
@@ -9,42 +16,38 @@ import {
 } from "engine/protocol/primitives/graph/client.js";
 
 import "reactflow/dist/style.css";
+import { setEngine } from "crypto";
 
 const URL = "http://localhost:9999";
 
+type FlowNode = {
+  id: string;
+  data: Record<string, unknown>;
+  position: { x: number; y: number };
+};
+
+type FlowEdge = {
+  id: string;
+  source: string;
+  target: string;
+};
+
 export const Graph = ({ id }: { id: string }) => {
-  const [graph, setGraph] = useState<
-    Awaited<ReturnType<typeof readRootClient>>["data"] | null
-  >(null);
-
-  const [nodes, setNodes] = useState<
-    Awaited<ReturnType<typeof readNodesClient>>["data"] | null
-  >(null);
-
-  const [edges, setEdges] = useState<
-    Awaited<ReturnType<typeof readEdgesClient>>["data"] | null
-  >(null);
-
-  useEffect(() => {
-    (async () => {
-      const graph = await readRootClient({ id, url: URL });
-
-      if (!graph.ok) {
-        setGraph(null);
-      } else {
-        setGraph(graph.data);
-      }
-    })();
-  }, [id]);
+  const [flowNodes, setFlowNodes] = useState<FlowNode[]>([]);
+  const [flowEdges, setFlowEdges] = useState<FlowEdge[]>([]);
 
   useEffect(() => {
     (async () => {
       const nodes = await readNodesClient({ id, url: URL });
 
-      if (!nodes.ok) {
-        setNodes(null);
-      } else {
-        setNodes(nodes.data);
+      if (nodes.ok) {
+        setFlowNodes(
+          nodes.data.map((node, i) => ({
+            id: node.id,
+            data: {},
+            position: { x: 0, y: i * 100 },
+          })),
+        );
       }
     })();
   }, [id]);
@@ -53,17 +56,37 @@ export const Graph = ({ id }: { id: string }) => {
     (async () => {
       const edges = await readEdgesClient({ id, url: URL });
 
-      if (!edges.ok) {
-        setEdges(null);
-      } else {
-        setEdges(edges.data);
+      if (edges.ok) {
+        setFlowEdges(
+          edges.data.map((edge) => ({
+            id: edge.id,
+            source: edge.from_id,
+            target: edge.to_id,
+          })),
+        );
       }
     })();
   }, [id]);
 
+  const onNodesChange = useCallback(
+    (changes: NodeChange[]) =>
+      setFlowNodes((nds) => applyNodeChanges(changes, nds)),
+    [],
+  );
+  const onEdgesChange = useCallback(
+    (changes: EdgeChange[]) =>
+      setFlowEdges((eds) => applyEdgeChanges(changes, eds)),
+    [],
+  );
+
   return (
     <div className="h-[50vh] w-[50vw] border border-gray-500">
-      <ReactFlow>
+      <ReactFlow
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        nodes={flowNodes}
+        edges={flowEdges}
+      >
         <Background />
         <Controls />
       </ReactFlow>

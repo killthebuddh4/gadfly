@@ -25,7 +25,13 @@ export const zReadEdgesParams = z.object({
   id: z.string().uuid(),
 });
 
-export const zReadEdgesData = z.array(z.object({ id: z.string().uuid() }));
+export const zReadEdgesData = z.array(
+  z.object({
+    id: z.string().uuid(),
+    from_id: z.string().uuid(),
+    to_id: z.string().uuid(),
+  }),
+);
 
 export const zReadNodesParams = z.object({
   id: z.string().uuid(),

@@ -9,7 +9,7 @@ export const App = () => {
     <div className="h-screen w-screen flex flex-col">
       <h1>Gadfly UI</h1>
       <div className="flex flex-row ml-auto mr-auto">
-        <Graph id="85bac0ac-8b45-4141-a8c4-0baafc3c2a9e" />
+        <Graph id="1e82aa85-ef70-4a26-b424-6e0b9c582ff2" />
       </div>
       <h1>End Gadfly UI</h1>
     </div>

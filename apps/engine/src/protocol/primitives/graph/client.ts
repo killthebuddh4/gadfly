@@ -1,5 +1,11 @@
 import { z } from "zod";
-import { zCreateRootBody, zCreateRootData, zReadRootData } from "./schemas.js";
+import {
+  zCreateRootBody,
+  zCreateRootData,
+  zReadRootData,
+  zReadNodesData,
+  zReadEdgesData,
+} from "./schemas.js";
 
 type ClientReturn<T> =
   | {
@@ -77,7 +83,7 @@ export const readEdgesClient = async ({
 }: {
   url: string;
   id: string;
-}) => {
+}): Promise<ClientReturn<z.infer<typeof zReadEdgesData>>> => {
   const response = await fetch(`${url}/p/graph/${id}/edges`);
 
   const json = await response.json();
@@ -92,7 +98,7 @@ export const readEdgesClient = async ({
     return {
       ok: true,
       status: response.status,
-      data: zReadRootData.parse(json.data),
+      data: zReadEdgesData.parse(json.data),
     };
   }
 };
@@ -103,7 +109,7 @@ export const readNodesClient = async ({
 }: {
   url: string;
   id: string;
-}) => {
+}): Promise<ClientReturn<z.infer<typeof zReadNodesData>>> => {
   const response = await fetch(`${url}/p/graph/${id}/nodes`);
 
   const json = await response.json();
@@ -118,7 +124,7 @@ export const readNodesClient = async ({
     return {
       ok: true,
       status: response.status,
-      data: zReadRootData.parse(json.data),
+      data: zReadNodesData.parse(json.data),
     };
   }
 };
