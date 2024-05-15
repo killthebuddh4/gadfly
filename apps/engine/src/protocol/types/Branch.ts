@@ -1,8 +1,8 @@
-import { Sequence } from "../types/Sequence.js";
+import { Sequence } from "./Sequence.js";
 import { Commit } from "./Commit.js";
 import { Log } from "./Log.js";
-import { Generation } from "../types/Generation.js";
-import { Result } from "../types/Result.js";
+import { Operation } from "./Operation.js";
+import { Result } from "./Result.js";
 
 export type Branch<S> = {
   unwrap: () => Promise<Sequence<Commit<S>>>;
@@ -17,8 +17,8 @@ export type Branch<S> = {
   operation: {
     commits: {
       append: {
-        request: () => Promise<Generation>;
-        generate: (target: Generation) => Promise<Commit<S>>;
+        request: () => Promise<Operation>;
+        generate: (target: Operation) => Promise<Commit<S>>;
         apply: (commit: Commit<S>) => Promise<Result>;
       };
     };

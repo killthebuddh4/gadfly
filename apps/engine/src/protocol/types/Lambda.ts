@@ -1,6 +1,6 @@
-import { Node } from "../types/Node.js";
-import { Graph } from "../types/Graph.js";
-import { Result } from "../types/Result.js";
+import { Node } from "./Node.js";
+import { Graph } from "./Graph.js";
+import { Result } from "./Result.js";
 import { Expression } from "./Expression.js";
 
 /* TODO Input/Output/etc should be their own types
