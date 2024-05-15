@@ -11,35 +11,37 @@ import { read as readType } from "./type/read.js";
 import { interpret as interpretType } from "./type/interpret.js";
 import { read as readValue } from "./value/read.js";
 import { interpret as interpretValue } from "./value/interpret.js";
+import {
+  zCreateRootBody,
+  zCreateRootData,
+  zReadEdgesData,
+  zReadEdgesParams,
+  zReadNodesData,
+  zReadNodesParams,
+  zReadRootData,
+  zReadRootParams,
+} from "./schemas.js";
 
 export const router = express.Router();
 
 router.use(express.json());
 
-const zCreateRootBody = z.object({
-  type: z.string().uuid(),
-  value: z.string().uuid(),
-});
-
 router.post("/", async (req, res) => {
   const body = zCreateRootBody.parse(req.body);
+
   const data = await createRoot({
     type: body.type,
     value: body.value,
   });
 
-  res.json({ ok: true, data });
-});
-
-const zReadRootParams = z.object({
-  id: z.string().uuid(),
+  res.json({ ok: true, data: zCreateRootData.parse(data) });
 });
 
 router.get("/:id", async (req, res) => {
   const params = zReadRootParams.parse(req.params);
   const data = await readRoot({ id: params.id });
 
-  res.json({ ok: true, data });
+  res.json({ ok: true, data: zReadRootData.parse(data) });
 });
 
 const zInterpretRootParams = z.object({
@@ -53,15 +55,11 @@ router.get("/:id/interpret", async (req, res) => {
   res.json({ ok: true, data });
 });
 
-const zReadEdgesParams = z.object({
-  id: z.string().uuid(),
-});
-
 router.get("/:id/edges", async (req, res) => {
   const params = zReadEdgesParams.parse(req.params);
   const data = await readEdges({ id: params.id });
 
-  res.json({ ok: true, data });
+  res.json({ ok: true, data: zReadEdgesData.parse(data) });
 });
 
 const zInterpretEdgesParams = z.object({
@@ -75,15 +73,11 @@ router.get("/:id/edges/interpret", async (req, res) => {
   res.json({ ok: true, data });
 });
 
-const zReadNodesParams = z.object({
-  id: z.string().uuid(),
-});
-
 router.get("/:id/nodes", async (req, res) => {
   const params = zReadNodesParams.parse(req.params);
   const data = await readNodes({ id: params.id });
 
-  res.json({ ok: true, data });
+  res.json({ ok: true, data: zReadNodesData.parse(data) });
 });
 
 const zInterpretNodesParams = z.object({

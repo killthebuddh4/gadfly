@@ -55,7 +55,8 @@
     "tailwindcss-animate": "^1.0.7",
     "tw-merge": "^0.0.1-alpha.3",
     "vaul": "^0.9.1",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "engine": "*"
   },
   "devDependencies": {
     "@repo/tsconfig": "*",

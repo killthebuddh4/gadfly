@@ -13,16 +13,27 @@ import { read as readUpstream } from "./upstream/read.js";
 import { interpret as interpretUpstream } from "./upstream/interpret.js";
 import { read as readDownstream } from "./downstream/read.js";
 import { interpret as interpretDownstream } from "./downstream/interpret.js";
+import {
+  zCreateRootBody,
+  zCreateRootData,
+  zReadRootParams,
+  zReadRootData,
+  zInterpretRootParams,
+  zReadGraphParams,
+  zInterpretGraphParams,
+  zReadTypeParams,
+  zInterpretTypeParams,
+  zReadValueParams,
+  zInterpretValueParams,
+  zReadUpstreamParams,
+  zInterpretUpstreamParams,
+  zReadDownstreamParams,
+  zInterpretDownstreamParams,
+} from "./schemas.js";
 
 export const router = express.Router();
 
 router.use(express.json());
-
-const zCreateRootBody = z.object({
-  graph: z.string().uuid(),
-  type: z.string().uuid(),
-  value: z.string().uuid(),
-});
 
 router.post("/", async (req, res) => {
   const body = zCreateRootBody.parse(req.body);
@@ -32,22 +43,14 @@ router.post("/", async (req, res) => {
     value: body.value,
   });
 
-  res.json({ ok: true, data });
-});
-
-const zReadRootParams = z.object({
-  id: z.string().uuid(),
+  res.json({ ok: true, data: zCreateRootData.parse(data) });
 });
 
 router.get("/:id", async (req, res) => {
   const params = zReadRootParams.parse(req.params);
   const data = await readRoot({ id: params.id });
 
-  res.json({ ok: true, data });
-});
-
-const zInterpretRootParams = z.object({
-  id: z.string().uuid(),
+  res.json({ ok: true, data: zReadRootData.parse(data) });
 });
 
 router.get("/:id/interpret", async (req, res) => {
@@ -57,19 +60,11 @@ router.get("/:id/interpret", async (req, res) => {
   res.json({ ok: true, data });
 });
 
-const zReadGraphParams = z.object({
-  id: z.string().uuid(),
-});
-
 router.get("/:id/graph", async (req, res) => {
   const params = zReadGraphParams.parse(req.params);
   const data = await readGraph({ id: params.id });
 
   res.json({ ok: true, data });
-});
-
-const zInterpretGraphParams = z.object({
-  id: z.string().uuid(),
 });
 
 router.get("/:id/graph/interpret", async (req, res) => {
@@ -79,19 +74,11 @@ router.get("/:id/graph/interpret", async (req, res) => {
   res.json({ ok: true, data });
 });
 
-const zReadTypeParams = z.object({
-  id: z.string().uuid(),
-});
-
 router.get("/:id/type", async (req, res) => {
   const params = zReadTypeParams.parse(req.params);
   const data = await readType({ id: params.id });
 
   res.json({ ok: true, data });
-});
-
-const zInterpretTypeParams = z.object({
-  id: z.string().uuid(),
 });
 
 router.get("/:id/type/interpret", async (req, res) => {
@@ -101,19 +88,11 @@ router.get("/:id/type/interpret", async (req, res) => {
   res.json({ ok: true, data });
 });
 
-const zReadValueParams = z.object({
-  id: z.string().uuid(),
-});
-
 router.get("/:id/value", async (req, res) => {
   const params = zReadValueParams.parse(req.params);
   const data = await readValue({ id: params.id });
 
   res.json({ ok: true, data });
-});
-
-const zInterpretValueParams = z.object({
-  id: z.string().uuid(),
 });
 
 router.get("/:id/value/interpret", async (req, res) => {
@@ -123,19 +102,11 @@ router.get("/:id/value/interpret", async (req, res) => {
   res.json({ ok: true, data });
 });
 
-const zReadUpstreamParams = z.object({
-  id: z.string().uuid(),
-});
-
 router.get("/:id/upstream", async (req, res) => {
   const params = zReadUpstreamParams.parse(req.params);
   const data = await readUpstream({ id: params.id });
 
   res.json({ ok: true, data });
-});
-
-const zInterpretUpstreamParams = z.object({
-  id: z.string().uuid(),
 });
 
 router.get("/:id/upstream/interpret", async (req, res) => {
@@ -145,19 +116,11 @@ router.get("/:id/upstream/interpret", async (req, res) => {
   res.json({ ok: true, data });
 });
 
-const zReadDownstreamParams = z.object({
-  id: z.string().uuid(),
-});
-
 router.get("/:id/downstream", async (req, res) => {
   const params = zReadDownstreamParams.parse(req.params);
   const data = await readDownstream({ id: params.id });
 
   res.json({ ok: true, data });
-});
-
-const zInterpretDownstreamParams = z.object({
-  id: z.string().uuid(),
 });
 
 router.get("/:id/downstream/interpret", async (req, res) => {

@@ -1,6 +1,9 @@
 {
   "name": "engine",
   "type": "module",
+  "exports": {
+    "./*.js": "./build/*.js"
+  },
   "engines": {
     "node": ">=18.0.0"
   },
@@ -20,6 +23,7 @@
     "@repo/core": "*",
     "@supabase/supabase-js": "^2.42.5",
     "@vercel/analytics": "^1.2.2",
+    "cors": "^2.8.5",
     "express": "^4.19.2",
     "openai": "^4.31.0",
     "supabase": "^1.150.0",
@@ -29,6 +33,7 @@
   },
   "devDependencies": {
     "@repo/tsconfig": "*",
+    "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/mocha": "^10.0.3",
     "@types/node": "^20.8.10",

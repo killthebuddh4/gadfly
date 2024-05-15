@@ -7,28 +7,43 @@ import { read as readCode } from "./url/read.js";
 import { interpret as interpretCode } from "./url/interpret.js";
 import { read as readDescription } from "./description/read.js";
 import { interpret as interpretDescription } from "./description/interpret.js";
+import {
+  zCreateRootBody,
+  zCreateRootData,
+  zReadRootParams,
+  zReadRootData,
+  zInterpretRootParams,
+  zReadCodeParams,
+  zInterpretCodeParams,
+  zReadDescriptionParams,
+  zInterpretDescriptionParams,
+} from "./schemas.js";
 
 export const router = express.Router();
 
 router.use(express.json());
 
-const zCreateRootBody = z.object({
-  url: z.string(),
-  description: z.string(),
-});
-
 router.post("/", async (req, res) => {
-  const body = zCreateRootBody.parse(req.body);
-  const data = await createRoot({
-    url: body.url,
-    description: body.description,
-  });
+  let body;
+  try {
+    body = zCreateRootBody.parse(req.body);
+  } catch {
+    res.status(400).json({ ok: false, error: "Invalid body" });
+    return;
+  }
+
+  let data;
+  try {
+    data = await createRoot({
+      url: body.url,
+      description: body.description,
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: "TODO(better error message)" });
+    return;
+  }
 
   res.json({ ok: true, data });
-});
-
-const zReadRootParams = z.object({
-  id: z.string().uuid(),
 });
 
 router.get("/:id", async (req, res) => {
@@ -38,19 +53,11 @@ router.get("/:id", async (req, res) => {
   res.json({ ok: true, data });
 });
 
-const zInterpretRootParams = z.object({
-  id: z.string().uuid(),
-});
-
 router.get("/:id/interpret", async (req, res) => {
   const params = zInterpretRootParams.parse(req.params);
   const data = await interpretRoot({ id: params.id });
 
   res.json({ ok: true, data });
-});
-
-const zReadCodeParams = z.object({
-  id: z.string().uuid(),
 });
 
 router.get("/:id/code", async (req, res) => {
@@ -59,11 +66,6 @@ router.get("/:id/code", async (req, res) => {
 
   res.json({ ok: true, data });
 });
-
-const zInterpretCodeParams = z.object({
-  id: z.string().uuid(),
-});
-
 router.get("/:id/code/interpret", async (req, res) => {
   const params = zInterpretCodeParams.parse(req.params);
   const data = await interpretCode({ id: params.id });
@@ -71,23 +73,11 @@ router.get("/:id/code/interpret", async (req, res) => {
   res.json({ ok: true, data });
 });
 
-const zReadDescriptionParams = z.object({
-  id: z.string().uuid(),
-});
-
 router.get("/:id/description", async (req, res) => {
   const params = zReadDescriptionParams.parse(req.params);
   const data = await readDescription({ id: params.id });
 
   res.json({ ok: true, data });
-});
-
-const zWriteDescriptionParams = z.object({
-  id: z.string().uuid(),
-});
-
-const zInterpretDescriptionParams = z.object({
-  id: z.string().uuid(),
 });
 
 router.get("/:id/description/interpret", async (req, res) => {
