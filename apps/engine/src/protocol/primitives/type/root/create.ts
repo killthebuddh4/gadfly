@@ -1,15 +1,15 @@
 import { prisma } from "../../../../lib/prisma.js";
 
 export const create = async ({
-  code,
+  url,
   description,
 }: {
-  code: number;
+  url: string;
   description: string;
 }) => {
   return prisma.type.create({
     data: {
-      code,
+      url,
       description,
     },
   });

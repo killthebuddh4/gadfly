@@ -6,7 +6,7 @@ export const setType = async ({ id, type }: { id: string; type: string }) => {
       id,
     },
     data: {
-      value: {
+      to_type: {
         connect: {
           id: type,
         },

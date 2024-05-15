@@ -12,7 +12,7 @@ export const setValue = async ({
       id,
     },
     data: {
-      value: {
+      to_value: {
         connect: {
           id: value,
         },

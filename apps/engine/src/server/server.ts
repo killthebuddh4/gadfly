@@ -3,7 +3,7 @@ import { router } from "../protocol/primitives/router.js";
 
 const app = express();
 
-app.use("/g", router);
+app.use("/p", router);
 
 app.listen(9999, () => {
   console.log("Server is running on port 9999");

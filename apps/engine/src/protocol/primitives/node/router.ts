@@ -21,6 +21,7 @@ router.use(express.json());
 const zCreateRootBody = z.object({
   graph: z.string().uuid(),
   type: z.string().uuid(),
+  value: z.string().uuid(),
 });
 
 router.post("/", async (req, res) => {
@@ -28,6 +29,7 @@ router.post("/", async (req, res) => {
   const data = await createRoot({
     graph: body.graph,
     type: body.type,
+    value: body.value,
   });
 
   res.json({ ok: true, data });

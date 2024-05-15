@@ -11,5 +11,5 @@ export const read = async ({ id }: { id: string }) => {
     throw new Error(`Type not found for id: ${id}`);
   }
 
-  return type.code;
+  return type.url;
 };

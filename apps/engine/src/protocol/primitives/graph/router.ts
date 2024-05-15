@@ -18,12 +18,14 @@ router.use(express.json());
 
 const zCreateRootBody = z.object({
   type: z.string().uuid(),
+  value: z.string().uuid(),
 });
 
 router.post("/", async (req, res) => {
   const body = zCreateRootBody.parse(req.body);
   const data = await createRoot({
     type: body.type,
+    value: body.value,
   });
 
   res.json({ ok: true, data });

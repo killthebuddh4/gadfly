@@ -3,13 +3,15 @@ import { prisma } from "../../../../lib/prisma.js";
 export const create = async ({
   graph,
   from,
+  to,
   type,
-  operation,
+  value,
 }: {
   graph: string;
   from: string;
   type: string;
-  operation: string;
+  to: string;
+  value: string;
 }) => {
   return prisma.edge.create({
     data: {
@@ -23,14 +25,19 @@ export const create = async ({
           id: from,
         },
       },
+      to: {
+        connect: {
+          id: to,
+        },
+      },
+      value: {
+        connect: {
+          id: value,
+        },
+      },
       type: {
         connect: {
           id: type,
-        },
-      },
-      operation: {
-        connect: {
-          id: operation,
         },
       },
     },

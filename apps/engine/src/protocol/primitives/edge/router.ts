@@ -9,8 +9,6 @@ import { read as readTo } from "./to/read.js";
 import { interpret as interpretTo } from "./to/interpret.js";
 import { read as readGraph } from "./graph/read.js";
 import { interpret as interpretGraph } from "./graph/interpret.js";
-import { read as readOperation } from "./operation/read.js";
-import { interpret as interpretOperation } from "./operation/interpret.js";
 import { read as readType } from "./type/read.js";
 import { interpret as interpretType } from "./type/interpret.js";
 import { read as readValue } from "./value/read.js";
@@ -23,8 +21,9 @@ router.use(express.json());
 const zCreateRootBody = z.object({
   graph: z.string().uuid(),
   from: z.string().uuid(),
+  to: z.string().uuid(),
   type: z.string().uuid(),
-  operation: z.string().uuid(),
+  value: z.string().uuid(),
 });
 
 router.post("/", async (req, res) => {
@@ -32,8 +31,9 @@ router.post("/", async (req, res) => {
   const data = await createRoot({
     graph: body.graph,
     from: body.from,
+    to: body.to,
     type: body.type,
-    operation: body.operation,
+    value: body.value,
   });
 
   res.json({ ok: true, data });
@@ -123,28 +123,6 @@ const zInterpretGraphParams = z.object({
 router.get("/:id/graph/interpret", async (req, res) => {
   const params = zInterpretGraphParams.parse(req.params);
   const data = await interpretGraph({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
-const zReadOperationParams = z.object({
-  id: z.string().uuid(),
-});
-
-router.get("/:id/operation", async (req, res) => {
-  const params = zReadOperationParams.parse(req.params);
-  const data = await readOperation({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
-const zInterpretOperationParams = z.object({
-  id: z.string().uuid(),
-});
-
-router.get("/:id/operation/interpret", async (req, res) => {
-  const params = zInterpretOperationParams.parse(req.params);
-  const data = await interpretOperation({ id: params.id });
 
   res.json({ ok: true, data });
 });

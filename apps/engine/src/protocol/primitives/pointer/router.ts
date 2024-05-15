@@ -7,7 +7,6 @@ import { setValue } from "./setValue.js";
 import { setNode } from "./setNode.js";
 import { setGraph } from "./setGraph.js";
 import { setEdge } from "./setEdge.js";
-import { setGeneration } from "./setGeneration.js";
 import { setType } from "./setType.js";
 
 export const router = express.Router();
@@ -27,11 +26,12 @@ router.get("/:id", async (req, res) => {
 
 const zCreateBody = z.object({
   from: z.string().uuid(),
+  type: z.string().uuid(),
 });
 
 router.post("/", async (req, res) => {
   const body = zCreateBody.parse(req.body);
-  const data = await create({ from: body.from });
+  const data = await create({ from: body.from, type: body.type });
 
   res.json({ ok: true, data });
 });
@@ -112,25 +112,6 @@ router.post("/:id/edge", async (req, res) => {
   const params = zSetEdgeParams.parse(req.params);
   const body = zSetEdgeBody.parse(req.body);
   const data = await setEdge({ id: params.id, edge: body.edge });
-
-  res.json({ ok: true, data });
-});
-
-const zSetGenerationParams = z.object({
-  id: z.string().uuid(),
-});
-
-const zSetGenerationBody = z.object({
-  operation: z.string().uuid(),
-});
-
-router.post("/:id/operation", async (req, res) => {
-  const params = zSetGenerationParams.parse(req.params);
-  const body = zSetGenerationBody.parse(req.body);
-  const data = await setGeneration({
-    id: params.id,
-    operation: body.operation,
-  });
 
   res.json({ ok: true, data });
 });

@@ -12,7 +12,7 @@ export const setGraph = async ({
       id,
     },
     data: {
-      graph: {
+      to_graph: {
         connect: {
           id: graph,
         },

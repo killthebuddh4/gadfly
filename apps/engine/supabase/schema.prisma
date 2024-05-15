@@ -11,7 +11,7 @@ model Type {
   id          String    @id @default(uuid())
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
-  code        Int
+  url         String    @unique
   description String
   values      Value[]
   graphs      Graph[]

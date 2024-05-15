@@ -6,7 +6,7 @@ export const setNode = async ({ id, node }: { id: string; node: string }) => {
       id,
     },
     data: {
-      node: {
+      to_node: {
         connect: {
           id: node,
         },

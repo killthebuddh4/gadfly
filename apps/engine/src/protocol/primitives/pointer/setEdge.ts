@@ -6,7 +6,7 @@ export const setEdge = async ({ id, edge }: { id: string; edge: string }) => {
       id,
     },
     data: {
-      edge: {
+      to_edge: {
         connect: {
           id: edge,
         },
