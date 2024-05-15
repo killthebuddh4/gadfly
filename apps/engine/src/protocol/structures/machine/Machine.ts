@@ -1,5 +1,5 @@
 import { Graph } from "../graphs/types/Graph.js";
-import { Phase } from "./Phase.js";
+import { Phase } from "../phase/Phase.js";
 import { Result } from "../graphs/types/Result.js";
 import { Generation } from "../graphs/types/Generation.js";
 

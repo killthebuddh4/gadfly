@@ -1,5 +1,5 @@
 import { Branch } from "./Branch.js";
-import { Element } from "../structures/Element.js";
+import { Element } from "../structures/element/Element.js";
 import { Artifact } from "./Artifact.js";
 
 export type Commit<S> = {

@@ -1,4 +1,4 @@
-import { Sequence } from "./Sequence.js";
+import { Sequence } from "../sequence/Sequence.js";
 
 export type Element<S> = {
   unwrap: () => Promise<S>;

@@ -1,6 +1,6 @@
 import { Graph } from "../graphs/types/Graph.js";
 import { Result } from "../graphs/types/Result.js";
-import { Element } from "./Element.js";
+import { Element } from "../element/Element.js";
 import { Generation } from "../graphs/types/Generation.js";
 
 export type Sequence<S> = {

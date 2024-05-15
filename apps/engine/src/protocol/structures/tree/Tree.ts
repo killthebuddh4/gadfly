@@ -1,5 +1,5 @@
 import { Graph } from "../graphs/types/Graph.js";
-import { Leaf } from "./Leaf.js";
+import { Leaf } from "../leaf/Leaf.js";
 import { Result } from "../graphs/types/Result.js";
 import { Generation } from "../graphs/types/Generation.js";
 

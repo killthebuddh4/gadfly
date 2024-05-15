@@ -1,4 +1,4 @@
-import { Machine } from "./Machine.js";
+import { Machine } from "../machine/Machine.js";
 
 export type Phase<S> = {
   unwrap: () => Promise<S>;

@@ -1,4 +1,4 @@
-import { Flow } from "../structures/Flow.js";
+import { Flow } from "../structures/flow/Flow.js";
 import { Branch } from "./Branch.js";
 import { Result } from "../graphs/types/Result.js";
 import { Generation } from "../graphs/types/Generation.js";
