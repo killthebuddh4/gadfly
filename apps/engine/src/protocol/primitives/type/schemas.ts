@@ -40,3 +40,5 @@ export const zReadDescriptionParams = z.object({
 export const zInterpretDescriptionParams = z.object({
   id: z.string().uuid(),
 });
+
+export const zSearchData = z.array(zCreateRootData);

@@ -38,3 +38,5 @@ export const zReadNodesParams = z.object({
 });
 
 export const zReadNodesData = z.array(z.object({ id: z.string().uuid() }));
+
+export const zSearchData = z.array(zCreateRootData);

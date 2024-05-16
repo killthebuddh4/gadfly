@@ -1,5 +1,5 @@
 import express from "express";
-import { z } from "zod";
+import { search } from "./search.js";
 import { create as createRoot } from "./root/create.js";
 import { read as readRoot } from "./root/read.js";
 import { interpret as interpretRoot } from "./root/interpret.js";
@@ -8,6 +8,7 @@ import { interpret as interpretCode } from "./url/interpret.js";
 import { read as readDescription } from "./description/read.js";
 import { interpret as interpretDescription } from "./description/interpret.js";
 import {
+  zSearchData,
   zCreateRootBody,
   zCreateRootData,
   zReadRootParams,
@@ -85,4 +86,10 @@ router.get("/:id/description/interpret", async (req, res) => {
   const data = await interpretDescription({ id: params.id });
 
   res.json({ ok: true, data });
+});
+
+router.get("/", async (req, res) => {
+  const data = await search();
+
+  res.json({ ok: true, data: zSearchData.parse(data) });
 });

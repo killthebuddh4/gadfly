@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { zCreateRootBody, zCreateRootData, zReadRootData } from "./schemas.js";
+import {
+  zCreateRootBody,
+  zCreateRootData,
+  zReadRootData,
+  zReadDownstreamData,
+} from "./schemas.js";
 
 type ClientReturn<T> =
   | {
@@ -13,7 +18,7 @@ type ClientReturn<T> =
       data?: undefined;
     };
 
-export const createRootClient = async ({
+const createRoot = async ({
   url,
   body,
 }: {
@@ -45,13 +50,13 @@ export const createRootClient = async ({
   }
 };
 
-export const readRootClient = async ({
+const readRoot = async ({
   url,
   id,
 }: {
   url: string;
   id: string;
-}) => {
+}): Promise<ClientReturn<z.infer<typeof zReadRootData>>> => {
   const response = await fetch(`${url}/p/node/${id}`);
 
   const json = await response.json();
@@ -69,4 +74,38 @@ export const readRootClient = async ({
       data: zReadRootData.parse(json.data),
     };
   }
+};
+
+const readDownstream = async ({
+  url,
+  id,
+}: {
+  url: string;
+  id: string;
+}): Promise<ClientReturn<z.infer<typeof zReadDownstreamData>>> => {
+  const response = await fetch(`${url}/p/node/${id}/downstream`);
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+      data: undefined,
+    };
+  } else {
+    return {
+      ok: true,
+      status: response.status,
+      data: zReadDownstreamData.parse(json.data),
+    };
+  }
+};
+
+export const client = {
+  create: createRoot,
+  read: readRoot,
+  downstream: {
+    read: readDownstream,
+  },
 };

@@ -1,7 +1,20 @@
 import { z } from "zod";
 import { zCreateRootBody, zCreateRootData, zReadRootData } from "./schemas.js";
+import { ClientRequest } from "http";
 
-export const createRootClient = async ({
+type ClientReturn<T> =
+  | {
+      ok: true;
+      status: number;
+      data: T;
+    }
+  | {
+      ok: false;
+      status: number;
+      data?: undefined;
+    };
+
+const createRoot = async ({
   url,
   body,
 }: {
@@ -33,13 +46,13 @@ export const createRootClient = async ({
   }
 };
 
-export const readRootClient = async ({
+const readRoot = async ({
   url,
   id,
 }: {
   url: string;
   id: string;
-}) => {
+}): Promise<ClientReturn<z.infer<typeof zReadRootData>>> => {
   const response = await fetch(`${url}/p/edge/${id}`);
 
   const json = await response.json();
@@ -57,4 +70,9 @@ export const readRootClient = async ({
       data: zReadRootData.parse(json.data),
     };
   }
+};
+
+export const client = {
+  read: readRoot,
+  create: createRoot,
 };

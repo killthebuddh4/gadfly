@@ -3,18 +3,18 @@ import { primitive as nodeTypePrimitive } from "./node/types/primitive.js";
 import { primitive as edgeTypePrimitive } from "./edge/types/primitive.js";
 import { primitive as graphTypePrimitive } from "./graph/types/primitive.js";
 import { primitive as valueTypePrimitive } from "./value/types/primitive.js";
-import { createRootClient as typeCreateRootClient } from "./type/client.js";
-import { createRootClient as graphCreateRootClient } from "./graph/client.js";
-import { createRootClient as valueCreateRootClient } from "./value/client.js";
-import { createRootClient as nodeCreateRootClient } from "./node/client.js";
-import { createRootClient as edgeCreateRootClient } from "./edge/client.js";
+import { client as typeClient } from "./type/client.js";
+import { client as graphClient } from "./graph/client.js";
+import { client as valueClient } from "./value/client.js";
+import { client as nodeClient } from "./node/client.js";
+import { client as edgeClient } from "./edge/client.js";
 
 const URL = "http://localhost:9999";
 
 describe("Primitives", () => {
   before(async () => {
     try {
-      await typeCreateRootClient({
+      await typeClient.create({
         url: URL,
         body: {
           url: nodeTypePrimitive.url,
@@ -26,7 +26,7 @@ describe("Primitives", () => {
     }
 
     try {
-      await typeCreateRootClient({
+      await typeClient.create({
         url: URL,
         body: {
           url: edgeTypePrimitive.url,
@@ -38,7 +38,7 @@ describe("Primitives", () => {
     }
 
     try {
-      await typeCreateRootClient({
+      await typeClient.create({
         url: URL,
         body: {
           url: graphTypePrimitive.url,
@@ -50,7 +50,7 @@ describe("Primitives", () => {
     }
 
     try {
-      await typeCreateRootClient({
+      await typeClient.create({
         url: URL,
         body: {
           url: valueTypePrimitive.url,
@@ -87,7 +87,7 @@ describe("Primitives", () => {
       throw new Error("primitive graph type not found");
     }
 
-    const graphValue = await valueCreateRootClient({
+    const graphValue = await valueClient.create({
       url: URL,
       body: {
         type: valueType.id,
@@ -99,7 +99,7 @@ describe("Primitives", () => {
       throw new Error("value for graph not created");
     }
 
-    const graph = await graphCreateRootClient({
+    const graph = await graphClient.create({
       url: URL,
       body: {
         type: graphType.id,
@@ -121,7 +121,7 @@ describe("Primitives", () => {
       throw new Error("primitive node type not found");
     }
 
-    const firstNodeValue = await valueCreateRootClient({
+    const firstNodeValue = await valueClient.create({
       url: URL,
       body: {
         type: valueType.id,
@@ -133,7 +133,7 @@ describe("Primitives", () => {
       throw new Error("value for first node not created");
     }
 
-    const firstNode = await nodeCreateRootClient({
+    const firstNode = await nodeClient.create({
       url: URL,
       body: {
         type: nodeType.id,
@@ -146,7 +146,7 @@ describe("Primitives", () => {
       throw new Error("first node not created");
     }
 
-    const secondNodeValue = await valueCreateRootClient({
+    const secondNodeValue = await valueClient.create({
       url: URL,
       body: {
         type: valueType.id,
@@ -158,7 +158,7 @@ describe("Primitives", () => {
       throw new Error("value for second node not created");
     }
 
-    const secondNode = await nodeCreateRootClient({
+    const secondNode = await nodeClient.create({
       url: URL,
       body: {
         type: nodeType.id,
@@ -181,7 +181,7 @@ describe("Primitives", () => {
       throw new Error("primitive edge type not found");
     }
 
-    const edgeValue = await valueCreateRootClient({
+    const edgeValue = await valueClient.create({
       url: URL,
       body: {
         type: valueType.id,
@@ -193,7 +193,7 @@ describe("Primitives", () => {
       throw new Error("value for edge not created");
     }
 
-    const edge = await edgeCreateRootClient({
+    const edge = await edgeClient.create({
       url: URL,
       body: {
         graph: graph.data.id,

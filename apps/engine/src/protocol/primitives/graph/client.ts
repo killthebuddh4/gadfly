@@ -5,6 +5,7 @@ import {
   zReadRootData,
   zReadNodesData,
   zReadEdgesData,
+  zSearchData,
 } from "./schemas.js";
 
 type ClientReturn<T> =
@@ -19,7 +20,7 @@ type ClientReturn<T> =
       data?: undefined;
     };
 
-export const createRootClient = async ({
+const createRoot = async ({
   url,
   body,
 }: {
@@ -51,13 +52,13 @@ export const createRootClient = async ({
   }
 };
 
-export const readRootClient = async ({
+const readRoot = async ({
   url,
   id,
 }: {
   url: string;
   id: string;
-}) => {
+}): Promise<ClientReturn<z.infer<typeof zReadRootData>>> => {
   const response = await fetch(`${url}/p/graph/${id}`);
 
   const json = await response.json();
@@ -77,7 +78,7 @@ export const readRootClient = async ({
   }
 };
 
-export const readEdgesClient = async ({
+const readEdges = async ({
   url,
   id,
 }: {
@@ -103,7 +104,7 @@ export const readEdgesClient = async ({
   }
 };
 
-export const readNodesClient = async ({
+const readNodes = async ({
   url,
   id,
 }: {
@@ -127,4 +128,40 @@ export const readNodesClient = async ({
       data: zReadNodesData.parse(json.data),
     };
   }
+};
+
+const search = async ({
+  url,
+}: {
+  url: string;
+}): Promise<ClientReturn<z.infer<typeof zSearchData>>> => {
+  const response = await fetch(`${url}/p/graph`);
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+      data: undefined,
+    };
+  } else {
+    return {
+      ok: true,
+      status: response.status,
+      data: zSearchData.parse(json.data),
+    };
+  }
+};
+
+export const client = {
+  read: readRoot,
+  create: createRoot,
+  search,
+  edges: {
+    read: readEdges,
+  },
+  nodes: {
+    read: readNodes,
+  },
 };

@@ -13,7 +13,7 @@ type ClientReturn<T> =
       data?: undefined;
     };
 
-export const createRootClient = async ({
+const createRoot = async ({
   url,
   body,
 }: {
@@ -45,13 +45,13 @@ export const createRootClient = async ({
   }
 };
 
-export const readRootClient = async ({
+const readRoot = async ({
   url,
   id,
 }: {
   url: string;
   id: string;
-}) => {
+}): Promise<ClientReturn<z.infer<typeof zReadRootData>>> => {
   const response = await fetch(`${url}/p/value/${id}`);
 
   const json = await response.json();
@@ -69,4 +69,9 @@ export const readRootClient = async ({
       data: zReadRootData.parse(json.data),
     };
   }
+};
+
+export const client = {
+  create: createRoot,
+  read: readRoot,
 };

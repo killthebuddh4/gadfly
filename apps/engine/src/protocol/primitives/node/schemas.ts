@@ -64,6 +64,12 @@ export const zReadDownstreamParams = z.object({
   id: z.string().uuid(),
 });
 
+export const zReadDownstreamData = z.array(
+  z.object({
+    id: z.string().uuid(),
+  }),
+);
+
 export const zInterpretDownstreamParams = z.object({
   id: z.string().uuid(),
 });

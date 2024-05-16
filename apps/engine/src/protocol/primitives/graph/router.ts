@@ -11,7 +11,9 @@ import { read as readType } from "./type/read.js";
 import { interpret as interpretType } from "./type/interpret.js";
 import { read as readValue } from "./value/read.js";
 import { interpret as interpretValue } from "./value/interpret.js";
+import { search } from "./search.js";
 import {
+  zSearchData,
   zCreateRootBody,
   zCreateRootData,
   zReadEdgesData,
@@ -38,10 +40,21 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-  const params = zReadRootParams.parse(req.params);
+  let params;
+  try {
+    params = zReadRootParams.parse(req.params);
+  } catch {
+    res.status(400).json({ ok: false, error: "Invalid params" });
+    return;
+  }
+
   const data = await readRoot({ id: params.id });
 
-  res.json({ ok: true, data: zReadRootData.parse(data) });
+  try {
+    res.json({ ok: true, data: zReadRootData.parse(data) });
+  } catch {
+    res.status(500).json({ ok: false, error: "zReadRootData.parse failed" });
+  }
 });
 
 const zInterpretRootParams = z.object({
@@ -133,4 +146,10 @@ router.get("/:id/value/interpret", async (req, res) => {
   const data = await interpretValue({ id: params.id });
 
   res.json({ ok: true, data });
+});
+
+router.get("/", async (req, res) => {
+  const data = await search();
+
+  res.json({ ok: true, data: zSearchData.parse(data) });
 });
