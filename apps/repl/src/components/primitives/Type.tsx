@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { client } from "engine/protocol/primitives/client.js";
+import Link from "next/link.js";
 
 type R<T extends (a: any) => any> = Awaited<ReturnType<T>>;
 
@@ -14,7 +15,7 @@ export const Type = ({
 }) => {
   const compact = (() => {
     if (opts?.compact === undefined) {
-      return true;
+      return false;
     } else {
       return opts.compact;
     }
@@ -45,16 +46,23 @@ export const Type = ({
 
   if (compact) {
     return (
-      <div className="bg-green-200">
+      <div className="bg-green-100">
         <p>{type.data.url}</p>
       </div>
     );
   }
 
   return (
-    <div className="p-4 bg-green-200">
-      <h1 className="font-bold">Type</h1>
-      <p>{id}</p>
+    <div className="p-4 bg-green-100">
+      <div className="mb-4">
+        <h1 className="font-bold">Type</h1>
+        <Link
+          className="cursor-pointer text-blue-500 hover:text-blue-900"
+          href={`/p/type/${type.data.id}`}
+        >
+          {type.data.id}
+        </Link>
+      </div>
       <h2>url</h2>
       <p>{type.data.url}</p>
       <h2>description</h2>

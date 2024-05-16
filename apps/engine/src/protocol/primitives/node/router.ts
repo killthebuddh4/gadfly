@@ -26,6 +26,7 @@ import {
   zReadValueParams,
   zInterpretValueParams,
   zReadUpstreamParams,
+  zReadUpstreamData,
   zInterpretUpstreamParams,
   zReadDownstreamParams,
   zReadDownstreamData,
@@ -107,7 +108,7 @@ router.get("/:id/upstream", async (req, res) => {
   const params = zReadUpstreamParams.parse(req.params);
   const data = await readUpstream({ id: params.id });
 
-  res.json({ ok: true, data });
+  res.json({ ok: true, data: zReadUpstreamData.parse(data) });
 });
 
 router.get("/:id/upstream/interpret", async (req, res) => {

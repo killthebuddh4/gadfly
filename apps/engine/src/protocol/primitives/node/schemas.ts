@@ -56,6 +56,12 @@ export const zReadUpstreamParams = z.object({
   id: z.string().uuid(),
 });
 
+export const zReadUpstreamData = z.array(
+  z.object({
+    id: z.string().uuid(),
+  }),
+);
+
 export const zInterpretUpstreamParams = z.object({
   id: z.string().uuid(),
 });

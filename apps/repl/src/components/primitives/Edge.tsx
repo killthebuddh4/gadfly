@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { client } from "engine/protocol/primitives/client.js";
 import { Type } from "./Type";
 import { Value } from "./Value";
-import { Node } from "./Node";
+import Link from "next/link";
 
 type R<T extends (a: any) => any> = Awaited<ReturnType<T>>;
 
@@ -33,15 +33,66 @@ export const Edge = ({ id }: { id: string }) => {
   }
 
   return (
-    <div className="p-4 bg-orange-200">
-      <h1 className="font-bold">Edge</h1>
-      <p>{id}</p>
-      <Type id={edge.data.type_id} />
-      <Value id={edge.data.value_id} />
-      <h1>from</h1>
-      <p>{edge.data.from_id}</p>
-      <h1>to</h1>
-      <p>{edge.data.to_id}</p>
+    <div className="p-4 bg-red-100">
+      <div className="mb-4">
+        <h1 className="font-bold">Edge</h1>
+        <Link
+          className="cursor-pointer text-blue-500 hover:text-blue-900"
+          href={`/p/edge/${edge.data.id}`}
+        >
+          {edge.data.id}
+        </Link>
+      </div>
+
+      <div className="mb-4">
+        <h1 className="font-bold">Graph</h1>
+        <Link
+          className="cursor-pointer text-blue-500 hover:text-blue-900"
+          href={`/p/graph/${edge.data.graph_id}`}
+        >
+          {edge.data.graph_id}
+        </Link>
+      </div>
+
+      <div className="mb-4">
+        <h1 className="font-bold">Type</h1>
+        <Link
+          className="cursor-pointer text-blue-500 hover:text-blue-900"
+          href={`/p/type/${edge.data.type_id}`}
+        >
+          {edge.data.type_id}
+        </Link>
+      </div>
+
+      <div className="mb-4">
+        <h1 className="font-bold">Value</h1>
+        <Link
+          className="cursor-pointer text-blue-500 hover:text-blue-900"
+          href={`/p/value/${edge.data.value_id}`}
+        >
+          {edge.data.value_id}
+        </Link>
+      </div>
+
+      <div className="mb-4">
+        <h1 className="font-bold">From</h1>
+        <Link
+          className="cursor-pointer text-blue-500 hover:text-blue-900"
+          href={`/p/node/${edge.data.from_id}`}
+        >
+          {edge.data.from_id}
+        </Link>
+      </div>
+
+      <div className="mb-4">
+        <h1 className="font-bold">To</h1>
+        <Link
+          className="cursor-pointer text-blue-500 hover:text-blue-900"
+          href={`/p/node/${edge.data.to_id}`}
+        >
+          {edge.data.to_id}
+        </Link>
+      </div>
     </div>
   );
 };

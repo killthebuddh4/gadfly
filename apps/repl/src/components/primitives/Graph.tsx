@@ -5,6 +5,7 @@ import { Node } from "./Node";
 import { Edge } from "./Edge";
 import { Type } from "./Type";
 import { Value } from "./Value";
+import Link from "next/link";
 
 type R<T extends (a: any) => any> = Awaited<ReturnType<T>>;
 
@@ -56,13 +57,39 @@ export const Graph = ({ id }: { id: string }) => {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4 bg-gray-200">
-      <h1 className="font-bold">Graph</h1>
-      <p>{graph.data.id}</p>
-      <Type id={graph.data.type_id} />
-      <Value id={graph.data.value_id} />
-      <div className="flex flex-col gap-8">
-        <h1>Nodes</h1>
+    <div className="flex flex-col p-4 bg-gray-100">
+      <div className="mb-4">
+        <h1 className="font-bold">Graph</h1>
+        <Link
+          className="cursor-pointer text-blue-500 hover:text-blue-900"
+          href={`/p/graph/${graph.data.id}`}
+        >
+          {graph.data.id}
+        </Link>
+      </div>
+
+      <div className="mb-4">
+        <h1 className="font-bold">Type</h1>
+        <Link
+          className="cursor-pointer text-blue-500 hover:text-blue-900"
+          href={`/p/type/${graph.data.type_id}`}
+        >
+          {graph.data.type_id}
+        </Link>
+      </div>
+
+      <div className="mb-4">
+        <h1 className="font-bold">Value</h1>
+        <Link
+          className="cursor-pointer text-blue-500 hover:text-blue-900"
+          href={`/p/value/${graph.data.value_id}`}
+        >
+          {graph.data.value_id}
+        </Link>
+      </div>
+
+      <h1 className="font-bold">Nodes</h1>
+      <div className="flex flex-col gap-4 mb-4">
         {(() => {
           if (nodes === undefined) {
             return "Loading Nodes...";
@@ -72,21 +99,44 @@ export const Graph = ({ id }: { id: string }) => {
             return "Error Loading Nodes";
           }
 
-          return nodes.data.map((node) => <Node key={node.id} id={node.id} />);
+          return nodes.data.map((node) => {
+            return (
+              <Link
+                key={node.id}
+                className="cursor-pointer text-blue-500 hover:text-blue-900"
+                href={`/p/node/${node.id}`}
+              >
+                {node.id}
+              </Link>
+            );
+          });
         })()}
       </div>
-      <h1>Edges</h1>
-      {(() => {
-        if (edges === undefined) {
-          return "Loading Edges...";
-        }
 
-        if (!edges.ok) {
-          return "Error Loading Edges";
-        }
+      <h1 className="font-bold">Edges</h1>
+      <div className="flex flex-col gap-4 mb-4">
+        {(() => {
+          if (edges === undefined) {
+            return "Loading Edges...";
+          }
 
-        return edges.data.map((edge) => <Edge key={edge.id} id={edge.id} />);
-      })()}
+          if (!edges.ok) {
+            return "Error Loading Edges";
+          }
+
+          return edges.data.map((edge) => {
+            return (
+              <Link
+                key={edge.id}
+                className="cursor-pointer text-blue-500 hover:text-blue-900"
+                href={`/p/edge/${edge.id}`}
+              >
+                {edge.id}
+              </Link>
+            );
+          });
+        })()}
+      </div>
     </div>
   );
 };

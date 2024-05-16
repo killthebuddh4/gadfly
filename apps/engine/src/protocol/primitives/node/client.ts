@@ -4,7 +4,9 @@ import {
   zCreateRootData,
   zReadRootData,
   zReadDownstreamData,
+  zReadUpstreamData,
 } from "./schemas.js";
+import { uptime } from "process";
 
 type ClientReturn<T> =
   | {
@@ -102,10 +104,39 @@ const readDownstream = async ({
   }
 };
 
+const readUpstream = async ({
+  url,
+  id,
+}: {
+  url: string;
+  id: string;
+}): Promise<ClientReturn<z.infer<typeof zReadUpstreamData>>> => {
+  const response = await fetch(`${url}/p/node/${id}/upstream`);
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+      data: undefined,
+    };
+  } else {
+    return {
+      ok: true,
+      status: response.status,
+      data: zReadUpstreamData.parse(json.data),
+    };
+  }
+};
+
 export const client = {
   create: createRoot,
   read: readRoot,
   downstream: {
     read: readDownstream,
+  },
+  upstream: {
+    read: readUpstream,
   },
 };
