@@ -12,6 +12,7 @@ import { read as readDownstream } from "./downstream/read.js";
 import { interpret as interpretDownstream } from "./downstream/interpret.js";
 import { read as readParents } from "./parents/read.js";
 import { read as readChildren } from "./children/read.js";
+import { search } from "./search.js";
 import {
   zReadChildrenData,
   zReadParentsData,
@@ -32,6 +33,7 @@ import {
   zReadDownstreamParams,
   zReadDownstreamData,
   zInterpretDownstreamParams,
+  zSearchData,
 } from "./schemas.js";
 
 export const router = express.Router();
@@ -130,4 +132,10 @@ router.get("/:id/children", async (req, res) => {
   const data = await readChildren({ id: params.id });
 
   res.json({ ok: true, data: zReadChildrenData.parse(data) });
+});
+
+router.get("/", async (req, res) => {
+  const data = await search();
+
+  res.json({ ok: true, data: zSearchData.parse(data) });
 });

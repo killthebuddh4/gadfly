@@ -81,3 +81,7 @@ export const zReadEdgeData = z
     id: z.string().uuid(),
   })
   .or(z.null());
+
+export const zSearchData = z.array(
+  z.object({ id: z.string().uuid(), value: z.string() }),
+);

@@ -80,3 +80,5 @@ export const zReadChildrenParams = z.object({
 });
 
 export const zReadChildrenData = z.array(z.object({ id: z.string().uuid() }));
+
+export const zSearchData = z.array(zCreateRootData);

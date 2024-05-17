@@ -10,7 +10,9 @@ import { read as readEdge } from "./edge/read.js";
 import { read as readGraph } from "./graph/read.js";
 import { read as readNode } from "./node/read.js";
 import { read as readPointer } from "./pointer/read.js";
+import { search } from "./search.js";
 import {
+  zSearchData,
   zCreateRootData,
   zReadRootData,
   zReadChildrenData,
@@ -111,4 +113,10 @@ router.get("/:id/pointer", async (req, res) => {
   const data = await readPointer({ id: params.id });
 
   res.json({ ok: true, data: zReadPointerData.parse(data) });
+});
+
+router.get("/", async (req, res) => {
+  const data = await search();
+
+  res.json({ ok: true, data: zSearchData.parse(data) });
 });
