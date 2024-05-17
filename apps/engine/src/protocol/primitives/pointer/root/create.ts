@@ -3,10 +3,8 @@ import { prisma } from "../../../../lib/prisma.js";
 export const create = async ({
   value,
   from,
-  type,
   to,
 }: {
-  type: string;
   value: string;
   from: {
     type: "value" | "node" | "graph" | "edge" | "pointer";
@@ -19,11 +17,6 @@ export const create = async ({
 }) => {
   return prisma.pointer.create({
     data: {
-      type: {
-        connect: {
-          id: type,
-        },
-      },
       value: {
         connect: {
           id: value,

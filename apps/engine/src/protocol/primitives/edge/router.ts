@@ -8,8 +8,6 @@ import { read as readTo } from "./to/read.js";
 import { interpret as interpretTo } from "./to/interpret.js";
 import { read as readGraph } from "./graph/read.js";
 import { interpret as interpretGraph } from "./graph/interpret.js";
-import { read as readType } from "./type/read.js";
-import { interpret as interpretType } from "./type/interpret.js";
 import { read as readValue } from "./value/read.js";
 import { interpret as interpretValue } from "./value/interpret.js";
 import {
@@ -24,8 +22,6 @@ import {
   zInterpretToParams,
   zReadGraphParams,
   zInterpretGraphParams,
-  zReadTypeParams,
-  zInterpretTypeParams,
   zReadValueParams,
   zInterpretValueParams,
 } from "./schemas.js";
@@ -40,7 +36,6 @@ router.post("/", async (req, res) => {
     graph: body.graph,
     from: body.from,
     to: body.to,
-    type: body.type,
     value: body.value,
   });
 
@@ -99,20 +94,6 @@ router.get("/:id/graph", async (req, res) => {
 router.get("/:id/graph/interpret", async (req, res) => {
   const params = zInterpretGraphParams.parse(req.params);
   const data = await interpretGraph({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
-router.get("/:id/type", async (req, res) => {
-  const params = zReadTypeParams.parse(req.params);
-  const data = await readType({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
-router.get("/:id/type/interpret", async (req, res) => {
-  const params = zInterpretTypeParams.parse(req.params);
-  const data = await interpretType({ id: params.id });
 
   res.json({ ok: true, data });
 });

@@ -1,6 +1,4 @@
 import express from "express";
-import { prisma } from "../../../lib/prisma.js";
-import { z } from "zod";
 import { read as readRoot } from "./root/read.js";
 import { create as createRoot } from "./root/create.js";
 import { read as readFrom } from "./from/read.js";
@@ -32,7 +30,6 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   const body = zCreateRootBody.parse(req.body);
   const data = await createRoot({
-    type: body.type,
     value: body.value,
     from: body.from,
     to: body.to,

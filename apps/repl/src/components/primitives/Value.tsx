@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { client } from "engine/protocol/primitives/client.js";
-import { Type } from "./Type";
 import Link from "next/link";
 
 type R<T extends (a: any) => any> = Awaited<ReturnType<T>>;
@@ -42,10 +41,8 @@ export const Value = ({ id }: { id: string }) => {
           {value.data.id}
         </Link>
       </div>
-      <Type id={value.data.type_id} />
-      <div className="bg-red-100">
-        <p>{value.data.value}</p>
-      </div>
+
+      <p>{value.data.value}</p>
     </div>
   );
 };

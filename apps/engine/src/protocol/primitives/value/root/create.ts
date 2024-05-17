@@ -1,20 +1,9 @@
 import { prisma } from "../../../../lib/prisma.js";
 
-export const create = async ({
-  value,
-  type,
-}: {
-  value: string;
-  type: string;
-}) => {
+export const create = async ({ value }: { value: string }) => {
   return prisma.value.create({
     data: {
       value,
-      type: {
-        connect: {
-          id: type,
-        },
-      },
     },
   });
 };

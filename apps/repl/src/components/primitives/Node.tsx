@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
 import { client } from "engine/protocol/primitives/client.js";
-import { Type } from "./Type";
-import { Value } from "./Value";
-import { Edge } from "./Edge";
 import Link from "next/link";
 
 type R<T extends (a: any) => any> = Awaited<ReturnType<T>>;
@@ -98,16 +95,6 @@ export const Node = ({ id }: { id: string }) => {
           href={`/p/graph/${node.data.graph_id}`}
         >
           {node.data.graph_id}
-        </Link>
-      </div>
-
-      <div className="mb-4">
-        <h1 className="font-bold">Type</h1>
-        <Link
-          className="cursor-pointer text-blue-500 hover:text-blue-900"
-          href={`/p/type/${node.data.type_id}`}
-        >
-          {node.data.type_id}
         </Link>
       </div>
 

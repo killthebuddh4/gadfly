@@ -4,12 +4,10 @@ export const create = async ({
   graph,
   from,
   to,
-  type,
   value,
 }: {
   graph: string;
   from: string;
-  type: string;
   to: string;
   value: string;
 }) => {
@@ -33,11 +31,6 @@ export const create = async ({
       value: {
         connect: {
           id: value,
-        },
-      },
-      type: {
-        connect: {
-          id: type,
         },
       },
     },

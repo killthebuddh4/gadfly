@@ -7,8 +7,6 @@ import { read as readEdges } from "./edges/read.js";
 import { interpret as interpretEdges } from "./edges/interpret.js";
 import { read as readNodes } from "./nodes/read.js";
 import { interpret as interpretNodes } from "./nodes/interpret.js";
-import { read as readType } from "./type/read.js";
-import { interpret as interpretType } from "./type/interpret.js";
 import { read as readValue } from "./value/read.js";
 import { interpret as interpretValue } from "./value/interpret.js";
 import { search } from "./search.js";
@@ -32,7 +30,6 @@ router.post("/", async (req, res) => {
   const body = zCreateRootBody.parse(req.body);
 
   const data = await createRoot({
-    type: body.type,
     value: body.value,
   });
 
@@ -100,28 +97,6 @@ const zInterpretNodesParams = z.object({
 router.get("/:id/nodes/interpret", async (req, res) => {
   const params = zInterpretNodesParams.parse(req.params);
   const data = await interpretNodes({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
-const zReadTypeParams = z.object({
-  id: z.string().uuid(),
-});
-
-router.get("/:id/type", async (req, res) => {
-  const params = zReadTypeParams.parse(req.params);
-  const data = await readType({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
-const zInterpretTypeParams = z.object({
-  id: z.string().uuid(),
-});
-
-router.get("/:id/type/interpret", async (req, res) => {
-  const params = zInterpretTypeParams.parse(req.params);
-  const data = await interpretType({ id: params.id });
 
   res.json({ ok: true, data });
 });

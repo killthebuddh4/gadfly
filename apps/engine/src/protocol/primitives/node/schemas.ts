@@ -36,14 +36,6 @@ export const zInterpretGraphParams = z.object({
   id: z.string().uuid(),
 });
 
-export const zReadTypeParams = z.object({
-  id: z.string().uuid(),
-});
-
-export const zInterpretTypeParams = z.object({
-  id: z.string().uuid(),
-});
-
 export const zReadValueParams = z.object({
   id: z.string().uuid(),
 });

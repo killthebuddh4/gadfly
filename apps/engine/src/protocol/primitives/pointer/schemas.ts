@@ -17,14 +17,12 @@ export const zReadRootParams = z.object({
 
 export const zReadRootData = z.object({
   id: z.string().uuid(),
-  type_id: z.string().uuid(),
   value_id: z.string().uuid(),
   from: zPointer,
   to: zPointer,
 });
 
 export const zCreateRootBody = z.object({
-  type: z.string().uuid(),
   value: z.string().uuid(),
   from: zPointer,
   to: zPointer,
@@ -32,7 +30,6 @@ export const zCreateRootBody = z.object({
 
 export const zCreateRootData = z.object({
   id: z.string().uuid(),
-  type_id: z.string().uuid(),
   value_id: z.string().uuid(),
   from: zPointer,
   to: zPointer,
@@ -44,7 +41,6 @@ export const zReadFromParams = z.object({
 
 export const zReadFromData = z.object({
   id: z.string().uuid(),
-  type_id: z.string().uuid(),
   value_id: z.string().uuid(),
   from: zPointer,
   to: zPointer,
@@ -56,7 +52,6 @@ export const zReadToParams = z.object({
 
 export const zReadToData = z.object({
   id: z.string().uuid(),
-  type_id: z.string().uuid(),
   value_id: z.string().uuid(),
   from: zPointer,
   to: zPointer,

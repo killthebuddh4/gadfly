@@ -11,13 +11,6 @@ export const read = async ({ id }: { id: string }) => {
     throw new Error(`Pointer not found: ${id}`);
   }
 
-  if (pointer.from_type_id !== null) {
-    return {
-      type: "type",
-      id: pointer.from_type_id,
-    };
-  }
-
   if (pointer.from_value_id !== null) {
     return {
       type: "value",
