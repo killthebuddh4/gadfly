@@ -1,5 +1,4 @@
 import express from "express";
-import { z } from "zod";
 import { create as createRoot } from "./root/create.js";
 import { read as readRoot } from "./root/read.js";
 import { interpret as interpretRoot } from "./root/interpret.js";
@@ -11,7 +10,13 @@ import { read as readUpstream } from "./upstream/read.js";
 import { interpret as interpretUpstream } from "./upstream/interpret.js";
 import { read as readDownstream } from "./downstream/read.js";
 import { interpret as interpretDownstream } from "./downstream/interpret.js";
+import { read as readParents } from "./parents/read.js";
+import { read as readChildren } from "./children/read.js";
 import {
+  zReadChildrenData,
+  zReadParentsData,
+  zReadChildrenParams,
+  zReadParentsParams,
   zCreateRootBody,
   zCreateRootData,
   zReadRootParams,
@@ -111,4 +116,18 @@ router.get("/:id/downstream/interpret", async (req, res) => {
   const data = await interpretDownstream({ id: params.id });
 
   res.json({ ok: true, data });
+});
+
+router.get("/:id/parents", async (req, res) => {
+  const params = zReadParentsParams.parse(req.params);
+  const data = await readParents({ id: params.id });
+
+  res.json({ ok: true, data: zReadParentsData.parse(data) });
+});
+
+router.get("/:id/children", async (req, res) => {
+  const params = zReadChildrenParams.parse(req.params);
+  const data = await readChildren({ id: params.id });
+
+  res.json({ ok: true, data: zReadChildrenData.parse(data) });
 });

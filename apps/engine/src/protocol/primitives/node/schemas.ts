@@ -71,3 +71,15 @@ export const zReadDownstreamData = z.array(
 export const zInterpretDownstreamParams = z.object({
   id: z.string().uuid(),
 });
+
+export const zReadParentsParams = z.object({
+  id: z.string().uuid(),
+});
+
+export const zReadParentsData = z.array(z.object({ id: z.string().uuid() }));
+
+export const zReadChildrenParams = z.object({
+  id: z.string().uuid(),
+});
+
+export const zReadChildrenData = z.array(z.object({ id: z.string().uuid() }));

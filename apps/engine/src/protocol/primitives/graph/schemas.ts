@@ -40,3 +40,15 @@ export const zReadNodesParams = z.object({
 export const zReadNodesData = z.array(z.object({ id: z.string().uuid() }));
 
 export const zSearchData = z.array(zCreateRootData);
+
+export const zReadParentsParams = z.object({
+  id: z.string().uuid(),
+});
+
+export const zReadParentsData = z.array(z.object({ id: z.string().uuid() }));
+
+export const zReadChildrenParams = z.object({
+  id: z.string().uuid(),
+});
+
+export const zReadChildrenData = z.array(z.object({ id: z.string().uuid() }));

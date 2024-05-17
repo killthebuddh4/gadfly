@@ -10,7 +10,13 @@ import { interpret as interpretNodes } from "./nodes/interpret.js";
 import { read as readValue } from "./value/read.js";
 import { interpret as interpretValue } from "./value/interpret.js";
 import { search } from "./search.js";
+import { read as readChildren } from "./children/read.js";
+import { read as readParents } from "./parents/read.js";
 import {
+  zReadChildrenData,
+  zReadChildrenParams,
+  zReadParentsData,
+  zReadParentsParams,
   zSearchData,
   zCreateRootBody,
   zCreateRootData,
@@ -127,4 +133,18 @@ router.get("/", async (req, res) => {
   const data = await search();
 
   res.json({ ok: true, data: zSearchData.parse(data) });
+});
+
+router.get("/:id/children", async (req, res) => {
+  const params = zReadChildrenParams.parse(req.params);
+  const data = await readChildren({ id: params.id });
+
+  res.json({ ok: true, data: zReadChildrenData.parse(data) });
+});
+
+router.get("/:id/parents", async (req, res) => {
+  const params = zReadParentsParams.parse(req.params);
+  const data = await readParents({ id: params.id });
+
+  res.json({ ok: true, data: zReadParentsData.parse(data) });
 });

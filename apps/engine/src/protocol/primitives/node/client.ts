@@ -5,6 +5,8 @@ import {
   zReadRootData,
   zReadDownstreamData,
   zReadUpstreamData,
+  zReadChildrenData,
+  zReadParentsData,
 } from "./schemas.js";
 
 type ClientReturn<T> =
@@ -129,6 +131,58 @@ const readUpstream = async ({
   }
 };
 
+const readChildren = async ({
+  url,
+  id,
+}: {
+  url: string;
+  id: string;
+}): Promise<ClientReturn<z.infer<typeof zReadChildrenData>>> => {
+  const response = await fetch(`${url}/p/node/${id}/children`);
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+      data: undefined,
+    };
+  } else {
+    return {
+      ok: true,
+      status: response.status,
+      data: zReadChildrenData.parse(json.data),
+    };
+  }
+};
+
+const readParents = async ({
+  url,
+  id,
+}: {
+  url: string;
+  id: string;
+}): Promise<ClientReturn<z.infer<typeof zReadParentsData>>> => {
+  const response = await fetch(`${url}/p/node/${id}/parents`);
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+      data: undefined,
+    };
+  } else {
+    return {
+      ok: true,
+      status: response.status,
+      data: zReadParentsData.parse(json.data),
+    };
+  }
+};
+
 export const client = {
   create: createRoot,
   read: readRoot,
@@ -137,5 +191,11 @@ export const client = {
   },
   upstream: {
     read: readUpstream,
+  },
+  parents: {
+    read: readParents,
+  },
+  children: {
+    read: readChildren,
   },
 };

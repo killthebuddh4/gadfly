@@ -10,6 +10,8 @@ import { read as readGraph } from "./graph/read.js";
 import { interpret as interpretGraph } from "./graph/interpret.js";
 import { read as readValue } from "./value/read.js";
 import { interpret as interpretValue } from "./value/interpret.js";
+import { read as readChildren } from "./children/read.js";
+import { read as readParents } from "./parents/read.js";
 import {
   zCreateRootBody,
   zCreateRootData,
@@ -24,6 +26,10 @@ import {
   zInterpretGraphParams,
   zReadValueParams,
   zInterpretValueParams,
+  zReadChildrenData,
+  zReadChildrenParams,
+  zReadParentsData,
+  zReadParentsParams,
 } from "./schemas.js";
 
 export const router = express.Router();
@@ -110,4 +116,18 @@ router.get("/:id/value/interpret", async (req, res) => {
   const data = await interpretValue({ id: params.id });
 
   res.json({ ok: true, data });
+});
+
+router.get("/:id/children", async (req, res) => {
+  const params = zReadChildrenParams.parse(req.params);
+  const data = await readChildren({ id: params.id });
+
+  res.json({ ok: true, data: zReadChildrenData.parse(data) });
+});
+
+router.get("/:id/parents", async (req, res) => {
+  const params = zReadParentsParams.parse(req.params);
+  const data = await readParents({ id: params.id });
+
+  res.json({ ok: true, data: zReadParentsData.parse(data) });
 });
