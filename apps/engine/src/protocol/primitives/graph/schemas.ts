@@ -1,13 +1,11 @@
 import { z } from "zod";
 
 export const zCreateRootBody = z.object({
-  type: z.string().uuid(),
   value: z.string().uuid(),
 });
 
 export const zCreateRootData = z.object({
   id: z.string().uuid(),
-  type_id: z.string().uuid(),
   value_id: z.string().uuid(),
 });
 
@@ -17,7 +15,6 @@ export const zReadRootParams = z.object({
 
 export const zReadRootData = z.object({
   id: z.string().uuid(),
-  type_id: z.string().uuid(),
   value_id: z.string().uuid(),
 });
 

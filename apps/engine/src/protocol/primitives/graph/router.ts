@@ -135,16 +135,54 @@ router.get("/", async (req, res) => {
   res.json({ ok: true, data: zSearchData.parse(data) });
 });
 
-router.get("/:id/children", async (req, res) => {
-  const params = zReadChildrenParams.parse(req.params);
-  const data = await readChildren({ id: params.id });
+router.get("/:id/parents", async (req, res) => {
+  let params;
+  try {
+    params = zReadParentsParams.parse(req.params);
+  } catch {
+    res.status(400).json({ ok: false, error: "Invalid params" });
+    return;
+  }
 
-  res.json({ ok: true, data: zReadChildrenData.parse(data) });
+  let data;
+  try {
+    data = await readParents({ id: params.id });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ ok: false, error: "readParents failed" });
+    return;
+  }
+
+  try {
+    res.json({ ok: true, data: zReadParentsData.parse(data) });
+  } catch {
+    res.status(500).json({ ok: false, error: "zReadParentsData.parse failed" });
+  }
 });
 
-router.get("/:id/parents", async (req, res) => {
-  const params = zReadParentsParams.parse(req.params);
-  const data = await readParents({ id: params.id });
+router.get("/:id/children", async (req, res) => {
+  let params;
+  try {
+    params = zReadChildrenParams.parse(req.params);
+  } catch {
+    res.status(400).json({ ok: false, error: "Invalid params" });
+    return;
+  }
 
-  res.json({ ok: true, data: zReadParentsData.parse(data) });
+  let data;
+  try {
+    data = await readChildren({ id: params.id });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ ok: false, error: "readChildren failed" });
+    return;
+  }
+
+  try {
+    res.json({ ok: true, data: zReadChildrenData.parse(data) });
+  } catch {
+    res
+      .status(500)
+      .json({ ok: false, error: "zReadChildrenData.parse failed" });
+  }
 });

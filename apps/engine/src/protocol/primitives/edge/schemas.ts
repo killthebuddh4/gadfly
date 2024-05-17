@@ -4,7 +4,6 @@ export const zCreateRootBody = z.object({
   graph: z.string().uuid(),
   from: z.string().uuid(),
   to: z.string().uuid(),
-  type: z.string().uuid(),
   value: z.string().uuid(),
 });
 
@@ -13,7 +12,6 @@ export const zCreateRootData = z.object({
   graph_id: z.string().uuid(),
   from_id: z.string().uuid(),
   to_id: z.string().uuid(),
-  type_id: z.string().uuid(),
   value_id: z.string().uuid(),
 });
 
@@ -26,7 +24,6 @@ export const zReadRootData = z.object({
   graph_id: z.string().uuid(),
   from_id: z.string().uuid(),
   to_id: z.string().uuid(),
-  type_id: z.string().uuid(),
   value_id: z.string().uuid(),
 });
 

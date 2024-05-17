@@ -69,24 +69,24 @@ export const Node = ({ id }: { id: string }) => {
   }, [node, node?.ok]);
 
   const [parents, setParents] = useState<
-    R<typeof client.graph.parents.read> | undefined
+    R<typeof client.node.parents.read> | undefined
   >(undefined);
 
   useEffect(() => {
     (async () => {
-      const response = await client.graph.parents.read({ id, url: URL });
+      const response = await client.node.parents.read({ id, url: URL });
 
       setParents(response);
     })();
   }, [id]);
 
   const [children, setChildren] = useState<
-    R<typeof client.graph.children.read> | undefined
+    R<typeof client.node.children.read> | undefined
   >(undefined);
 
   useEffect(() => {
     (async () => {
-      const response = await client.graph.children.read({ id, url: URL });
+      const response = await client.node.children.read({ id, url: URL });
 
       setChildren(response);
     })();

@@ -23,24 +23,24 @@ export const Pointer = ({ id }: { id: string }) => {
   }, [id]);
 
   const [parents, setParents] = useState<
-    R<typeof client.graph.parents.read> | undefined
+    R<typeof client.pointer.parents.read> | undefined
   >(undefined);
 
   useEffect(() => {
     (async () => {
-      const response = await client.graph.parents.read({ id, url: URL });
+      const response = await client.pointer.parents.read({ id, url: URL });
 
       setParents(response);
     })();
   }, [id]);
 
   const [children, setChildren] = useState<
-    R<typeof client.graph.children.read> | undefined
+    R<typeof client.pointer.children.read> | undefined
   >(undefined);
 
   useEffect(() => {
     (async () => {
-      const response = await client.graph.children.read({ id, url: URL });
+      const response = await client.pointer.children.read({ id, url: URL });
 
       setChildren(response);
     })();
