@@ -6,7 +6,6 @@ import {
   zReadDownstreamData,
   zReadUpstreamData,
 } from "./schemas.js";
-import { uptime } from "process";
 
 type ClientReturn<T> =
   | {

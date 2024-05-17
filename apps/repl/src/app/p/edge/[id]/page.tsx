@@ -1,4 +1,5 @@
 "use client";
+
 import { useParams } from "next/navigation.js";
 import { Edge } from "@/components/primitives/Edge";
 import { z } from "zod";
