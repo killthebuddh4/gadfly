@@ -41,3 +41,43 @@ export const zReadChildrenParams = z.object({
 });
 
 export const zReadChildrenData = z.array(z.object({ id: z.string().uuid() }));
+
+export const zReadGraphParams = z.object({
+  id: z.string().uuid(),
+});
+
+export const zReadGraphData = z
+  .object({
+    id: z.string().uuid(),
+  })
+  .or(z.null());
+
+export const zReadNodeParams = z.object({
+  id: z.string().uuid(),
+});
+
+export const zReadNodeData = z
+  .object({
+    id: z.string().uuid(),
+  })
+  .or(z.null());
+
+export const zReadPointerParams = z.object({
+  id: z.string().uuid(),
+});
+
+export const zReadPointerData = z
+  .object({
+    id: z.string().uuid(),
+  })
+  .or(z.null());
+
+export const zReadEdgeParams = z.object({
+  id: z.string().uuid(),
+});
+
+export const zReadEdgeData = z
+  .object({
+    id: z.string().uuid(),
+  })
+  .or(z.null());

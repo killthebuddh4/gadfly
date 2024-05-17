@@ -5,6 +5,10 @@ import {
   zCreateRootBody,
   zCreateRootData,
   zReadRootData,
+  zReadEdgeData,
+  zReadNodeData,
+  zReadPointerData,
+  zReadGraphData,
 } from "./schemas.js";
 
 type ClientReturn<T> =
@@ -129,6 +133,110 @@ const readChildren = async ({
   }
 };
 
+const readEdge = async ({
+  url,
+  id,
+}: {
+  url: string;
+  id: string;
+}): Promise<ClientReturn<z.infer<typeof zReadEdgeData>>> => {
+  const response = await fetch(`${url}/p/value/${id}/edge`);
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+      data: undefined,
+    };
+  } else {
+    return {
+      ok: true,
+      status: response.status,
+      data: zReadEdgeData.parse(json.data),
+    };
+  }
+};
+
+const readNode = async ({
+  url,
+  id,
+}: {
+  url: string;
+  id: string;
+}): Promise<ClientReturn<z.infer<typeof zReadNodeData>>> => {
+  const response = await fetch(`${url}/p/value/${id}/node`);
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+      data: undefined,
+    };
+  } else {
+    return {
+      ok: true,
+      status: response.status,
+      data: zReadNodeData.parse(json.data),
+    };
+  }
+};
+
+const readPointer = async ({
+  url,
+  id,
+}: {
+  url: string;
+  id: string;
+}): Promise<ClientReturn<z.infer<typeof zReadPointerData>>> => {
+  const response = await fetch(`${url}/p/value/${id}/pointer`);
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+      data: undefined,
+    };
+  } else {
+    return {
+      ok: true,
+      status: response.status,
+      data: zReadPointerData.parse(json.data),
+    };
+  }
+};
+
+const readGraph = async ({
+  url,
+  id,
+}: {
+  url: string;
+  id: string;
+}): Promise<ClientReturn<z.infer<typeof zReadGraphData>>> => {
+  const response = await fetch(`${url}/p/value/${id}/graph`);
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+      data: undefined,
+    };
+  } else {
+    return {
+      ok: true,
+      status: response.status,
+      data: zReadGraphData.parse(json.data),
+    };
+  }
+};
+
 export const client = {
   create: createRoot,
   read: readRoot,
@@ -137,5 +245,17 @@ export const client = {
   },
   parents: {
     read: readParents,
+  },
+  edge: {
+    read: readEdge,
+  },
+  node: {
+    read: readNode,
+  },
+  pointer: {
+    read: readPointer,
+  },
+  graph: {
+    read: readGraph,
   },
 };

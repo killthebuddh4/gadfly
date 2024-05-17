@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { client } from "engine/protocol/primitives/client.js";
 import Link from "next/link.js";
+import { Log } from "@/components/Log";
 
 type R<T extends (a: any) => any> = Awaited<ReturnType<T>>;
 
@@ -33,6 +34,7 @@ export default function Page() {
 
   return (
     <div className="p-4">
+      <Log />
       <h1 className="font-bold mb-4">Graphs</h1>
       <ul className="flex flex-col gap-4">
         {graphs.data.map((graph) => (
