@@ -1,8 +1,8 @@
 import express from "express";
 import { prisma } from "../../../lib/prisma.js";
 import { z } from "zod";
-import { read } from "./read.js";
-import { create } from "./create.js";
+import { read } from "./root/read.js";
+import { create } from "./root/create.js";
 import { setValue } from "./setValue.js";
 import { setNode } from "./setNode.js";
 import { setGraph } from "./setGraph.js";
