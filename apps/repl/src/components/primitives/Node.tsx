@@ -68,6 +68,30 @@ export const Node = ({ id }: { id: string }) => {
     })();
   }, [node, node?.ok]);
 
+  const [parents, setParents] = useState<
+    R<typeof client.graph.parents.read> | undefined
+  >(undefined);
+
+  useEffect(() => {
+    (async () => {
+      const response = await client.graph.parents.read({ id, url: URL });
+
+      setParents(response);
+    })();
+  }, [id]);
+
+  const [children, setChildren] = useState<
+    R<typeof client.graph.children.read> | undefined
+  >(undefined);
+
+  useEffect(() => {
+    (async () => {
+      const response = await client.graph.children.read({ id, url: URL });
+
+      setChildren(response);
+    })();
+  }, [id]);
+
   if (node === undefined) {
     return <div>Loading...</div>;
   }
@@ -151,6 +175,56 @@ export const Node = ({ id }: { id: string }) => {
                 href={`/p/edge/${edge.id}`}
               >
                 {edge.id}
+              </Link>
+            );
+          });
+        })()}
+      </div>
+
+      <h1 className="font-bold">Parents</h1>
+      <div className="flex flex-col gap-4 mb-4">
+        {(() => {
+          if (parents === undefined) {
+            return "Loading Parents...";
+          }
+
+          if (!parents.ok) {
+            return "Error Loading Parents";
+          }
+
+          return parents.data.map((parent) => {
+            return (
+              <Link
+                key={parent.id}
+                className="cursor-pointer text-blue-500 hover:text-blue-900"
+                href={`/p/pointer/${parent.id}`}
+              >
+                {parent.id}
+              </Link>
+            );
+          });
+        })()}
+      </div>
+
+      <h1 className="font-bold">Children</h1>
+      <div className="flex flex-col gap-4 mb-4">
+        {(() => {
+          if (children === undefined) {
+            return "Loading Children...";
+          }
+
+          if (!children.ok) {
+            return "Error Loading Children";
+          }
+
+          return children.data.map((child) => {
+            return (
+              <Link
+                key={child.id}
+                className="cursor-pointer text-blue-500 hover:text-blue-900"
+                href={`/p/pointer/${child.id}`}
+              >
+                {child.id}
               </Link>
             );
           });
