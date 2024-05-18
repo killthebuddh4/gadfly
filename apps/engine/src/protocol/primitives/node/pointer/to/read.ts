@@ -1,4 +1,4 @@
-import { prisma } from "../../../../lib/prisma.js";
+import { prisma } from "../../../../../lib/prisma.js";
 
 export const read = async ({ id }: { id: string }) => {
   const pointer = await prisma.pointer.findUnique({
@@ -11,38 +11,38 @@ export const read = async ({ id }: { id: string }) => {
     throw new Error(`Pointer not found: ${id}`);
   }
 
-  if (pointer.from_value_id !== null) {
+  if (pointer.to_value_id !== null) {
     return {
       type: "value",
-      id: pointer.from_value_id,
+      id: pointer.to_value_id,
     };
   }
 
-  if (pointer.from_node_id !== null) {
+  if (pointer.to_node_id !== null) {
     return {
       type: "node",
-      id: pointer.from_node_id,
+      id: pointer.to_node_id,
     };
   }
 
-  if (pointer.from_graph_id !== null) {
+  if (pointer.to_graph_id !== null) {
     return {
       type: "graph",
-      id: pointer.from_graph_id,
+      id: pointer.to_graph_id,
     };
   }
 
-  if (pointer.from_edge_id !== null) {
+  if (pointer.to_edge_id !== null) {
     return {
       type: "edge",
-      id: pointer.from_edge_id,
+      id: pointer.to_edge_id,
     };
   }
 
-  if (pointer.from_pointer_id !== null) {
+  if (pointer.to_pointer_id !== null) {
     return {
       type: "pointer",
-      id: pointer.from_pointer_id,
+      id: pointer.to_pointer_id,
     };
   }
 

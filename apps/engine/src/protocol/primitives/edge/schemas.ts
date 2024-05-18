@@ -1,10 +1,22 @@
 import { z } from "zod";
 
+export const zEdge = z.object({
+  id: z.string().uuid(),
+  created_at: z.date(),
+  updated_at: z.date(),
+  graph_id: z.string().uuid(),
+  type_id: z.string().uuid(),
+  value_id: z.string().uuid(),
+  from_id: z.string().uuid(),
+  to_id: z.string().uuid(),
+});
+
 export const zCreateRootBody = z.object({
-  graph: z.string().uuid(),
-  from: z.string().uuid(),
-  to: z.string().uuid(),
-  value: z.string().uuid(),
+  graph_id: z.string().uuid(),
+  from_id: z.string().uuid(),
+  to_id: z.string().uuid(),
+  value_id: z.string().uuid(),
+  type_id: z.string().uuid(),
 });
 
 export const zCreateRootData = z.object({
@@ -13,6 +25,7 @@ export const zCreateRootData = z.object({
   from_id: z.string().uuid(),
   to_id: z.string().uuid(),
   value_id: z.string().uuid(),
+  type_id: z.string().uuid(),
 });
 
 export const zReadRootParams = z.object({
@@ -25,6 +38,7 @@ export const zReadRootData = z.object({
   from_id: z.string().uuid(),
   to_id: z.string().uuid(),
   value_id: z.string().uuid(),
+  type_id: z.string().uuid(),
 });
 
 export const zInterpretRootParams = z.object({
@@ -73,4 +87,14 @@ export const zReadChildrenParams = z.object({
   id: z.string().uuid(),
 });
 
+export const zReadTypeParams = z.object({
+  id: z.string().uuid(),
+});
+
+export const zReadTypeData = z.object({
+  id: z.string().uuid(),
+});
+
 export const zReadChildrenData = z.array(z.object({ id: z.string().uuid() }));
+
+export const zSearchData = z.array(zEdge);

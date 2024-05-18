@@ -5,6 +5,8 @@ import {
   zCreateRootBody,
   zCreateRootData,
   zReadRootData,
+  zReadTypeData,
+  zSearchData,
 } from "./schemas.js";
 
 type ClientReturn<T> =
@@ -129,6 +131,56 @@ const readParents = async ({
   }
 };
 
+const readType = async ({
+  url,
+  id,
+}: {
+  url: string;
+  id: string;
+}): Promise<ClientReturn<z.infer<typeof zReadTypeData>>> => {
+  const response = await fetch(`${url}/p/edge/${id}/type`);
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+      data: undefined,
+    };
+  } else {
+    return {
+      ok: true,
+      status: response.status,
+      data: zReadTypeData.parse(json.data),
+    };
+  }
+};
+
+const search = async ({
+  url,
+}: {
+  url: string;
+}): Promise<ClientReturn<z.infer<typeof zSearchData>>> => {
+  const response = await fetch(`${url}/p/edge`);
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+      data: undefined,
+    };
+  } else {
+    return {
+      ok: true,
+      status: response.status,
+      data: zSearchData.parse(json.data),
+    };
+  }
+};
+
 export const client = {
   read: readRoot,
   create: createRoot,
@@ -138,4 +190,8 @@ export const client = {
   parents: {
     read: readParents,
   },
+  type: {
+    read: readType,
+  },
+  search,
 };

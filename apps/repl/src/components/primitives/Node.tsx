@@ -123,6 +123,16 @@ export const Node = ({ id }: { id: string }) => {
       </div>
 
       <div className="mb-4">
+        <h1 className="font-bold">Type</h1>
+        <Link
+          className="cursor-pointer text-blue-500 hover:text-blue-900"
+          href={`/p/type/${node.data.type_id}`}
+        >
+          {node.data.type_id}
+        </Link>
+      </div>
+
+      <div className="mb-4">
         <h1 className="font-bold">Value</h1>
         <Link
           className="cursor-pointer text-blue-500 hover:text-blue-900"

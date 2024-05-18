@@ -1,22 +1,29 @@
 import { prisma } from "../../../../lib/prisma.js";
 
 export const create = async ({
-  graph,
-  value,
+  type_id,
+  graph_id,
+  value_id,
 }: {
-  graph: string;
-  value: string;
+  type_id: string;
+  graph_id: string;
+  value_id: string;
 }) => {
   return prisma.node.create({
     data: {
+      type: {
+        connect: {
+          id: type_id,
+        },
+      },
       graph: {
         connect: {
-          id: graph,
+          id: graph_id,
         },
       },
       value: {
         connect: {
-          id: value,
+          id: value_id,
         },
       },
     },

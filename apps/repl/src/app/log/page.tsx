@@ -1,6 +1,6 @@
 "use client";
 
-import { Log } from "@/components/Log";
+import { Log } from "@/components/primitives/Log";
 
 type R<T extends (a: any) => any> = Awaited<ReturnType<T>>;
 

@@ -1,11 +1,21 @@
 import { z } from "zod";
 
+export const zGraph = z.object({
+  id: z.string().uuid(),
+  created_at: z.date(),
+  updated_at: z.date(),
+  type_id: z.string().uuid(),
+  value_id: z.string().uuid(),
+});
+
 export const zCreateRootBody = z.object({
-  value: z.string().uuid(),
+  type_id: z.string().uuid(),
+  value_id: z.string().uuid(),
 });
 
 export const zCreateRootData = z.object({
   id: z.string().uuid(),
+  type_id: z.string().uuid(),
   value_id: z.string().uuid(),
 });
 
@@ -15,6 +25,7 @@ export const zReadRootParams = z.object({
 
 export const zReadRootData = z.object({
   id: z.string().uuid(),
+  type_id: z.string().uuid(),
   value_id: z.string().uuid(),
 });
 
@@ -49,3 +60,11 @@ export const zReadChildrenParams = z.object({
 });
 
 export const zReadChildrenData = z.array(z.object({ id: z.string().uuid() }));
+
+export const zReadTypeParams = z.object({
+  id: z.string().uuid(),
+});
+
+export const zReadTypeData = z.object({
+  id: z.string().uuid(),
+});

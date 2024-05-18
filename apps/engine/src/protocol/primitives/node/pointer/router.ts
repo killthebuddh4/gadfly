@@ -37,6 +37,7 @@ router.post("/", async (req, res) => {
   const data = await createRoot({
     value: body.value,
     from: body.from,
+    type: body.type,
     to: body.to,
   });
 

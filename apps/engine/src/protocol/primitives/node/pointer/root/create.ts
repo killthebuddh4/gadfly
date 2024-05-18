@@ -1,27 +1,36 @@
-import { prisma } from "../../../../lib/prisma.js";
+import { prisma } from "../../../../../lib/prisma.js";
 
 export const create = async ({
+  type,
   value,
   from,
   to,
 }: {
+  type: string;
   value: string;
   from: {
-    type: "value" | "node" | "graph" | "edge" | "pointer";
+    type: "value" | "node" | "graph" | "edge" | "pointer" | "type";
     id: string;
   };
   to: {
-    type: "value" | "node" | "graph" | "edge" | "pointer";
+    type: "value" | "node" | "graph" | "edge" | "pointer" | "type";
     id: string;
   };
 }) => {
   return prisma.pointer.create({
     data: {
+      type: {
+        connect: {
+          id: type,
+        },
+      },
       value: {
         connect: {
           id: value,
         },
       },
+      from_type:
+        from.type === "type" ? { connect: { id: from.id } } : undefined,
       from_value:
         from.type === "value" ? { connect: { id: from.id } } : undefined,
       from_node:
@@ -38,6 +47,7 @@ export const create = async ({
       to_edge: to.type === "edge" ? { connect: { id: to.id } } : undefined,
       to_pointer:
         to.type === "pointer" ? { connect: { id: to.id } } : undefined,
+      to_type: to.type === "type" ? { connect: { id: to.id } } : undefined,
     },
   });
 };

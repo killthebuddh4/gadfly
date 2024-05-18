@@ -12,6 +12,7 @@ import { interpret as interpretValue } from "./value/interpret.js";
 import { search } from "./search.js";
 import { read as readChildren } from "./children/read.js";
 import { read as readParents } from "./parents/read.js";
+import { read as readType } from "./type/read.js";
 import {
   zReadChildrenData,
   zReadChildrenParams,
@@ -26,6 +27,8 @@ import {
   zReadNodesParams,
   zReadRootData,
   zReadRootParams,
+  zReadTypeData,
+  zReadTypeParams,
 } from "./schemas.js";
 
 export const router = express.Router();
@@ -34,10 +37,7 @@ router.use(express.json());
 
 router.post("/", async (req, res) => {
   const body = zCreateRootBody.parse(req.body);
-
-  const data = await createRoot({
-    value: body.value,
-  });
+  const data = await createRoot(body);
 
   res.json({ ok: true, data: zCreateRootData.parse(data) });
 });
@@ -184,5 +184,23 @@ router.get("/:id/children", async (req, res) => {
     res
       .status(500)
       .json({ ok: false, error: "zReadChildrenData.parse failed" });
+  }
+});
+
+router.get("/:id/type", async (req, res) => {
+  let params;
+  try {
+    params = zReadTypeParams.parse(req.params);
+  } catch {
+    res.status(400).json({ ok: false, error: "Invalid params" });
+    return;
+  }
+
+  const data = await readType({ id: params.id });
+
+  try {
+    res.json({ ok: true, data: zReadTypeData.parse(data) });
+  } catch {
+    res.status(500).json({ ok: false, error: "zReadTypeData.parse failed" });
   }
 });

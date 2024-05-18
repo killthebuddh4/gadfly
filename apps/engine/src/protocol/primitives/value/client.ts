@@ -10,6 +10,7 @@ import {
   zReadPointerData,
   zReadGraphData,
   zSearchData,
+  zReadTypeData,
 } from "./schemas.js";
 
 type ClientReturn<T> =
@@ -262,6 +263,32 @@ const search = async ({
   }
 };
 
+const readType = async ({
+  url,
+  id,
+}: {
+  url: string;
+  id: string;
+}): Promise<ClientReturn<z.infer<typeof zReadTypeData>>> => {
+  const response = await fetch(`${url}/p/value/${id}/type`);
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+      data: undefined,
+    };
+  } else {
+    return {
+      ok: true,
+      status: response.status,
+      data: zReadTypeData.parse(json.data),
+    };
+  }
+};
+
 export const client = {
   create: createRoot,
   read: readRoot,
@@ -284,4 +311,7 @@ export const client = {
     read: readGraph,
   },
   search,
+  type: {
+    read: readType,
+  },
 };

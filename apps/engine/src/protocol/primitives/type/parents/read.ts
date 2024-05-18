@@ -1,7 +1,7 @@
 import { prisma } from "../../../../lib/prisma.js";
 
 export const read = async ({ id }: { id: string }) => {
-  const pointer = await prisma.pointer.findUnique({
+  const type = await prisma.type.findUnique({
     include: {
       parents: true,
     },
@@ -10,9 +10,9 @@ export const read = async ({ id }: { id: string }) => {
     },
   });
 
-  if (pointer === null) {
-    throw new Error(`Pointer with id ${id} not found`);
+  if (type === null) {
+    throw new Error(`Type with id ${id} not found`);
   }
 
-  return pointer.parents;
+  return type.parents;
 };

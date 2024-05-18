@@ -8,6 +8,7 @@ import {
   zSearchData,
   zReadChildrenData,
   zReadParentsData,
+  zReadTypeData,
 } from "./schemas.js";
 
 type ClientReturn<T> =
@@ -208,6 +209,32 @@ const readParents = async ({
   }
 };
 
+const readType = async ({
+  url,
+  id,
+}: {
+  url: string;
+  id: string;
+}): Promise<ClientReturn<z.infer<typeof zReadTypeData>>> => {
+  const response = await fetch(`${url}/p/graph/${id}/type`);
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+      data: undefined,
+    };
+  } else {
+    return {
+      ok: true,
+      status: response.status,
+      data: zReadTypeData.parse(json.data),
+    };
+  }
+};
+
 export const client = {
   read: readRoot,
   create: createRoot,
@@ -223,5 +250,8 @@ export const client = {
   },
   children: {
     read: readChildren,
+  },
+  type: {
+    read: readType,
   },
 };

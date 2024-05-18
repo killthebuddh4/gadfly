@@ -1,11 +1,21 @@
 import { z } from "zod";
 
+export const zValue = z.object({
+  id: z.string().uuid(),
+  created_at: z.date(),
+  updated_at: z.date(),
+  type_id: z.string().uuid(),
+  value: z.string().min(1),
+});
+
 export const zCreateRootBody = z.object({
+  type_id: z.string().uuid(),
   value: z.string(),
 });
 
 export const zCreateRootData = z.object({
   id: z.string().uuid(),
+  type_id: z.string().uuid(),
   value: z.string(),
 });
 
@@ -16,6 +26,7 @@ export const zReadRootParams = z.object({
 export const zReadRootData = z.object({
   id: z.string().uuid(),
   value: z.string(),
+  type_id: z.string().uuid(),
 });
 
 export const zInterpretRootParams = z.object({
@@ -85,3 +96,11 @@ export const zReadEdgeData = z
 export const zSearchData = z.array(
   z.object({ id: z.string().uuid(), value: z.string() }),
 );
+
+export const zReadTypeParams = z.object({
+  id: z.string().uuid(),
+});
+
+export const zReadTypeData = z.object({
+  id: z.string().uuid(),
+});

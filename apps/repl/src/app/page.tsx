@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { client } from "engine/protocol/primitives/client.js";
 import Link from "next/link.js";
-import { Log } from "@/components/Log";
+import { Log } from "@/components/primitives/Log";
 
 type R<T extends (a: any) => any> = Awaited<ReturnType<T>>;
 
