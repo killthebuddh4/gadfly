@@ -1,13 +1,6 @@
 import { z } from "zod";
-
-export const zNode = z.object({
-  id: z.string().uuid(),
-  created_at: z.date(),
-  updated_at: z.date(),
-  graph_id: z.string().uuid(),
-  type_id: z.string().uuid(),
-  value_id: z.string().uuid(),
-});
+import { zEdge } from "../schemas.js";
+import { zNode } from "../schemas.js";
 
 export const zCreateRootBody = z.object({
   graph_id: z.string().uuid(),
@@ -57,11 +50,7 @@ export const zReadUpstreamParams = z.object({
   id: z.string().uuid(),
 });
 
-export const zReadUpstreamData = z.array(
-  z.object({
-    id: z.string().uuid(),
-  }),
-);
+export const zReadUpstreamData = z.array(zEdge);
 
 export const zInterpretUpstreamParams = z.object({
   id: z.string().uuid(),
@@ -71,11 +60,7 @@ export const zReadDownstreamParams = z.object({
   id: z.string().uuid(),
 });
 
-export const zReadDownstreamData = z.array(
-  z.object({
-    id: z.string().uuid(),
-  }),
-);
+export const zReadDownstreamData = z.array(zEdge);
 
 export const zInterpretDownstreamParams = z.object({
   id: z.string().uuid(),
@@ -93,7 +78,7 @@ export const zReadChildrenParams = z.object({
 
 export const zReadChildrenData = z.array(z.object({ id: z.string().uuid() }));
 
-export const zSearchData = z.array(zCreateRootData);
+export const zSearchData = z.array(zNode);
 
 export const zReadTypeParams = z.object({
   id: z.string().uuid(),

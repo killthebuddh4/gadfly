@@ -54,8 +54,12 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
+  console.log("HERRRRRRRRRRRRRRRREEEEEEEEEEEEEEEEEE");
+
   const params = zReadRootParams.parse(req.params);
   const data = await readRoot({ id: params.id });
+
+  console.log(data);
 
   res.json({ ok: true, data: zReadRootData.parse(data) });
 });

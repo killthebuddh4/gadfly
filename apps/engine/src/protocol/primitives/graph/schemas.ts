@@ -1,12 +1,6 @@
 import { z } from "zod";
-
-export const zGraph = z.object({
-  id: z.string().uuid(),
-  created_at: z.date(),
-  updated_at: z.date(),
-  type_id: z.string().uuid(),
-  value_id: z.string().uuid(),
-});
+import { zNode } from "../schemas.js";
+import { zEdge } from "../schemas.js";
 
 export const zCreateRootBody = z.object({
   type_id: z.string().uuid(),
@@ -33,19 +27,13 @@ export const zReadEdgesParams = z.object({
   id: z.string().uuid(),
 });
 
-export const zReadEdgesData = z.array(
-  z.object({
-    id: z.string().uuid(),
-    from_id: z.string().uuid(),
-    to_id: z.string().uuid(),
-  }),
-);
+export const zReadEdgesData = z.array(zEdge);
 
 export const zReadNodesParams = z.object({
   id: z.string().uuid(),
 });
 
-export const zReadNodesData = z.array(z.object({ id: z.string().uuid() }));
+export const zReadNodesData = z.array(zNode);
 
 export const zSearchData = z.array(zCreateRootData);
 

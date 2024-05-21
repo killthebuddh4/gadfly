@@ -1,9 +1,10 @@
 import { z } from "zod";
 import {
+  zReadRootData,
   zCreateRootBody,
   zCreateRootData,
-  zReadRootData,
-  zSearchData,
+  zReadFromData,
+  zReadToData,
   zReadChildrenData,
   zReadParentsData,
 } from "./schemas.js";
@@ -20,14 +21,14 @@ type ClientReturn<T> =
       data?: undefined;
     };
 
-const createRootClient = async ({
+const createRoot = async ({
   url,
   body,
 }: {
   url: string;
   body: z.infer<typeof zCreateRootBody>;
 }): Promise<ClientReturn<z.infer<typeof zCreateRootData>>> => {
-  const response = await fetch(`${url}/p/type`, {
+  const response = await fetch(`${url}/p/pointer`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -52,14 +53,16 @@ const createRootClient = async ({
   }
 };
 
-const readRootClient = async ({
+const readRoot = async ({
   url,
   id,
 }: {
   url: string;
   id: string;
 }): Promise<ClientReturn<z.infer<typeof zReadRootData>>> => {
-  const response = await fetch(`${url}/p/type/${id}`);
+  const response = await fetch(`${url}/p/pointer/${id}`);
+
+  const json = await response.json();
 
   if (!response.ok) {
     return {
@@ -68,8 +71,6 @@ const readRootClient = async ({
       data: undefined,
     };
   } else {
-    const json = await response.json();
-
     return {
       ok: true,
       status: response.status,
@@ -78,38 +79,14 @@ const readRootClient = async ({
   }
 };
 
-const search = async ({
-  url,
-}: {
-  url: string;
-}): Promise<ClientReturn<z.infer<typeof zSearchData>>> => {
-  const response = await fetch(`${url}/p/type`);
-
-  const json = await response.json();
-
-  if (!response.ok) {
-    return {
-      ok: false,
-      status: response.status,
-      data: undefined,
-    };
-  } else {
-    return {
-      ok: true,
-      status: response.status,
-      data: zSearchData.parse(json.data),
-    };
-  }
-};
-
-const readChildren = async ({
+const readFrom = async ({
   url,
   id,
 }: {
   url: string;
   id: string;
-}): Promise<ClientReturn<z.infer<typeof zReadChildrenData>>> => {
-  const response = await fetch(`${url}/p/type/${id}/children`);
+}): Promise<ClientReturn<z.infer<typeof zReadFromData>>> => {
+  const response = await fetch(`${url}/p/pointer/${id}/from`);
 
   const json = await response.json();
 
@@ -123,7 +100,33 @@ const readChildren = async ({
     return {
       ok: true,
       status: response.status,
-      data: zReadChildrenData.parse(json.data),
+      data: zReadFromData.parse(json.data),
+    };
+  }
+};
+
+const readTo = async ({
+  url,
+  id,
+}: {
+  url: string;
+  id: string;
+}): Promise<ClientReturn<z.infer<typeof zReadToData>>> => {
+  const response = await fetch(`${url}/p/pointer/${id}/to`);
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+      data: undefined,
+    };
+  } else {
+    return {
+      ok: true,
+      status: response.status,
+      data: zReadToData.parse(json.data),
     };
   }
 };
@@ -135,7 +138,7 @@ const readParents = async ({
   url: string;
   id: string;
 }): Promise<ClientReturn<z.infer<typeof zReadParentsData>>> => {
-  const response = await fetch(`${url}/p/type/${id}/parents`);
+  const response = await fetch(`${url}/p/pointer/${id}/parents`);
 
   const json = await response.json();
 
@@ -154,14 +157,45 @@ const readParents = async ({
   }
 };
 
+const readChildren = async ({
+  url,
+  id,
+}: {
+  url: string;
+  id: string;
+}): Promise<ClientReturn<z.infer<typeof zReadChildrenData>>> => {
+  const response = await fetch(`${url}/p/pointer/${id}/children`);
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+      data: undefined,
+    };
+  } else {
+    return {
+      ok: true,
+      status: response.status,
+      data: zReadChildrenData.parse(json.data),
+    };
+  }
+};
+
 export const client = {
-  create: createRootClient,
-  read: readRootClient,
-  search,
-  parents: {
-    read: readParents,
+  read: readRoot,
+  create: createRoot,
+  from: {
+    read: readFrom,
+  },
+  to: {
+    read: readTo,
   },
   children: {
     read: readChildren,
+  },
+  parents: {
+    read: readParents,
   },
 };

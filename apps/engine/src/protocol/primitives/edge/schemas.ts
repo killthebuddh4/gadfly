@@ -1,15 +1,5 @@
 import { z } from "zod";
-
-export const zEdge = z.object({
-  id: z.string().uuid(),
-  created_at: z.date(),
-  updated_at: z.date(),
-  graph_id: z.string().uuid(),
-  type_id: z.string().uuid(),
-  value_id: z.string().uuid(),
-  from_id: z.string().uuid(),
-  to_id: z.string().uuid(),
-});
+import { zEdge } from "../schemas.js";
 
 export const zCreateRootBody = z.object({
   graph_id: z.string().uuid(),

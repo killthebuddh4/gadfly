@@ -1,13 +1,5 @@
 import { z } from "zod";
 
-export const zValue = z.object({
-  id: z.string().uuid(),
-  created_at: z.date(),
-  updated_at: z.date(),
-  type_id: z.string().uuid(),
-  value: z.string().min(1),
-});
-
 export const zCreateRootBody = z.object({
   type_id: z.string().uuid(),
   value: z.string(),
