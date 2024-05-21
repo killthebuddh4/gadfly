@@ -1,8 +1,8 @@
 import express from "express";
 import { z } from "zod";
-import { create as createRoot } from "./root/create.js";
-import { read as readRoot } from "./root/read.js";
-import { interpret as interpretRoot } from "./root/interpret.js";
+import { create as createRoot } from "./create.js";
+import { read as readRoot } from "./read.js";
+import { interpret as interpretRoot } from "./interpret.js";
 import { read as readEdges } from "./edges/read.js";
 import { interpret as interpretEdges } from "./edges/interpret.js";
 import { read as readNodes } from "./nodes/read.js";

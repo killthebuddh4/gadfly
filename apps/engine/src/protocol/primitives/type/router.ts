@@ -1,8 +1,8 @@
 import express from "express";
 import { search } from "./search.js";
-import { create as createRoot } from "./root/create.js";
-import { read as readRoot } from "./root/read.js";
-import { interpret as interpretRoot } from "./root/interpret.js";
+import { create as createRoot } from "./create.js";
+import { read as readRoot } from "./read.js";
+import { interpret as interpretRoot } from "./interpret.js";
 import { read as readCode } from "./url/read.js";
 import { interpret as interpretCode } from "./url/interpret.js";
 import { read as readDescription } from "./description/read.js";

@@ -1,7 +1,7 @@
 import express from "express";
-import { create as createRoot } from "./root/create.js";
-import { read as readRoot } from "./root/read.js";
-import { interpret as interpretRoot } from "./root/interpret.js";
+import { create as createRoot } from "./create.js";
+import { read as readRoot } from "./read.js";
+import { interpret as interpretRoot } from "./interpret.js";
 import { read as readFrom } from "./from/read.js";
 import { interpret as interpretFrom } from "./from/interpret.js";
 import { read as readTo } from "./to/read.js";

@@ -16,14 +16,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <h1 className="p-4 text-right">
-          <Link
-            className="cursor-pointer text-blue-500 hover:text-blue-900"
-            href={`/`}
-          >
-            root
-          </Link>
-        </h1>
         {children}
         <Analytics />
       </body>

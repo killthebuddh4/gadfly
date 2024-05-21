@@ -5,12 +5,12 @@ export const read = async ({ graphId }: { graphId: string }) => {
   const nodes = await nodesRead({ id: graphId });
   const edges = await edgesRead({ id: graphId });
 
-  // i.e. isRoot
-  const isRoot = (nodeId: string) => {
+  // i.e. isLeaf
+  const isInitial = (nodeId: string) => {
     return !edges.some((edge) => edge.to_id === nodeId);
   };
 
-  const root = nodes.find((node) => isRoot(node.id));
+  const initial = nodes.filter((node) => isInitial(node.id));
 
-  return { root: root || null };
+  return { initial };
 };

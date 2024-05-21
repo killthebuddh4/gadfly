@@ -6,11 +6,11 @@ export const read = async ({ graphId }: { graphId: string }) => {
   const edges = await edgesRead({ id: graphId });
 
   // i.e. isRoot
-  const isRoot = (nodeId: string) => {
+  const isTail = (nodeId: string) => {
     return !edges.some((edge) => edge.to_id === nodeId);
   };
 
-  const root = nodes.find((node) => isRoot(node.id));
+  const tails = nodes.filter((node) => isTail(node.id));
 
-  return { root: root || null };
+  return { tails };
 };
