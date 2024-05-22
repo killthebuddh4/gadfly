@@ -7,5 +7,5 @@ export const create = async (args: {
 }) => {
   const graph = await graphRootCreate(args.graph);
 
-  return { map: graph };
+  return { hash: graph };
 };
