@@ -687,4 +687,6 @@ jotai
 react-router
 react-hook-form
 tailwindcss
+typescript
+next.js
 
