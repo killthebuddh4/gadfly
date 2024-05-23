@@ -1,17 +1,17 @@
 import express from "express";
-import { create as createRoot } from "./create.js";
-import { read as readRoot } from "./read.js";
-import { interpret as interpretRoot } from "./interpret.js";
-import { read as readValue } from "./value/read.js";
-import { interpret as interpretValue } from "./value/interpret.js";
-import { read as readParents } from "./parents/read.js";
-import { read as readChildren } from "./children/read.js";
-import { read as readEdge } from "./edge/read.js";
-import { read as readGraph } from "./graph/read.js";
-import { read as readNode } from "./node/read.js";
-import { read as readPointer } from "./pointer/read.js";
-import { search } from "./search.js";
-import { read as readType } from "./type/read.js";
+import { create as createRoot } from "../create.js";
+import { read as readRoot } from "../read.js";
+import { interpret as interpretRoot } from "../interpret.js";
+import { read as readValue } from "../value/read.js";
+import { interpret as interpretValue } from "../value/interpret.js";
+import { read as readParents } from "../parents/read.js";
+import { read as readChildren } from "../children/read.js";
+import { read as readEdge } from "../edge/read.js";
+import { read as readGraph } from "../graph/read.js";
+import { read as readNode } from "../node/read.js";
+import { read as readPointer } from "../pointer/read.js";
+import { search } from "../search.js";
+import { read as readType } from "../type/read.js";
 import {
   zSearchData,
   zCreateRootData,

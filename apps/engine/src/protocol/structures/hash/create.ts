@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { create as graphRootCreate } from "../../primitives/graph/create.js";
-import { zCreateRootBody as graphCreateRootBody } from "../../primitives/graph/schemas.js";
+import { zCreateRootBody as graphCreateRootBody } from "../../primitives/graph/api/schemas.js";
 
 export const create = async (args: {
   graph: z.infer<typeof graphCreateRootBody>;

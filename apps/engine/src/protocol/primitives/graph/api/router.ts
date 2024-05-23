@@ -1,18 +1,18 @@
 import express from "express";
 import { z } from "zod";
-import { create as createRoot } from "./create.js";
-import { read as readRoot } from "./read.js";
-import { interpret as interpretRoot } from "./interpret.js";
-import { read as readEdges } from "./edges/read.js";
-import { interpret as interpretEdges } from "./edges/interpret.js";
-import { read as readNodes } from "./nodes/read.js";
-import { interpret as interpretNodes } from "./nodes/interpret.js";
-import { read as readValue } from "./value/read.js";
-import { interpret as interpretValue } from "./value/interpret.js";
-import { search } from "./search.js";
-import { read as readChildren } from "./children/read.js";
-import { read as readParents } from "./parents/read.js";
-import { read as readType } from "./type/read.js";
+import { create as createRoot } from "../create.js";
+import { read as readRoot } from "../read.js";
+import { interpret as interpretRoot } from "../interpret.js";
+import { read as readEdges } from "../edges/read.js";
+import { interpret as interpretEdges } from "../edges/interpret.js";
+import { read as readNodes } from "../nodes/read.js";
+import { interpret as interpretNodes } from "../nodes/interpret.js";
+import { read as readValue } from "../value/read.js";
+import { interpret as interpretValue } from "../value/interpret.js";
+import { search } from "../search.js";
+import { read as readChildren } from "../children/read.js";
+import { read as readParents } from "../parents/read.js";
+import { read as readType } from "../type/read.js";
 import {
   zReadChildrenData,
   zReadChildrenParams,

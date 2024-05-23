@@ -675,3 +675,16 @@ what is the human-in-the-loop version?
 "what can i do", "what should i do", "show me some examples", "pick one", "do it"
 
 Something like that. Anyways, so those are the kind of threads weaving through my thoughts at the moment. The idea is to end up with a highly interactive system that has multiple levels and where each level is mapped more or less perfectly onto the lower level. It may end up being the case that the levels are actually themselves autonomous. This could be a useful technique for managing divergence and for improving locality (and reducing context).
+
+
+# 2024-05-23
+
+react
+zod
+react-query
+zustand
+jotai
+react-router
+react-hook-form
+tailwindcss
+

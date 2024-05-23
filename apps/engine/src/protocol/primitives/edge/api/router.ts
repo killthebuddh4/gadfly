@@ -1,19 +1,19 @@
 import express from "express";
-import { create as createRoot } from "./create.js";
-import { read as readRoot } from "./read.js";
-import { interpret as interpretRoot } from "./interpret.js";
-import { read as readFrom } from "./from/read.js";
-import { interpret as interpretFrom } from "./from/interpret.js";
-import { read as readTo } from "./to/read.js";
-import { interpret as interpretTo } from "./to/interpret.js";
-import { read as readGraph } from "./graph/read.js";
-import { interpret as interpretGraph } from "./graph/interpret.js";
-import { read as readValue } from "./value/read.js";
-import { interpret as interpretValue } from "./value/interpret.js";
-import { read as readChildren } from "./children/read.js";
-import { read as readParents } from "./parents/read.js";
-import { read as readType } from "./type/read.js";
-import { search } from "./search.js";
+import { create as createRoot } from "../create.js";
+import { read as readRoot } from "../read.js";
+import { interpret as interpretRoot } from "../interpret.js";
+import { read as readFrom } from "../from/read.js";
+import { interpret as interpretFrom } from "../from/interpret.js";
+import { read as readTo } from "../to/read.js";
+import { interpret as interpretTo } from "../to/interpret.js";
+import { read as readGraph } from "../graph/read.js";
+import { interpret as interpretGraph } from "../graph/interpret.js";
+import { read as readValue } from "../value/read.js";
+import { interpret as interpretValue } from "../value/interpret.js";
+import { read as readChildren } from "../children/read.js";
+import { read as readParents } from "../parents/read.js";
+import { read as readType } from "../type/read.js";
+import { search } from "../search.js";
 import {
   zSearchData,
   zCreateRootBody,

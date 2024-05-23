@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { zEdge } from "../schemas.js";
-import { zNode } from "../schemas.js";
+import { zEdge } from "../../schemas.js";
+import { zNode } from "../../schemas.js";
 
 export const zCreateRootBody = z.object({
   graph_id: z.string().uuid(),
