@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { create as treeRootCreate } from "../../structures/tree/create.js";
-import { zCreateRootBody } from "../../structures/tree/api/schemas.js";
+import { create as sequenceCreate } from "../../structures/sequence/create.js";
+import { zCreateRootBody } from "../../structures/sequence/api/schemas.js";
 
 export const create = async (args: z.infer<typeof zCreateRootBody>) => {
-  const tree = await treeRootCreate(args);
+  const sequence = await sequenceCreate(args);
 
-  return { trace: tree };
+  return { trace: sequence };
 };
