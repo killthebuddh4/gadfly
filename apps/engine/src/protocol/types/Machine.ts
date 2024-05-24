@@ -1,6 +1,6 @@
 import { Phase } from "./Phase.js";
 import { Transition } from "./Transition.js";
-import { Trace } from "./Trace.js";
+import { Process } from "./Process.js";
 
 export type Machine = {
   phases: {
@@ -10,7 +10,7 @@ export type Machine = {
     read: () => Promise<Transition>;
   };
   traces: {
-    read: () => Promise<Trace[]>;
-    write: (args: { trace: Trace }) => Promise<void>;
+    read: () => Promise<Process[]>;
+    write: (args: { process: Process }) => Promise<void>;
   };
 };

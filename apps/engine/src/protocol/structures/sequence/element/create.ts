@@ -1,11 +1,9 @@
 import { z } from "zod";
-import { zCreateRootBody as nodeCreateRootBody } from "../../../primitives/node/api/schemas.js";
-import { create as nodeRootCreate } from "../../../primitives/node/create.js";
+import { zCreateElementBody } from "../api/schemas.js";
+import { create as nodeFirstCreate } from "../../../primitives/node/create.js";
 
-export const create = async (args: {
-  node: z.infer<typeof nodeCreateRootBody>;
-}) => {
-  const node = await nodeRootCreate(args.node);
+export const create = async (args: z.infer<typeof zCreateElementBody>) => {
+  const node = await nodeFirstCreate(args);
 
   return { element: node };
 };

@@ -1,7 +1,7 @@
-import { read as edgeRootRead } from "../../../primitives/edge/read.js";
+import { read as edgeFirstRead } from "../../../primitives/edge/read.js";
 
 export const read = async ({ id }: { id: string }) => {
-  const edge = await edgeRootRead({ id });
+  const edge = await edgeFirstRead({ id });
 
   return { iterator: edge };
 };

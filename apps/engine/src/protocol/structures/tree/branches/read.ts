@@ -1,7 +1,7 @@
 import { read as nodesRead } from "../../../primitives/graph/nodes/read.js";
 
-export const read = async ({ graphId }: { graphId: string }) => {
-  const nodes = await nodesRead({ id: graphId });
+export const read = async ({ id }: { id: string }) => {
+  const nodes = await nodesRead({ id });
 
-  return { branches: nodes };
+  return { Branches: nodes };
 };

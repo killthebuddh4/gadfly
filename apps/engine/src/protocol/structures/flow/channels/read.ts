@@ -1,7 +1,7 @@
 import { read as edgesRead } from "../../../primitives/graph/edges/read.js";
 
-export const read = async ({ graphId }: { graphId: string }) => {
-  const edges = await edgesRead({ id: graphId });
+export const read = async ({ id }: { id: string }) => {
+  const edges = await edgesRead({ id });
 
   return { channels: edges };
 };
