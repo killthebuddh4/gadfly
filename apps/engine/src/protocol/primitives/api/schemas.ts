@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const zEdge = z.object({
+const zEdge = z.object({
   id: z.string().uuid(),
   created_at: z.date().or(z.string().pipe(z.coerce.date())),
   updated_at: z.date().or(z.string().pipe(z.coerce.date())),
@@ -11,7 +11,7 @@ export const zEdge = z.object({
   to_id: z.string().uuid(),
 });
 
-export const zGraph = z.object({
+const zGraph = z.object({
   id: z.string().uuid(),
   created_at: z.date().or(z.string().pipe(z.coerce.date())),
   updated_at: z.date().or(z.string().pipe(z.coerce.date())),
@@ -19,7 +19,7 @@ export const zGraph = z.object({
   value_id: z.string().uuid(),
 });
 
-export const zNode = z.object({
+const zNode = z.object({
   id: z.string().uuid(),
   created_at: z.date().or(z.string().pipe(z.coerce.date())),
   updated_at: z.date().or(z.string().pipe(z.coerce.date())),
@@ -28,7 +28,7 @@ export const zNode = z.object({
   value_id: z.string().uuid(),
 });
 
-export const zType = z.object({
+const zType = z.object({
   id: z.string().uuid(),
   created_at: z.date().or(z.string().pipe(z.coerce.date())),
   updated_at: z.date().or(z.string().pipe(z.coerce.date())),
@@ -36,10 +36,49 @@ export const zType = z.object({
   description: z.string().min(1),
 });
 
-export const zValue = z.object({
+const zValue = z.object({
   id: z.string().uuid(),
   created_at: z.date().or(z.string().pipe(z.coerce.date())),
   updated_at: z.date().or(z.string().pipe(z.coerce.date())),
   type_id: z.string().uuid(),
   value: z.string().min(1),
 });
+
+const zPointer = z.object({
+  id: z.string().uuid(),
+  created_at: z.date().or(z.string().pipe(z.coerce.date())),
+  updated_at: z.date().or(z.string().pipe(z.coerce.date())),
+  type_id: z.string().uuid(),
+  value_id: z.string().uuid(),
+  from: z.object({
+    type: z.union([
+      z.literal("value"),
+      z.literal("node"),
+      z.literal("graph"),
+      z.literal("edge"),
+      z.literal("pointer"),
+      z.literal("type"),
+    ]),
+    id: z.string().uuid(),
+  }),
+  to: z.object({
+    type: z.union([
+      z.literal("value"),
+      z.literal("node"),
+      z.literal("graph"),
+      z.literal("edge"),
+      z.literal("pointer"),
+      z.literal("type"),
+    ]),
+    id: z.string().uuid(),
+  }),
+});
+
+export const schemas = {
+  zEdge,
+  zGraph,
+  zNode,
+  zType,
+  zValue,
+  zPointer,
+};

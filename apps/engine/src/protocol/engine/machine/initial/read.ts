@@ -1,15 +1,15 @@
 import { read as nodesRead } from "../../../primitives/graph/nodes/read.js";
 import { read as edgesRead } from "../../../primitives/graph/edges/read.js";
 
-export const read = async ({ graphId }: { graphId: string }) => {
-  const nodes = await nodesRead({ id: graphId });
-  const edges = await edgesRead({ id: graphId });
+export const read = async ({ id }: { id: string }) => {
+  const nodes = await nodesRead({ id });
+  const edges = await edgesRead({ id });
 
-  const isInitial = (nodeId: string) => {
+  const isTail = (nodeId: string) => {
     return !edges.some((edge) => edge.to_id === nodeId);
   };
 
-  const initial = nodes.filter((node) => isInitial(node.id));
+  const initial = nodes.filter((node) => isTail(node.id));
 
   return { initial };
 };

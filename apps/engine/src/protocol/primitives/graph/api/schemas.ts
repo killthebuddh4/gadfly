@@ -1,58 +1,63 @@
 import { z } from "zod";
-import { zNode } from "../../api/schemas.js";
-import { zEdge } from "../../api/schemas.js";
+import { schemas as apiSchemas } from "../../api/schemas.js";
 
-export const zCreateRootBody = z.object({
-  type_id: z.string().uuid(),
-  value_id: z.string().uuid(),
+const zCreateGraph = z.object({
+  body: apiSchemas.zGraph.omit({
+    id: true,
+    created_at: true,
+    updated_at: true,
+  }),
+  data: apiSchemas.zGraph,
 });
 
-export const zCreateRootData = z.object({
-  id: z.string().uuid(),
-  type_id: z.string().uuid(),
-  value_id: z.string().uuid(),
+const zReadGraph = z.object({
+  params: z.object({ id: z.string().uuid() }),
+  data: apiSchemas.zGraph,
 });
 
-export const zReadRootParams = z.object({
-  id: z.string().uuid(),
+const zReadNodes = z.object({
+  params: z.object({ id: z.string().uuid() }),
+  data: z.array(apiSchemas.zNode),
 });
 
-export const zReadRootData = z.object({
-  id: z.string().uuid(),
-  type_id: z.string().uuid(),
-  value_id: z.string().uuid(),
+const zReadEdges = z.object({
+  params: z.object({ id: z.string().uuid() }),
+  data: z.array(apiSchemas.zEdge),
 });
 
-export const zReadEdgesParams = z.object({
-  id: z.string().uuid(),
+const zSearch = z.object({
+  params: z.object({ id: z.string().uuid() }),
+  data: z.array(apiSchemas.zPointer),
 });
 
-export const zReadEdgesData = z.array(zEdge);
-
-export const zReadNodesParams = z.object({
-  id: z.string().uuid(),
+const zReadChildren = z.object({
+  params: z.object({ id: z.string().uuid() }),
+  data: z.array(apiSchemas.zPointer),
 });
 
-export const zReadNodesData = z.array(zNode);
-
-export const zSearchData = z.array(zCreateRootData);
-
-export const zReadParentsParams = z.object({
-  id: z.string().uuid(),
+const zReadParents = z.object({
+  params: z.object({ id: z.string().uuid() }),
+  data: z.array(apiSchemas.zPointer),
 });
 
-export const zReadParentsData = z.array(z.object({ id: z.string().uuid() }));
-
-export const zReadChildrenParams = z.object({
-  id: z.string().uuid(),
+const zReadType = z.object({
+  params: z.object({ id: z.string().uuid() }),
+  data: apiSchemas.zType,
 });
 
-export const zReadChildrenData = z.array(z.object({ id: z.string().uuid() }));
-
-export const zReadTypeParams = z.object({
-  id: z.string().uuid(),
+const zReadValue = z.object({
+  params: z.object({ id: z.string().uuid() }),
+  data: apiSchemas.zValue,
 });
 
-export const zReadTypeData = z.object({
-  id: z.string().uuid(),
-});
+export const schemas = {
+  zCreateGraph,
+  zReadGraph,
+  zReadNodes,
+  zReadEdges,
+  zSearch,
+  zReadChildren,
+  zReadParents,
+  zReadType,
+  zReadValue,
+};

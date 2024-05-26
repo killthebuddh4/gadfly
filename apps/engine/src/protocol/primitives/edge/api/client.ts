@@ -1,197 +1,74 @@
-import { z } from "zod";
-import {
-  zReadChildrenData,
-  zReadParentsData,
-  zCreateRootBody,
-  zCreateRootData,
-  zReadRootData,
-  zReadTypeData,
-  zSearchData,
-} from "./schemas.js";
+import { schemas } from "./schemas.js";
+import { createApiClient } from "../../../../lib/api/createApiClient.js";
 
-type ClientReturn<T> =
-  | {
-      ok: true;
-      status: number;
-      data: T;
-    }
-  | {
-      ok: false;
-      status: number;
-      data?: undefined;
-    };
+const createEdge = createApiClient.writer({
+  path: "p/edge",
+  body: schemas.zCreateEdge.shape.body,
+  data: schemas.zCreateEdge.shape.data,
+});
 
-const createRoot = async ({
-  url,
-  body,
-}: {
-  url: string;
-  body: z.infer<typeof zCreateRootBody>;
-}) => {
-  const response = await fetch(`${url}/p/edge`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
+const readEdge = createApiClient.reader({
+  path: (p) => `p/edge/${p.id}`,
+  params: schemas.zReadEdge.shape.params,
+  data: schemas.zReadEdge.shape.data,
+});
 
-  const json = await response.json();
+const readFrom = createApiClient.reader({
+  path: (p) => `p/edge/${p.id}/from`,
+  params: schemas.zReadFrom.shape.params,
+  data: schemas.zReadFrom.shape.data,
+});
 
-  if (!response.ok) {
-    return {
-      ok: false,
-      status: response.status,
-      data: undefined,
-    };
-  } else {
-    return {
-      ok: true,
-      status: response.status,
-      data: zCreateRootData.parse(json.data),
-    };
-  }
-};
+const readTo = createApiClient.reader({
+  path: (p) => `p/edge/${p.id}/to`,
+  params: schemas.zReadTo.shape.params,
+  data: schemas.zReadTo.shape.data,
+});
 
-const readRoot = async ({
-  url,
-  id,
-}: {
-  url: string;
-  id: string;
-}): Promise<ClientReturn<z.infer<typeof zReadRootData>>> => {
-  const response = await fetch(`${url}/p/edge/${id}`);
+const readGraph = createApiClient.reader({
+  path: (p) => `p/edge/${p.id}/graph`,
+  params: schemas.zReadGraph.shape.params,
+  data: schemas.zReadGraph.shape.data,
+});
 
-  const json = await response.json();
+const readType = createApiClient.reader({
+  path: (p) => `p/edge/${p.id}/type`,
+  params: schemas.zReadType.shape.params,
+  data: schemas.zReadType.shape.data,
+});
 
-  if (!response.ok) {
-    return {
-      ok: false,
-      status: response.status,
-      data: undefined,
-    };
-  } else {
-    return {
-      ok: true,
-      status: response.status,
-      data: zReadRootData.parse(json.data),
-    };
-  }
-};
+const readValue = createApiClient.reader({
+  path: (p) => `p/edge/${p.id}/value`,
+  params: schemas.zReadValue.shape.params,
+  data: schemas.zReadValue.shape.data,
+});
 
-const readChildren = async ({
-  url,
-  id,
-}: {
-  url: string;
-  id: string;
-}): Promise<ClientReturn<z.infer<typeof zReadChildrenData>>> => {
-  const response = await fetch(`${url}/p/edge/${id}/children`);
+const readParents = createApiClient.reader({
+  path: (p) => `p/edge/${p.id}/parents`,
+  params: schemas.zReadParents.shape.params,
+  data: schemas.zReadParents.shape.data,
+});
 
-  const json = await response.json();
+const readChildren = createApiClient.reader({
+  path: (p) => `p/edge/${p.id}/children`,
+  params: schemas.zReadChildren.shape.params,
+  data: schemas.zReadChildren.shape.data,
+});
 
-  if (!response.ok) {
-    return {
-      ok: false,
-      status: response.status,
-      data: undefined,
-    };
-  } else {
-    return {
-      ok: true,
-      status: response.status,
-      data: zReadChildrenData.parse(json.data),
-    };
-  }
-};
-
-const readParents = async ({
-  url,
-  id,
-}: {
-  url: string;
-  id: string;
-}): Promise<ClientReturn<z.infer<typeof zReadParentsData>>> => {
-  const response = await fetch(`${url}/p/edge/${id}/parents`);
-
-  const json = await response.json();
-
-  if (!response.ok) {
-    return {
-      ok: false,
-      status: response.status,
-      data: undefined,
-    };
-  } else {
-    return {
-      ok: true,
-      status: response.status,
-      data: zReadParentsData.parse(json.data),
-    };
-  }
-};
-
-const readType = async ({
-  url,
-  id,
-}: {
-  url: string;
-  id: string;
-}): Promise<ClientReturn<z.infer<typeof zReadTypeData>>> => {
-  const response = await fetch(`${url}/p/edge/${id}/type`);
-
-  const json = await response.json();
-
-  if (!response.ok) {
-    return {
-      ok: false,
-      status: response.status,
-      data: undefined,
-    };
-  } else {
-    return {
-      ok: true,
-      status: response.status,
-      data: zReadTypeData.parse(json.data),
-    };
-  }
-};
-
-const search = async ({
-  url,
-}: {
-  url: string;
-}): Promise<ClientReturn<z.infer<typeof zSearchData>>> => {
-  const response = await fetch(`${url}/p/edge`);
-
-  const json = await response.json();
-
-  if (!response.ok) {
-    return {
-      ok: false,
-      status: response.status,
-      data: undefined,
-    };
-  } else {
-    return {
-      ok: true,
-      status: response.status,
-      data: zSearchData.parse(json.data),
-    };
-  }
-};
+const search = createApiClient.searcher({
+  path: "p/edge",
+  data: schemas.zSearch.shape.data,
+});
 
 export const client = {
-  read: readRoot,
-  create: createRoot,
-  children: {
-    read: readChildren,
-  },
-  parents: {
-    read: readParents,
-  },
-  type: {
-    read: readType,
-  },
+  create: createEdge,
+  read: readEdge,
+  from: { read: readFrom },
+  to: { read: readTo },
+  graph: { read: readGraph },
+  type: { read: readType },
+  value: { read: readValue },
+  parents: { read: readParents },
+  children: { read: readChildren },
   search,
 };

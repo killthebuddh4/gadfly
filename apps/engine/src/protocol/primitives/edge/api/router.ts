@@ -1,157 +1,126 @@
 import express from "express";
-import { create as createRoot } from "../create.js";
-import { read as readRoot } from "../read.js";
-import { interpret as interpretRoot } from "../interpret.js";
+import { create as createEdge } from "../create.js";
+import { read as readEdge } from "../read.js";
 import { read as readFrom } from "../from/read.js";
-import { interpret as interpretFrom } from "../from/interpret.js";
 import { read as readTo } from "../to/read.js";
-import { interpret as interpretTo } from "../to/interpret.js";
 import { read as readGraph } from "../graph/read.js";
-import { interpret as interpretGraph } from "../graph/interpret.js";
 import { read as readValue } from "../value/read.js";
-import { interpret as interpretValue } from "../value/interpret.js";
 import { read as readChildren } from "../children/read.js";
 import { read as readParents } from "../parents/read.js";
 import { read as readType } from "../type/read.js";
 import { search } from "../search.js";
-import {
-  zSearchData,
-  zCreateRootBody,
-  zCreateRootData,
-  zReadRootParams,
-  zReadRootData,
-  zInterpretRootParams,
-  zReadFromParams,
-  zInterpretFromParams,
-  zReadToParams,
-  zInterpretToParams,
-  zReadGraphParams,
-  zInterpretGraphParams,
-  zReadValueParams,
-  zInterpretValueParams,
-  zReadChildrenData,
-  zReadChildrenParams,
-  zReadParentsData,
-  zReadParentsParams,
-  zReadTypeData,
-  zReadTypeParams,
-} from "./schemas.js";
+import { schemas } from "./schemas.js";
+import { createApiHandler } from "../../../../lib/api/createApiHandler.js";
 
 export const router = express.Router();
 
 router.use(express.json());
 
-router.post("/", async (req, res) => {
-  const body = zCreateRootBody.parse(req.body);
-  const data = await createRoot(body);
+router.post(
+  "/",
+  createApiHandler.writer({
+    req: { body: schemas.zCreateEdge.shape.body },
+    res: { body: schemas.zCreateEdge.shape.data },
+    handler: async ({ body }) => {
+      return createEdge(body);
+    },
+  }),
+);
 
-  res.json({ ok: true, data: zCreateRootData.parse(data) });
-});
+router.get(
+  "/:id",
+  createApiHandler.reader({
+    req: { params: schemas.zReadEdge.shape.params },
+    res: { body: schemas.zReadEdge.shape.data },
+    handler: async ({ params }) => {
+      return readEdge(params);
+    },
+  }),
+);
 
-router.get("/:id", async (req, res) => {
-  const params = zReadRootParams.parse(req.params);
-  const data = await readRoot({ id: params.id });
+router.get(
+  "/:id/from",
+  createApiHandler.reader({
+    req: { params: schemas.zReadFrom.shape.params },
+    res: { body: schemas.zReadFrom.shape.data },
+    handler: async ({ params }) => {
+      return readFrom(params);
+    },
+  }),
+);
 
-  res.json({ ok: true, data: zReadRootData.parse(data) });
-});
+router.get(
+  "/:id/to",
+  createApiHandler.reader({
+    req: { params: schemas.zReadTo.shape.params },
+    res: { body: schemas.zReadTo.shape.data },
+    handler: async ({ params }) => {
+      return readTo(params);
+    },
+  }),
+);
 
-router.get("/:id/interpret", async (req, res) => {
-  const params = zInterpretRootParams.parse(req.params);
-  const data = await interpretRoot({ id: params.id });
+router.get(
+  "/:id/graph",
+  createApiHandler.reader({
+    req: { params: schemas.zReadGraph.shape.params },
+    res: { body: schemas.zReadGraph.shape.data },
+    handler: async ({ params }) => {
+      return readGraph(params);
+    },
+  }),
+);
 
-  res.json({ ok: true, data });
-});
+router.get(
+  "/:id/value",
+  createApiHandler.reader({
+    req: { params: schemas.zReadValue.shape.params },
+    res: { body: schemas.zReadValue.shape.data },
+    handler: async ({ params }) => {
+      return readValue(params);
+    },
+  }),
+);
 
-router.get("/:id/from", async (req, res) => {
-  const params = zReadFromParams.parse(req.params);
-  const data = await readFrom({ id: params.id });
+router.get(
+  "/:id/parents",
+  createApiHandler.reader({
+    req: { params: schemas.zReadParents.shape.params },
+    res: { body: schemas.zReadParents.shape.data },
+    handler: async ({ params }) => {
+      return readParents(params);
+    },
+  }),
+);
 
-  res.json({ ok: true, data });
-});
+router.get(
+  "/:id/children",
+  createApiHandler.reader({
+    req: { params: schemas.zReadChildren.shape.params },
+    res: { body: schemas.zReadChildren.shape.data },
+    handler: async ({ params }) => {
+      return readChildren(params);
+    },
+  }),
+);
 
-router.get("/:id/from/interpret", async (req, res) => {
-  const params = zInterpretFromParams.parse(req.params);
-  const data = await interpretFrom({ id: params.id });
+router.get(
+  "/:id/type",
+  createApiHandler.reader({
+    req: { params: schemas.zReadType.shape.params },
+    res: { body: schemas.zReadType.shape.data },
+    handler: async ({ params }) => {
+      return readType(params);
+    },
+  }),
+);
 
-  res.json({ ok: true, data });
-});
-
-router.get("/:id/to", async (req, res) => {
-  const params = zReadToParams.parse(req.params);
-  const data = await readTo({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
-router.get("/:id/to/interpret", async (req, res) => {
-  const params = zInterpretToParams.parse(req.params);
-  const data = await interpretTo({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
-router.get("/:id/graph", async (req, res) => {
-  const params = zReadGraphParams.parse(req.params);
-  const data = await readGraph({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
-router.get("/:id/graph/interpret", async (req, res) => {
-  const params = zInterpretGraphParams.parse(req.params);
-  const data = await interpretGraph({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
-router.get("/:id/value", async (req, res) => {
-  const params = zReadValueParams.parse(req.params);
-  const data = await readValue({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
-router.get("/:id/value/interpret", async (req, res) => {
-  const params = zInterpretValueParams.parse(req.params);
-  const data = await interpretValue({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-
-router.get("/:id/children", async (req, res) => {
-  const params = zReadChildrenParams.parse(req.params);
-  const data = await readChildren({ id: params.id });
-
-  res.json({ ok: true, data: zReadChildrenData.parse(data) });
-});
-
-router.get("/:id/parents", async (req, res) => {
-  const params = zReadParentsParams.parse(req.params);
-  const data = await readParents({ id: params.id });
-
-  res.json({ ok: true, data: zReadParentsData.parse(data) });
-});
-
-router.get("/:id/type", async (req, res) => {
-  let params;
-  try {
-    params = zReadTypeParams.parse(req.params);
-  } catch {
-    res.status(400).json({ ok: false, error: "Invalid params" });
-    return;
-  }
-
-  const data = await readType({ id: params.id });
-
-  try {
-    res.json({ ok: true, data: zReadTypeData.parse(data) });
-  } catch {
-    res.status(500).json({ ok: false, error: "zReadTypeData.parse failed" });
-  }
-});
-
-router.get("/", async (req, res) => {
-  const data = await search();
-
-  res.json({ ok: true, data: zSearchData.parse(data) });
-});
+router.get(
+  "/",
+  createApiHandler.searcher({
+    res: { body: schemas.zSearch.shape.data },
+    handler: async () => {
+      return search();
+    },
+  }),
+);
