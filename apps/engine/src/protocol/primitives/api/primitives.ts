@@ -50,31 +50,21 @@ const zPointer = z.object({
   updated_at: z.date().or(z.string().pipe(z.coerce.date())),
   type_id: z.string().uuid(),
   value_id: z.string().uuid(),
-  from: z.object({
-    type: z.union([
-      z.literal("value"),
-      z.literal("node"),
-      z.literal("graph"),
-      z.literal("edge"),
-      z.literal("pointer"),
-      z.literal("type"),
-    ]),
-    id: z.string().uuid(),
-  }),
-  to: z.object({
-    type: z.union([
-      z.literal("value"),
-      z.literal("node"),
-      z.literal("graph"),
-      z.literal("edge"),
-      z.literal("pointer"),
-      z.literal("type"),
-    ]),
-    id: z.string().uuid(),
-  }),
+  from_value_id: z.string().uuid().or(z.null()),
+  from_node_id: z.string().uuid().or(z.null()),
+  from_graph_id: z.string().uuid().or(z.null()),
+  from_edge_id: z.string().uuid().or(z.null()),
+  from_pointer_id: z.string().uuid().or(z.null()),
+  from_type_id: z.string().uuid().or(z.null()),
+  to_value_id: z.string().uuid().or(z.null()),
+  to_node_id: z.string().uuid().or(z.null()),
+  to_graph_id: z.string().uuid().or(z.null()),
+  to_edge_id: z.string().uuid().or(z.null()),
+  to_pointer_id: z.string().uuid().or(z.null()),
+  to_type_id: z.string().uuid().or(z.null()),
 });
 
-export const schemas = {
+export const primitives = {
   zEdge,
   zGraph,
   zNode,

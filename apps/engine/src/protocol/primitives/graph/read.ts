@@ -7,5 +7,9 @@ export const read = async ({ id }: { id: string }) => {
     },
   });
 
+  if (!data) {
+    throw new Error(`Graph not found: ${id}`);
+  }
+
   return data;
 };

@@ -1,69 +1,131 @@
 import { z } from "zod";
-import { schemas as apiSchemas } from "../../api/schemas.js";
+import { schemas as apiSchemas } from "../../api/primitives.js";
+import { reader } from "../../../../lib/api/Reader.js";
+import { writer } from "../../../../lib/api/Writer.js";
+import { searcher } from "../../../../lib/api/Searcher.js";
 
-const zCreateEdge = z.object({
-  body: apiSchemas.zEdge.omit({
-    id: true,
-    created_at: true,
-    updated_at: true,
-  }),
-  data: apiSchemas.zEdge,
+const createEdge = writer({
+  name: "createEdge",
+  request: {
+    path: "/edge",
+    body: apiSchemas.zEdge.omit({
+      id: true,
+      created_at: true,
+      updated_at: true,
+    }),
+  },
+  response: {
+    body: apiSchemas.zEdge,
+  },
 });
 
-const zReadEdge = z.object({
-  params: z.object({ id: z.string().uuid() }),
-  data: apiSchemas.zEdge,
+const readEdge = reader({
+  name: "readEdge",
+  request: {
+    path: (p) => `p/edge/${p.id}`,
+    params: z.object({ id: z.string().uuid() }),
+  },
+  response: {
+    body: apiSchemas.zEdge,
+  },
 });
 
-const zReadFrom = z.object({
-  params: z.object({ id: z.string().uuid() }),
-  data: apiSchemas.zNode,
+const readFrom = reader({
+  name: "readFrom",
+  request: {
+    path: (p) => `p/edge/${p.id}/from`,
+    params: z.object({ id: z.string().uuid() }),
+  },
+  response: {
+    body: apiSchemas.zNode,
+  },
 });
 
-const zReadTo = z.object({
-  params: z.object({ id: z.string().uuid() }),
-  data: apiSchemas.zNode,
+const readTo = reader({
+  name: "readTo",
+  request: {
+    path: (p) => `p/edge/${p.id}/to`,
+    params: z.object({ id: z.string().uuid() }),
+  },
+  response: {
+    body: apiSchemas.zNode,
+  },
 });
 
-const zReadGraph = z.object({
-  params: z.object({ id: z.string().uuid() }),
-  data: apiSchemas.zGraph,
+const readGraph = reader({
+  name: "readGraph",
+  request: {
+    path: (p) => `p/edge/${p.id}/graph`,
+    params: z.object({ id: z.string().uuid() }),
+  },
+  response: {
+    body: apiSchemas.zGraph,
+  },
 });
 
-const zReadType = z.object({
-  params: z.object({ id: z.string().uuid() }),
-  data: apiSchemas.zType,
+const readType = reader({
+  name: "readType",
+  request: {
+    path: (p) => `p/edge/${p.id}/type`,
+    params: z.object({ id: z.string().uuid() }),
+  },
+  response: {
+    body: apiSchemas.zType,
+  },
 });
 
-const zReadValue = z.object({
-  params: z.object({ id: z.string().uuid() }),
-  data: apiSchemas.zValue,
+const readValue = reader({
+  name: "readValue",
+  request: {
+    path: (p) => `p/edge/${p.id}/value`,
+    params: z.object({ id: z.string().uuid() }),
+  },
+  response: {
+    body: apiSchemas.zValue,
+  },
 });
 
-const zReadParents = z.object({
-  params: z.object({ id: z.string().uuid() }),
-  data: z.array(apiSchemas.zPointer),
+const readParents = reader({
+  name: "readParents",
+  request: {
+    path: (p) => `p/edge/${p.id}/parents`,
+    params: z.object({ id: z.string().uuid() }),
+  },
+  response: {
+    body: z.array(apiSchemas.zPointer),
+  },
 });
 
-const zReadChildren = z.object({
-  params: z.object({ id: z.string().uuid() }),
-  data: z.array(apiSchemas.zPointer),
+const readChildren = reader({
+  name: "readChildren",
+  request: {
+    path: (p) => `p/edge/${p.id}/children`,
+    params: z.object({ id: z.string().uuid() }),
+  },
+  response: {
+    body: z.array(apiSchemas.zPointer),
+  },
 });
 
-const zSearch = z.object({
-  params: z.object({ id: z.string().uuid() }),
-  data: z.array(apiSchemas.zEdge),
+const search = searcher({
+  name: "search",
+  request: {
+    path: "/edge",
+  },
+  response: {
+    body: z.array(apiSchemas.zEdge),
+  },
 });
 
 export const schemas = {
-  zCreateEdge,
-  zReadEdge,
-  zReadFrom,
-  zReadTo,
-  zReadGraph,
-  zReadType,
-  zReadValue,
-  zReadParents,
-  zReadChildren,
-  zSearch,
+  createEdge,
+  readEdge,
+  readFrom,
+  readTo,
+  readGraph,
+  readType,
+  readValue,
+  readParents,
+  readChildren,
+  search,
 };

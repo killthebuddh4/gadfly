@@ -1,36 +1,26 @@
 import { z } from "zod";
 import { ApiResponse } from "./ApiResponse.js";
-
-const zData = z.object({
-  data: z.unknown(),
-});
+import { Reader } from "./Reader.js";
+import { zJsonString } from "@repo/core/zJsonString.js";
 
 export const readClient = async <
   P extends z.ZodTypeAny,
   D extends z.ZodTypeAny,
->(props: {
-  params: P;
-  path: (p: z.infer<P>) => string;
-  data: D;
-}) => {
+>(
+  defn: Reader<P, D>,
+) => {
   return async (args: {
     url: string;
     params: z.infer<P>;
   }): Promise<ApiResponse<z.infer<D>>> => {
     let path;
     try {
-      path = props.path(args.params);
+      path = defn.request.path(args.params);
     } catch (error) {
       return {
         ok: false,
-        status: 0,
-        data: undefined,
-        error: {
-          message: `Failed to generate path from params`,
-          method: "GET",
-          url: args.url,
-          response: { text: `` },
-        },
+        type: "ClientError",
+        message: `defn.request.path(args.params) threw an error`,
       };
     }
 
@@ -43,133 +33,82 @@ export const readClient = async <
     } catch (error) {
       return {
         ok: false,
-        status: 0,
-        data: undefined,
-        error: {
-          message: `Fetch failed`,
+        type: "NetworkError",
+        message: `Fetch failed`,
+        details: {
           method: "GET",
           url: `${args.url}/${path}`,
-          response: { text: `` },
         },
       };
     }
 
-    if (!response.ok) {
-      let responseText;
-      try {
-        responseText = await response.text();
-      } catch (error) {
-        return {
-          ok: false,
-          status: response.status,
-          data: undefined,
-          error: {
-            message: `Response.ok is false and also await response.text() failed`,
-            method: "GET",
-            url: `${args.url}/${path}`,
-            response: { text: `` },
-          },
-        };
-      }
-
+    let responseText;
+    try {
+      responseText = await response.text();
+    } catch (error) {
       return {
         ok: false,
-        status: response.status,
-        data: undefined,
-        error: {
-          message: `Response not ok`,
+        type: "ClientError",
+        message: `response.text() threw an error`,
+      };
+    }
+
+    if (!response.ok) {
+      return {
+        ok: false,
+        type: "ServerError",
+        message: `response.ok is false`,
+        details: {
           method: "GET",
-          url: `${args.url}/${path}`,
+          url: args.url,
+          status: response.status,
           response: { text: responseText },
         },
       };
     }
 
-    let json;
-    try {
-      json = await response.json();
-    } catch (error) {
+    const json = zJsonString.safeParse(responseText);
+
+    if (!json.success) {
       return {
         ok: false,
-        status: response.status,
-        data: undefined,
-        error: {
-          message: `Response.ok is true but response.json() failed`,
+        type: "ServerError",
+        message: "the server's response is not valid JSON",
+        details: {
           method: "GET",
-          url: args.url,
-          response: { text: await response.text() },
-        },
-      };
-    }
-
-    const jsonWithData = zData.safeParse(json);
-
-    if (!jsonWithData.success) {
-      let responseText;
-      try {
-        responseText = JSON.stringify(json);
-      } catch (error) {
-        return {
-          ok: false,
+          url: `${args.url}/${path}`,
           status: response.status,
-          data: undefined,
-          error: {
-            message: `zData.safeParse(json) failed and also JSON.stringify(json) failed`,
-            method: "GET",
-            url: args.url,
-            response: { text: `` },
-          },
-        };
-      }
-      return {
-        ok: false,
-        status: response.status,
-        data: undefined,
-        error: {
-          message: `zData.parse(json) failed`,
-          method: "GET",
-          url: args.url,
-          response: {
-            text: responseText,
-          },
+          response: { text: responseText },
         },
       };
     }
 
-    const data = props.data.safeParse(jsonWithData.data);
+    const body = defn.response.body.safeParse(json);
 
-    if (!data.success) {
-      let responseText;
-      try {
-        responseText = JSON.stringify(json);
-      } catch (error) {
-        return {
-          ok: false,
+    if (!body.success) {
+      return {
+        ok: false,
+        type: "ServerError",
+        message: "defn.response.body.parse(json) failed",
+        details: {
+          method: "GET",
+          url: `${args.url}/${path}`,
           status: response.status,
-          data: undefined,
-          error: {
-            message: `props.data.safeParse(jsonWithData.data) failed and also JSON.stringify(json) failed`,
-            method: "GET",
-            url: args.url,
-            response: { text: `` },
-          },
-        };
-      }
-      return {
-        ok: false,
-        status: response.status,
-        data: undefined,
-        error: {
-          message: `props.data.parse(jsonWithData.data) failed`,
-          method: "GET",
-          url: args.url,
-          response: {
-            text: responseText,
-          },
+          response: { text: responseText },
         },
       };
     }
 
-    return { ok: true, status: response.status, data, error: undefined };
+    return {
+      ok: true,
+      type: "Success",
+      data: body.data,
+      details: {
+        method: "GET",
+        url: `${args.url}/${path}`,
+        status: response.status,
+        response: { text: responseText },
+      },
+    };
   };
 };

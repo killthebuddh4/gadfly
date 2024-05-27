@@ -1,39 +1,44 @@
 import * as express from "express";
 import { z } from "zod";
+import { Writer } from "./Writer.js";
 
 export const writeHandler = <
   RequestBody extends z.ZodTypeAny,
   ResponseBody extends z.ZodTypeAny,
 >(props: {
-  req: {
-    body: RequestBody;
-  };
-  res: {
-    body: ResponseBody;
-  };
+  defn: Writer<RequestBody, ResponseBody>;
   handler: (args: {
     body: z.infer<RequestBody>;
   }) => Promise<z.infer<ResponseBody>>;
 }) => {
   return async (req: express.Request, res: express.Response) => {
     try {
-      const body = props.req.body.safeParse(req.body);
+      const body = props.defn.request.body.safeParse(req.body);
 
       if (!body.success) {
-        res.status(400).json({ ok: false, error: "Invalid body" });
+        res.status(400).send("Invalid body");
         return;
       }
 
-      const data = props.res.body.safeParse(await props.handler({ body }));
-
-      if (!data.success) {
-        res.status(500).json({ ok: false, error: "Invalid data" });
+      let data;
+      try {
+        data = await props.handler({ body: body.data });
+      } catch {
+        res.status(500).send("props.handler({ body }) threw an error");
         return;
       }
 
-      res.status(200).json({ ok: true, data });
+      let stringified;
+      try {
+        stringified = JSON.stringify(data.data);
+      } catch (error) {
+        res.status(500).send("JSON.stringify(data) failed");
+        return;
+      }
+
+      res.status(200).send(stringified);
     } catch (error) {
-      res.status(500).json({ ok: false, error: "Internal server error" });
+      res.status(500).send("Internal server error");
       return;
     }
   };

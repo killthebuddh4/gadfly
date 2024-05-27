@@ -19,8 +19,7 @@ router.use(express.json());
 router.post(
   "/",
   createApiHandler.writer({
-    req: { body: schemas.zCreateEdge.shape.body },
-    res: { body: schemas.zCreateEdge.shape.data },
+    defn: schemas.createEdge,
     handler: async ({ body }) => {
       return createEdge(body);
     },
@@ -30,8 +29,7 @@ router.post(
 router.get(
   "/:id",
   createApiHandler.reader({
-    req: { params: schemas.zReadEdge.shape.params },
-    res: { body: schemas.zReadEdge.shape.data },
+    defn: schemas.readEdge,
     handler: async ({ params }) => {
       return readEdge(params);
     },
@@ -41,8 +39,7 @@ router.get(
 router.get(
   "/:id/from",
   createApiHandler.reader({
-    req: { params: schemas.zReadFrom.shape.params },
-    res: { body: schemas.zReadFrom.shape.data },
+    defn: schemas.readFrom,
     handler: async ({ params }) => {
       return readFrom(params);
     },
@@ -52,8 +49,7 @@ router.get(
 router.get(
   "/:id/to",
   createApiHandler.reader({
-    req: { params: schemas.zReadTo.shape.params },
-    res: { body: schemas.zReadTo.shape.data },
+    defn: schemas.readTo,
     handler: async ({ params }) => {
       return readTo(params);
     },
@@ -63,8 +59,7 @@ router.get(
 router.get(
   "/:id/graph",
   createApiHandler.reader({
-    req: { params: schemas.zReadGraph.shape.params },
-    res: { body: schemas.zReadGraph.shape.data },
+    defn: schemas.readGraph,
     handler: async ({ params }) => {
       return readGraph(params);
     },
@@ -72,10 +67,19 @@ router.get(
 );
 
 router.get(
+  "/:id/type",
+  createApiHandler.reader({
+    defn: schemas.readType,
+    handler: async ({ params }) => {
+      return readType(params);
+    },
+  }),
+);
+
+router.get(
   "/:id/value",
   createApiHandler.reader({
-    req: { params: schemas.zReadValue.shape.params },
-    res: { body: schemas.zReadValue.shape.data },
+    defn: schemas.readValue,
     handler: async ({ params }) => {
       return readValue(params);
     },
@@ -85,8 +89,7 @@ router.get(
 router.get(
   "/:id/parents",
   createApiHandler.reader({
-    req: { params: schemas.zReadParents.shape.params },
-    res: { body: schemas.zReadParents.shape.data },
+    defn: schemas.readParents,
     handler: async ({ params }) => {
       return readParents(params);
     },
@@ -96,8 +99,7 @@ router.get(
 router.get(
   "/:id/children",
   createApiHandler.reader({
-    req: { params: schemas.zReadChildren.shape.params },
-    res: { body: schemas.zReadChildren.shape.data },
+    defn: schemas.readChildren,
     handler: async ({ params }) => {
       return readChildren(params);
     },
@@ -105,20 +107,9 @@ router.get(
 );
 
 router.get(
-  "/:id/type",
-  createApiHandler.reader({
-    req: { params: schemas.zReadType.shape.params },
-    res: { body: schemas.zReadType.shape.data },
-    handler: async ({ params }) => {
-      return readType(params);
-    },
-  }),
-);
-
-router.get(
   "/",
   createApiHandler.searcher({
-    res: { body: schemas.zSearch.shape.data },
+    defn: schemas.search,
     handler: async () => {
       return search();
     },
