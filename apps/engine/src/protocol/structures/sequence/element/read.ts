@@ -1,7 +1,7 @@
-import { read as nodeFirstRead } from "../../../primitives/node/read.js";
+import { read as nodeRootRead } from "../../../primitives/node/read.js";
 
 export const read = async ({ id }: { id: string }) => {
-  const node = await nodeFirstRead({ id });
+  const node = await nodeRootRead({ id });
 
-  return { element: node };
+  return { state: node };
 };

@@ -1,9 +1,20 @@
 import { z } from "zod";
-import { zCreateElementBody } from "../api/schemas.js";
-import { create as nodeFirstCreate } from "../../../primitives/node/create.js";
+import { create as nodeCreate } from "../../../primitives/node/create.js";
 
-export const create = async (args: z.infer<typeof zCreateElementBody>) => {
-  const node = await nodeFirstCreate(args);
+export const create = async ({
+  graph_id,
+  type_id,
+  value_id,
+}: {
+  graph_id: string;
+  value_id: string;
+  type_id: string;
+}) => {
+  const node = await nodeCreate({
+    graph_id,
+    type_id,
+    value_id,
+  });
 
-  return { element: node };
+  return node;
 };

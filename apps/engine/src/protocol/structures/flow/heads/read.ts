@@ -11,5 +11,5 @@ export const read = async ({ id }: { id: string }) => {
 
   const heads = nodes.filter((node) => isHead(node.id));
 
-  return { heads };
+  return heads;
 };

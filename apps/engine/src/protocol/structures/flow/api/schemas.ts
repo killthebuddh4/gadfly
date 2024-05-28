@@ -1,67 +1,64 @@
 import { z } from "zod";
-import { zGraph, zNode } from "../../../primitives/api/schemas.js";
-import { zEdge } from "../../../primitives/api/schemas.js";
+import { schemas as apiSchemas } from "../../../primitives/api/schemas.js";
 
-export const zFlow = zGraph;
-
-export const zCreateRootBody = zFlow.omit({ id: true });
-
-export const zCreateRootData = zFlow;
-
-export const zReadRootParams = zFlow.pick({ id: true });
-
-export const zReadRootData = zFlow;
-
-export const zChannel = zEdge;
-
-export const zCreateChannelParams = z.object({
-  id: z.string().uuid(),
-});
-
-export const zCreateChannelBody = zChannel.omit({ id: true });
-
-export const zReadChannelParams = z.object({
-  id: z.string().uuid(),
-  channel_id: z.string().uuid(),
-});
-
-export const zReadChannelData = zChannel;
-
-export const zReadChannelsParams = z.object({
-  id: z.string().uuid(),
-});
-
-export const zReadChannelsData = z.array(zChannel);
-
-export const zState = zNode;
-
-export const zCreateStateParams = z.object({
-  id: z.string().uuid(),
-});
-
-export const zCreateStateBody = zState.omit({ id: true });
-
-export const zReadStateParams = z.object({
-  id: z.string().uuid(),
-  state_id: z.string().uuid(),
-});
-
-export const zReadStateData = zState;
-
-export const zReadStatesParams = z.object({
-  id: z.string().uuid(),
-});
-
-export const zReadStatesData = z.array(zState);
-
-export const zReadHeadsParams = z.object({
-  id: z.string().uuid(),
-});
-
-export const zReadHeadsData = z.array(zState);
-
-export const zReadTailsParams = z.object({
-  id: z.string().uuid(),
-});
-
-export const zReadTailsData = z.array(zState);
+export const schemas = {
+  create: {
+    path: "/",
+    data: apiSchemas.zGraph,
+  },
+  read: {
+    path: "/",
+    query: z.object({ id: z.string().uuid() }),
+    data: apiSchemas.zGraph.or(z.null()),
+  },
+  state: {
+    read: {
+      path: "/state",
+      query: z.object({ id: z.string().uuid() }),
+      data: apiSchemas.zNode.or(z.null()),
+    },
+    create: {
+      path: "/state",
+      data: apiSchemas.zNode,
+    },
+  },
+  states: {
+    read: {
+      path: "/states",
+      query: z.object({ id: z.string().uuid() }),
+      data: z.array(apiSchemas.zNode),
+    },
+  },
+  channel: {
+    read: {
+      path: "/channel",
+      query: z.object({ id: z.string().uuid() }),
+      data: apiSchemas.zEdge.or(z.null()),
+    },
+    create: {
+      path: "/channel",
+      data: apiSchemas.zEdge,
+    },
+  },
+  channels: {
+    read: {
+      path: "/channels",
+      query: z.object({ id: z.string().uuid() }),
+      data: z.array(apiSchemas.zEdge),
+    },
+  },
+  heads: {
+    read: {
+      path: "/heads",
+      query: z.object({ id: z.string().uuid() }),
+      data: z.array(apiSchemas.zNode),
+    },
+  },
+  tails: {
+    read: {
+      path: "/tails",
+      query: z.object({ id: z.string().uuid() }),
+      data: z.array(apiSchemas.zNode),
+    },
+  },
+};

@@ -1,9 +1,13 @@
-import { z } from "zod";
-import { create as graphRootCreate } from "../../primitives/graph/create.js";
-import { zCreateRootBody as graphCreateFirstBody } from "../../primitives/graph/api/schemas.js";
+import { create as graphCreate } from "../../primitives/graph/create.js";
 
-export const create = async (args: z.infer<typeof graphCreateFirstBody>) => {
-  const graph = await graphRootCreate(args);
+export const create = async ({
+  type_id,
+  value_id,
+}: {
+  type_id: string;
+  value_id: string;
+}) => {
+  const graph = await graphCreate({ type_id, value_id });
 
-  return { sequence: graph };
+  return graph;
 };
