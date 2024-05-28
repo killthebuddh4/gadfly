@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { zGraph, zNode } from "../../../primitives/api/primitives.js";
-import { zEdge } from "../../../primitives/api/primitives.js";
+import { zGraph, zNode } from "../../../primitives/api/schemas.js";
+import { zEdge } from "../../../primitives/api/schemas.js";
 
 export const zFlow = zGraph;
 

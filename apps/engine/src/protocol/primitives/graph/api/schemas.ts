@@ -4,37 +4,30 @@ import { schemas as apiSchemas } from "../../api/schemas.js";
 export const schemas = {
   create: {
     path: "/",
-    data: apiSchemas.zEdge,
+    data: apiSchemas.zGraph,
   },
   read: {
     path: "/",
     query: z.object({ id: z.string().uuid() }),
-    data: apiSchemas.zEdge.or(z.null()),
+    data: apiSchemas.zGraph.or(z.null()),
   },
   search: {
     path: "/search",
     query: z.object({}),
-    data: z.array(apiSchemas.zEdge),
+    data: z.array(apiSchemas.zGraph),
   },
-  from: {
+  nodes: {
     read: {
-      path: "/from",
+      path: "/nodes",
       query: z.object({ id: z.string().uuid() }),
-      data: apiSchemas.zNode,
+      data: z.array(apiSchemas.zNode),
     },
   },
-  to: {
+  edges: {
     read: {
-      path: "/to",
+      path: "/edges",
       query: z.object({ id: z.string().uuid() }),
-      data: apiSchemas.zNode,
-    },
-  },
-  graph: {
-    read: {
-      path: "/graph",
-      query: z.object({ id: z.string().uuid() }),
-      data: apiSchemas.zGraph,
+      data: z.array(apiSchemas.zEdge),
     },
   },
   type: {

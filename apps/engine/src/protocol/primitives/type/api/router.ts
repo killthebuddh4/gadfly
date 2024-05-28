@@ -1,119 +1,102 @@
-import express from "express";
+import * as express from "express";
+import { create } from "../create.js";
+import { read } from "../read.js";
 import { search } from "../search.js";
-import { create as createRoot } from "../create.js";
-import { read as readRoot } from "../read.js";
-import { interpret as interpretRoot } from "../interpret.js";
-import { read as readCode } from "../url/read.js";
-import { interpret as interpretCode } from "../url/interpret.js";
+import { read as readUrl } from "../url/read.js";
 import { read as readDescription } from "../description/read.js";
-import { interpret as interpretDescription } from "../description/interpret.js";
 import { read as readChildren } from "../children/read.js";
+import { read as readEdges } from "../edges/read.js";
+import { read as readGraphs } from "../graphs/read.js";
+import { read as readValues } from "../values/read.js";
 import { read as readParents } from "../parents/read.js";
-import {
-  zReadChildrenData,
-  zReadChildrenParams,
-  zReadParentsData,
-  zSearchData,
-  zCreateRootBody,
-  zCreateRootData,
-  zReadRootParams,
-  zReadRootData,
-  zInterpretRootParams,
-  zReadCodeParams,
-  zInterpretCodeParams,
-  zReadDescriptionParams,
-  zInterpretDescriptionParams,
-  zReadParentsParams,
-} from "./schemas.js";
+import { read as readNodes } from "../nodes/read.js";
+import { read as readPointers } from "../pointers/read.js";
+import { schemas } from "./schemas.js";
+import { createReadHandler } from "../../../../lib/api/createReadHandler.js";
+import { createWriteHandler } from "../../../../lib/api/createWriteHandler.js";
 
 export const router = express.Router();
 
 router.use(express.json());
 
-router.post("/", async (req, res) => {
-  let body;
-  try {
-    body = zCreateRootBody.parse(req.body);
-  } catch {
-    res.status(400).json({ ok: false, error: "Invalid body" });
-    return;
-  }
-
-  let data;
-  try {
-    data = await createRoot({
-      url: body.url,
-      description: body.description,
-    });
-  } catch (error) {
-    res.status(500).json({ ok: false, error: "TODO(better error message)" });
-    return;
-  }
-
-  res.json({ ok: true, data: zCreateRootData.parse(data) });
+createWriteHandler(schemas.create)({
+  router,
+  handler: async ({ data }) => create(data),
 });
 
-router.get("/:id", async (req, res) => {
-  console.log("HERRRRRRRRRRRRRRRREEEEEEEEEEEEEEEEEE");
-
-  const params = zReadRootParams.parse(req.params);
-  const data = await readRoot({ id: params.id });
-
-  console.log(data);
-
-  res.json({ ok: true, data: zReadRootData.parse(data) });
+createReadHandler(schemas.read)({
+  router,
+  handler: async ({ query }) => {
+    return read(query);
+  },
 });
 
-router.get("/:id/interpret", async (req, res) => {
-  const params = zInterpretRootParams.parse(req.params);
-  const data = await interpretRoot({ id: params.id });
-
-  res.json({ ok: true, data });
+createReadHandler(schemas.search)({
+  router,
+  handler: async ({ query }) => {
+    return search();
+  },
 });
 
-router.get("/:id/code", async (req, res) => {
-  const params = zReadCodeParams.parse(req.params);
-  const data = await readCode({ id: params.id });
-
-  res.json({ ok: true, data });
-});
-router.get("/:id/code/interpret", async (req, res) => {
-  const params = zInterpretCodeParams.parse(req.params);
-  const data = await interpretCode({ id: params.id });
-
-  res.json({ ok: true, data });
+createReadHandler(schemas.url.read)({
+  router,
+  handler: async ({ query }) => {
+    return readUrl(query);
+  },
 });
 
-router.get("/:id/description", async (req, res) => {
-  const params = zReadDescriptionParams.parse(req.params);
-  const data = await readDescription({ id: params.id });
-
-  res.json({ ok: true, data });
+createReadHandler(schemas.description.read)({
+  router,
+  handler: async ({ query }) => {
+    return readDescription(query);
+  },
 });
 
-router.get("/:id/description/interpret", async (req, res) => {
-  const params = zInterpretDescriptionParams.parse(req.params);
-  const data = await interpretDescription({ id: params.id });
-
-  res.json({ ok: true, data });
+createReadHandler(schemas.children.read)({
+  router,
+  handler: async ({ query }) => {
+    return readChildren(query);
+  },
 });
 
-router.get("/", async (req, res) => {
-  const data = await search();
-
-  res.json({ ok: true, data: zSearchData.parse(data) });
+createReadHandler(schemas.edges.read)({
+  router,
+  handler: async ({ query }) => {
+    return readEdges(query);
+  },
 });
 
-router.get("/:id/parents", async (req, res) => {
-  const params = zReadParentsParams.parse(req.params);
-  const data = await readParents({ id: params.id });
-
-  res.json({ ok: true, data: zReadParentsData.parse(data) });
+createReadHandler(schemas.graphs.read)({
+  router,
+  handler: async ({ query }) => {
+    return readGraphs(query);
+  },
 });
 
-router.get("/:id/children", async (req, res) => {
-  const params = zReadChildrenParams.parse(req.params);
-  const data = await readChildren({ id: params.id });
+createReadHandler(schemas.values.read)({
+  router,
+  handler: async ({ query }) => {
+    return readValues(query);
+  },
+});
 
-  res.json({ ok: true, data: zReadChildrenData.parse(data) });
+createReadHandler(schemas.parents.read)({
+  router,
+  handler: async ({ query }) => {
+    return readParents(query);
+  },
+});
+
+createReadHandler(schemas.nodes.read)({
+  router,
+  handler: async ({ query }) => {
+    return readNodes(query);
+  },
+});
+
+createReadHandler(schemas.pointers.read)({
+  router,
+  handler: async ({ query }) => {
+    return readPointers(query);
+  },
 });

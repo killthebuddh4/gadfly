@@ -1,98 +1,75 @@
+import { schemas as apiSchemas } from "../../api/schemas.js";
 import { z } from "zod";
 
-export const zCreateRootBody = z.object({
-  type_id: z.string().uuid(),
-  value: z.string(),
-});
-
-export const zCreateRootData = z.object({
-  id: z.string().uuid(),
-  type_id: z.string().uuid(),
-  value: z.string(),
-});
-
-export const zReadRootParams = z.object({
-  id: z.string().uuid(),
-});
-
-export const zReadRootData = z.object({
-  id: z.string().uuid(),
-  value: z.string(),
-  type_id: z.string().uuid(),
-});
-
-export const zInterpretRootParams = z.object({
-  id: z.string().uuid(),
-});
-
-export const zReadValueParams = z.object({
-  id: z.string().uuid(),
-});
-
-export const zInterpretValueParams = z.object({
-  id: z.string().uuid(),
-});
-
-export const zReadParentsParams = z.object({
-  id: z.string().uuid(),
-});
-
-export const zReadParentsData = z.array(z.object({ id: z.string().uuid() }));
-
-export const zReadChildrenParams = z.object({
-  id: z.string().uuid(),
-});
-
-export const zReadChildrenData = z.array(z.object({ id: z.string().uuid() }));
-
-export const zReadGraphParams = z.object({
-  id: z.string().uuid(),
-});
-
-export const zReadGraphData = z
-  .object({
-    id: z.string().uuid(),
-  })
-  .or(z.null());
-
-export const zReadNodeParams = z.object({
-  id: z.string().uuid(),
-});
-
-export const zReadNodeData = z
-  .object({
-    id: z.string().uuid(),
-  })
-  .or(z.null());
-
-export const zReadPointerParams = z.object({
-  id: z.string().uuid(),
-});
-
-export const zReadPointerData = z
-  .object({
-    id: z.string().uuid(),
-  })
-  .or(z.null());
-
-export const zReadEdgeParams = z.object({
-  id: z.string().uuid(),
-});
-
-export const zReadEdgeData = z
-  .object({
-    id: z.string().uuid(),
-  })
-  .or(z.null());
-
-export const zSearchData = z.array(
-  z.object({ id: z.string().uuid(), value: z.string() }),
-);
-
-export const zReadTypeParams = z.object({
-  id: z.string().uuid(),
-});
-
-export const zReadTypeData = z.object({
-  id: z.string().uuid(),
-});
+export const schemas = {
+  create: {
+    path: "/",
+    data: apiSchemas.zValue,
+  },
+  read: {
+    path: "/",
+    query: z.object({ id: z.string().uuid() }),
+    data: apiSchemas.zValue.or(z.null()),
+  },
+  search: {
+    path: "/search",
+    query: z.object({}),
+    data: z.array(apiSchemas.zValue),
+  },
+  type: {
+    read: {
+      path: "/type",
+      query: z.object({ id: z.string().uuid() }),
+      data: apiSchemas.zType,
+    },
+  },
+  value: {
+    read: {
+      path: "/value",
+      query: z.object({ id: z.string().uuid() }),
+      data: z.string(),
+    },
+  },
+  node: {
+    read: {
+      path: "/node",
+      query: z.object({ id: z.string().uuid() }),
+      data: apiSchemas.zNode.or(z.null()),
+    },
+  },
+  edge: {
+    read: {
+      path: "/edge",
+      query: z.object({ id: z.string().uuid() }),
+      data: apiSchemas.zEdge.or(z.null()),
+    },
+  },
+  graph: {
+    read: {
+      path: "/graph",
+      query: z.object({ id: z.string().uuid() }),
+      data: apiSchemas.zGraph.or(z.null()),
+    },
+  },
+  pointer: {
+    read: {
+      path: "/pointer",
+      query: z.object({ id: z.string().uuid() }),
+      data: apiSchemas.zPointer.or(z.null()),
+    },
+  },
+  children: {
+    read: {
+      path: "/children",
+      query: z.object({ id: z.string().uuid() }),
+      data: z.array(apiSchemas.zPointer),
+    },
+  },
+  parents: {
+    read: {
+      path: "/parents",
+      query: z.object({ id: z.string().uuid() }),
+      data: z.array(apiSchemas.zPointer),
+    },
+  },
+};

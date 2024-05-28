@@ -2,6 +2,9 @@ import { prisma } from "../../../../lib/prisma.js";
 
 export const read = async ({ id }: { id: string }) => {
   const type = await prisma.type.findUnique({
+    include: {
+      edges: true,
+    },
     where: {
       id,
     },
@@ -11,5 +14,5 @@ export const read = async ({ id }: { id: string }) => {
     throw new Error("Type not found");
   }
 
-  return type.description;
+  return type.edges;
 };
