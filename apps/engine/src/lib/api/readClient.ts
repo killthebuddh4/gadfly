@@ -4,29 +4,31 @@ import { Reader } from "./Reader.js";
 import { zJsonString } from "@repo/core/zJsonString.js";
 
 export const readClient = async <
-  P extends z.ZodTypeAny,
+  Q extends z.ZodTypeAny,
   D extends z.ZodTypeAny,
 >(
-  defn: Reader<P, D>,
+  defn: Reader<Q, D>,
 ) => {
   return async (args: {
     url: string;
-    params: z.infer<P>;
+    query: z.infer<Q>;
   }): Promise<ApiResponse<z.infer<D>>> => {
-    let path;
+    let query;
     try {
-      path = defn.request.path(args.params);
+      query = new URLSearchParams(args.query);
     } catch (error) {
       return {
         ok: false,
         type: "ClientError",
-        message: `defn.request.path(args.params) threw an error`,
+        message: `new URLSearchParams(args.query) threw an error`,
       };
     }
 
+    const url = `${args.url}/${defn.name}?${query}`;
+
     let response;
     try {
-      response = await fetch(`${args.url}/${path}`, {
+      response = await fetch(url, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -37,7 +39,7 @@ export const readClient = async <
         message: `Fetch failed`,
         details: {
           method: "GET",
-          url: `${args.url}/${path}`,
+          url,
         },
       };
     }
@@ -60,7 +62,7 @@ export const readClient = async <
         message: `response.ok is false`,
         details: {
           method: "GET",
-          url: args.url,
+          url,
           status: response.status,
           response: { text: responseText },
         },
@@ -76,7 +78,7 @@ export const readClient = async <
         message: "the server's response is not valid JSON",
         details: {
           method: "GET",
-          url: `${args.url}/${path}`,
+          url,
           status: response.status,
           response: { text: responseText },
         },
@@ -92,7 +94,7 @@ export const readClient = async <
         message: "defn.response.body.parse(json) failed",
         details: {
           method: "GET",
-          url: `${args.url}/${path}`,
+          url,
           status: response.status,
           response: { text: responseText },
         },
@@ -105,7 +107,7 @@ export const readClient = async <
       data: body.data,
       details: {
         method: "GET",
-        url: `${args.url}/${path}`,
+        url,
         status: response.status,
         response: { text: responseText },
       },

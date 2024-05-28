@@ -30,7 +30,7 @@ router.get(
   "/:id",
   createApiHandler.reader({
     defn: schemas.readEdge,
-    handler: async ({ params }) => {
+    handler: async ({ query: params }) => {
       return readEdge(params);
     },
   }),
@@ -40,7 +40,7 @@ router.get(
   "/:id/from",
   createApiHandler.reader({
     defn: schemas.readFrom,
-    handler: async ({ params }) => {
+    handler: async ({ query: params }) => {
       return readFrom(params);
     },
   }),
@@ -50,7 +50,7 @@ router.get(
   "/:id/to",
   createApiHandler.reader({
     defn: schemas.readTo,
-    handler: async ({ params }) => {
+    handler: async ({ query: params }) => {
       return readTo(params);
     },
   }),
@@ -60,7 +60,7 @@ router.get(
   "/:id/graph",
   createApiHandler.reader({
     defn: schemas.readGraph,
-    handler: async ({ params }) => {
+    handler: async ({ query: params }) => {
       return readGraph(params);
     },
   }),
@@ -70,7 +70,7 @@ router.get(
   "/:id/type",
   createApiHandler.reader({
     defn: schemas.readType,
-    handler: async ({ params }) => {
+    handler: async ({ query: params }) => {
       return readType(params);
     },
   }),
@@ -80,7 +80,7 @@ router.get(
   "/:id/value",
   createApiHandler.reader({
     defn: schemas.readValue,
-    handler: async ({ params }) => {
+    handler: async ({ query: params }) => {
       return readValue(params);
     },
   }),
@@ -90,7 +90,7 @@ router.get(
   "/:id/parents",
   createApiHandler.reader({
     defn: schemas.readParents,
-    handler: async ({ params }) => {
+    handler: async ({ query: params }) => {
       return readParents(params);
     },
   }),
@@ -100,7 +100,7 @@ router.get(
   "/:id/children",
   createApiHandler.reader({
     defn: schemas.readChildren,
-    handler: async ({ params }) => {
+    handler: async ({ query: params }) => {
       return readChildren(params);
     },
   }),

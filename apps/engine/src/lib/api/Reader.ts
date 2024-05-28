@@ -1,13 +1,12 @@
 import { z } from "zod";
 
 export type Reader<
-  RequestParams extends z.ZodTypeAny,
+  RequestQuery extends z.ZodTypeAny,
   ResponseBody extends z.ZodTypeAny,
 > = {
   name: string;
   request: {
-    path: (params: z.infer<RequestParams>) => string;
-    params: RequestParams;
+    query: RequestQuery;
   };
   response: {
     body: ResponseBody;
@@ -15,17 +14,16 @@ export type Reader<
 };
 
 export const reader = <
-  RequestParams extends z.ZodTypeAny,
+  RequestQuery extends z.ZodTypeAny,
   ResponseBody extends z.ZodTypeAny,
 >(props: {
   name: string;
   request: {
-    path: (params: z.infer<RequestParams>) => string;
-    params: RequestParams;
+    query: RequestQuery;
   };
   response: {
     body: ResponseBody;
   };
-}): Reader<RequestParams, ResponseBody> => {
+}): Reader<RequestQuery, ResponseBody> => {
   return props;
 };
