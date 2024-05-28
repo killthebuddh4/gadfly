@@ -1,9 +1,9 @@
-import { prisma } from "../../../../lib/prisma.js";
+import { prisma } from "../../../../../lib/prisma.js";
 
 export const read = async ({ id }: { id: string }) => {
   const pointer = await prisma.pointer.findUnique({
     include: {
-      from_type: true,
+      to_type: true,
     },
     where: {
       id,
@@ -14,5 +14,5 @@ export const read = async ({ id }: { id: string }) => {
     throw new Error(`Pointer not found: ${id}`);
   }
 
-  return pointer.from_type;
+  return pointer.to_type;
 };

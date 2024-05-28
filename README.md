@@ -690,3 +690,20 @@ tailwindcss
 typescript
 next.js
 
+# 2024-05-28
+
+/DOMAIN
+
+/api
+  router and endpoint definitions
+/atoms
+  the primitives of the domain. the things that can be more or less read and written to atomically
+/derivations
+  compound reads that require some logic
+/transactions
+  compound writes that require a lot of logic
+/lib
+  synchronous, pure functions
+
+Every atom can itself be a domain
+

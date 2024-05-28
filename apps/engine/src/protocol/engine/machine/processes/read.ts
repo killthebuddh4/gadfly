@@ -1,10 +1,7 @@
-import { search } from "../../../primitives/graph/search.js";
+import { read as graphRead } from "../../../primitives/graph/read.js";
 
-export const read = async ({ graphId }: { graphId: string }) => {
-  const graphs = await search();
+export const read = async ({ id }: { id: string }) => {
+  const graph = await graphRead({ id });
 
-  // TODO How do I implement this?
-  const isProcess = () => false;
-
-  return { traces: graphs.filter(isProcess) };
+  return graph;
 };

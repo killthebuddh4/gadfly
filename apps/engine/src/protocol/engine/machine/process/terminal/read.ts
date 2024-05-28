@@ -5,11 +5,19 @@ export const read = async ({ id }: { id: string }) => {
   const nodes = await nodesRead({ id });
   const edges = await edgesRead({ id });
 
-  const isHead = (nodeId: string) => {
+  const isLast = (nodeId: string) => {
     return !edges.some((edge) => edge.from_id === nodeId);
   };
 
-  const terminal = nodes.filter((node) => isHead(node.id));
+  const last = nodes.filter((node) => isLast(node.id));
 
-  return { terminal };
+  if (last.length > 1) {
+    throw new Error("Multiple last found");
+  }
+
+  if (last.length === 0) {
+    return null;
+  }
+
+  return last[0];
 };

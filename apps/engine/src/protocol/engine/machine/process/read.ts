@@ -1,7 +1,7 @@
-import { read as graphInitialRead } from "../../../primitives/graph/read.js";
+import { read as graphRead } from "../../../primitives/graph/read.js";
 
 export const read = async ({ id }: { id: string }) => {
-  const graph = await graphInitialRead({ id });
+  const graph = await graphRead({ id });
 
-  return { process: graph };
+  return graph;
 };

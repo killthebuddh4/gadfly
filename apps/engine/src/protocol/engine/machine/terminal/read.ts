@@ -9,7 +9,7 @@ export const read = async ({ id }: { id: string }) => {
     return !edges.some((edge) => edge.from_id === nodeId);
   };
 
-  const terminal = nodes.filter((node) => isHead(node.id));
+  const heads = nodes.filter((node) => isHead(node.id));
 
-  return { terminal };
+  return heads;
 };
