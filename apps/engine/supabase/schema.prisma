@@ -7,116 +7,125 @@ datasource db {
   url      = env("SUPABASE_CONN_STRING")
 }
 
-model Type {
-  id          String    @id @default(uuid())
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
-  url         String    @unique
-  description String
-  values      Value[]
-  nodes       Node[]
-  edges       Edge[]
-  graphs      Graph[]
-  pointers    Pointer[] @relation("pointer_type")
-  parents     Pointer[] @relation("pointer_to_type")
-  children    Pointer[] @relation("pointer_from_type")
+model Log {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  commits   Commit[]
+  patches   Patch[]
+  forks     Fork[]
+  branches  Branch[]
 }
 
-model Value {
-  id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  type       Type      @relation(fields: [type_id], references: [id], onDelete: Cascade)
-  type_id    String
-  value      String
-  graph      Graph?
-  node       Node?
-  edge       Edge?
-  pointer    Pointer?  @relation("pointer_value")
-  parents    Pointer[] @relation("pointer_to_value")
-  children   Pointer[] @relation("pointer_from_value")
+model Fork {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  log       Log      @relation(fields: [log_id], references: [id], onDelete: Cascade)
+  log_id    String
+  commits   Commit[]
+  patches   Patch[]
 }
 
-model Graph {
-  id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  type       Type      @relation(fields: [type_id], references: [id], onDelete: Cascade)
-  type_id    String
-  value      Value     @relation(fields: [value_id], references: [id], onDelete: Cascade)
-  value_id   String    @unique
-  nodes      Node[]
-  edges      Edge[]
-  parents    Pointer[] @relation("pointer_to_graph")
-  children   Pointer[] @relation("pointer_from_graph")
+model Branch {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  log       Log      @relation(fields: [log_id], references: [id], onDelete: Cascade)
+  log_id    String
+  commits   Commit[]
+  patches   Patch[]
 }
 
-model Node {
-  id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  graph      Graph     @relation(fields: [graph_id], references: [id], onDelete: Cascade)
-  graph_id   String
-  type       Type      @relation(fields: [type_id], references: [id], onDelete: Cascade)
-  type_id    String
-  value      Value     @relation(fields: [value_id], references: [id], onDelete: Cascade)
-  value_id   String    @unique
-  upstream   Edge[]    @relation("edge_to")
-  downstream Edge[]    @relation("edge_from")
-  parents    Pointer[] @relation("pointer_to_node")
-  children   Pointer[] @relation("pointer_from_node")
+model Commit {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  log        Log      @relation(fields: [log_id], references: [id], onDelete: Cascade)
+  log_id     String
+  fork       Fork     @relation(fields: [fork_id], references: [id], onDelete: Cascade)
+  fork_id    String
+  branch     Branch   @relation(fields: [branch_id], references: [id], onDelete: Cascade)
+  branch_id  String
+  upstream   Patch[]  @relation("patch_to")
+  downstream Patch[]  @relation("patch_from")
 }
 
-model Edge {
-  id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  graph      Graph     @relation(fields: [graph_id], references: [id], onDelete: Cascade)
-  graph_id   String
-  type       Type      @relation(fields: [type_id], references: [id], onDelete: Cascade)
-  type_id    String
-  value      Value     @relation(fields: [value_id], references: [id], onDelete: Cascade)
-  value_id   String    @unique
-  from       Node      @relation("edge_from", fields: [from_id], references: [id], onDelete: Cascade)
+model Patch {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  log       Log      @relation(fields: [log_id], references: [id], onDelete: Cascade)
+  log_id    String
+  fork      Fork     @relation(fields: [fork_id], references: [id], onDelete: Cascade)
+  fork_id   String
+  branch    Branch   @relation(fields: [branch_id], references: [id], onDelete: Cascade)
+  branch_id String
+  from      Commit   @relation("patch_from", fields: [from_id], references: [id], onDelete: Cascade)
+  from_id   String
+  to        Commit   @relation("patch_to", fields: [to_id], references: [id], onDelete: Cascade)
+  to_id     String
+}
+
+model Machine {
+  id           String       @id @default(uuid())
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  phases       Phase[]
+  transitions  Transition[]
+  trajectories Trajectory[]
+}
+
+model Phase {
+  id         String       @id @default(uuid())
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  machine    Machine      @relation(fields: [machine_id], references: [id], onDelete: Cascade)
+  machine_id String
+  upstream   Transition[] @relation("transition_to")
+  downstream Transition[] @relation("transition_from")
+}
+
+model Transition {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  machine    Machine  @relation(fields: [machine_id], references: [id], onDelete: Cascade)
+  machine_id String
+  from       Phase    @relation("transition_from", fields: [from_id], references: [id], onDelete: Cascade)
   from_id    String
-  to         Node      @relation("edge_to", fields: [to_id], references: [id], onDelete: Cascade)
+  to         Phase    @relation("transition_to", fields: [to_id], references: [id], onDelete: Cascade)
   to_id      String
-  parents    Pointer[] @relation("pointer_to_edge")
-  children   Pointer[] @relation("pointer_from_edge")
 }
 
-model Pointer {
-  id              String    @id @default(uuid())
-  created_at      DateTime  @default(now())
-  updated_at      DateTime  @updatedAt
-  type            Type      @relation("pointer_type", fields: [type_id], references: [id], onDelete: Cascade)
-  type_id         String
-  value           Value     @relation("pointer_value", fields: [value_id], references: [id], onDelete: Cascade)
-  value_id        String    @unique
-  from_node       Node?     @relation("pointer_from_node", fields: [from_node_id], references: [id], onDelete: Cascade)
-  from_node_id    String?
-  from_value      Value?    @relation("pointer_from_value", fields: [from_value_id], references: [id], onDelete: Cascade)
-  from_value_id   String?
-  from_graph      Graph?    @relation("pointer_from_graph", fields: [from_graph_id], references: [id], onDelete: Cascade)
-  from_graph_id   String?
-  from_edge       Edge?     @relation("pointer_from_edge", fields: [from_edge_id], references: [id], onDelete: Cascade)
-  from_edge_id    String?
-  from_pointer    Pointer?  @relation("pointer_from_pointer", fields: [from_pointer_id], references: [id], onDelete: Cascade)
-  from_pointer_id String?
-  from_type       Type?     @relation("pointer_from_type", fields: [from_type_id], references: [id], onDelete: Cascade)
-  from_type_id    String?
-  to_value        Value?    @relation("pointer_to_value", fields: [to_value_id], references: [id], onDelete: Cascade)
-  to_value_id     String?
-  to_node         Node?     @relation("pointer_to_node", fields: [to_node_id], references: [id], onDelete: Cascade)
-  to_node_id      String?
-  to_graph        Graph?    @relation("pointer_to_graph", fields: [to_graph_id], references: [id], onDelete: Cascade)
-  to_graph_id     String?
-  to_edge         Edge?     @relation("pointer_to_edge", fields: [to_edge_id], references: [id], onDelete: Cascade)
-  to_edge_id      String?
-  to_pointer      Pointer?  @relation("pointer_to_pointer", fields: [to_pointer_id], references: [id], onDelete: Cascade)
-  to_pointer_id   String?
-  to_type         Type?     @relation("pointer_to_type", fields: [to_type_id], references: [id], onDelete: Cascade)
-  to_type_id      String?
-  parents         Pointer[] @relation("pointer_to_pointer")
-  children        Pointer[] @relation("pointer_from_pointer")
+model Trajectory {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  machine    Machine  @relation(fields: [machine_id], references: [id], onDelete: Cascade)
+  machine_id String
+  states     State[]
+  signals    Signal[]
+}
+
+model State {
+  id            String     @id @default(uuid())
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  trajectory    Trajectory @relation(fields: [trajectory_id], references: [id], onDelete: Cascade)
+  trajectory_id String
+  upstream      Signal[]   @relation("signal_to")
+  downstream    Signal[]   @relation("signal_from")
+}
+
+model Signal {
+  id            String     @id @default(uuid())
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  trajectory    Trajectory @relation(fields: [trajectory_id], references: [id], onDelete: Cascade)
+  trajectory_id String
+  from          State      @relation("signal_from", fields: [from_id], references: [id], onDelete: Cascade)
+  from_id       String
+  to            State      @relation("signal_to", fields: [to_id], references: [id], onDelete: Cascade)
+  to_id         String
 }
