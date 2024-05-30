@@ -7,40 +7,40 @@ datasource db {
   url      = env("SUPABASE_CONN_STRING")
 }
 
+model Actor {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  ghost      Ghost?
+  daemon     Daemon?
+  oracle     Oracle?
+}
+
+model Daemon {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  log        Log?
+  actor      Actor    @relation(fields: [actor_id], references: [id], onDelete: Cascade)
+  actor_id   String   @unique
+}
+
 model Log {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  commits   Commit[]
-  patches   Patch[]
-  forks     Fork[]
-  branches  Branch[]
-}
-
-model Fork {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  log       Log      @relation(fields: [log_id], references: [id], onDelete: Cascade)
-  log_id    String
-  commits   Commit[]
-  patches   Patch[]
-}
-
-model Branch {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  log       Log      @relation(fields: [log_id], references: [id], onDelete: Cascade)
-  log_id    String
-  commits   Commit[]
-  patches   Patch[]
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  commits    Commit[]
+  patches    Patch[]
+  forks      Fork[]
+  branches   Branch[]
+  daemon     Daemon   @relation(fields: [daemon_id], references: [id], onDelete: Cascade)
+  daemon_id  String   @unique
 }
 
 model Commit {
   id         String   @id @default(uuid())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
   log        Log      @relation(fields: [log_id], references: [id], onDelete: Cascade)
   log_id     String
   fork       Fork     @relation(fields: [fork_id], references: [id], onDelete: Cascade)
@@ -49,83 +49,156 @@ model Commit {
   branch_id  String
   upstream   Patch[]  @relation("patch_to")
   downstream Patch[]  @relation("patch_from")
+  state      State    @relation(fields: [state_id], references: [id], onDelete: Cascade)
+  state_id   String
+  signals    Signal[]
 }
 
 model Patch {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  log       Log      @relation(fields: [log_id], references: [id], onDelete: Cascade)
-  log_id    String
-  fork      Fork     @relation(fields: [fork_id], references: [id], onDelete: Cascade)
-  fork_id   String
-  branch    Branch   @relation(fields: [branch_id], references: [id], onDelete: Cascade)
-  branch_id String
-  from      Commit   @relation("patch_from", fields: [from_id], references: [id], onDelete: Cascade)
-  from_id   String
-  to        Commit   @relation("patch_to", fields: [to_id], references: [id], onDelete: Cascade)
-  to_id     String
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  log        Log      @relation(fields: [log_id], references: [id], onDelete: Cascade)
+  log_id     String
+  fork       Fork     @relation(fields: [fork_id], references: [id], onDelete: Cascade)
+  fork_id    String
+  branch     Branch   @relation(fields: [branch_id], references: [id], onDelete: Cascade)
+  branch_id  String
+  from       Commit   @relation("patch_from", fields: [from_id], references: [id], onDelete: Cascade)
+  from_id    String
+  to         Commit   @relation("patch_to", fields: [to_id], references: [id], onDelete: Cascade)
+  to_id      String
+}
+
+model Fork {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  log        Log      @relation(fields: [log_id], references: [id], onDelete: Cascade)
+  log_id     String
+  commits    Commit[]
+  patches    Patch[]
+}
+
+model Branch {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  log        Log      @relation(fields: [log_id], references: [id], onDelete: Cascade)
+  log_id     String
+  commits    Commit[]
+  patches    Patch[]
+}
+
+model Ghost {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  machine    Machine?
+  actor      Actor    @relation(fields: [actor_id], references: [id], onDelete: Cascade)
+  actor_id   String   @unique
 }
 
 model Machine {
   id           String       @id @default(uuid())
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  created_at   DateTime     @default(now())
+  updated_at   DateTime     @updatedAt
   phases       Phase[]
-  transitions  Transition[]
+  rules        Rule[]
   trajectories Trajectory[]
+  interfaces   Interface[]
+  ghost        Ghost        @relation(fields: [ghost_id], references: [id], onDelete: Cascade)
+  ghost_id     String       @unique
+}
+
+model Interface {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  machine    Machine  @relation(fields: [machine_id], references: [id], onDelete: Cascade)
+  machine_id String
+  phase      Phase    @relation(fields: [phase_id], references: [id])
+  phase_id   String   @unique
 }
 
 model Phase {
-  id         String       @id @default(uuid())
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  machine    Machine      @relation(fields: [machine_id], references: [id], onDelete: Cascade)
+  id         String     @id @default(uuid())
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  machine    Machine    @relation(fields: [machine_id], references: [id], onDelete: Cascade)
   machine_id String
-  upstream   Transition[] @relation("transition_to")
-  downstream Transition[] @relation("transition_from")
+  upstream   Rule[]     @relation("rule_to")
+  downstream Rule[]     @relation("rule_from")
+  interface  Interface?
 }
 
-model Transition {
+model Rule {
   id         String   @id @default(uuid())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
   machine    Machine  @relation(fields: [machine_id], references: [id], onDelete: Cascade)
   machine_id String
-  from       Phase    @relation("transition_from", fields: [from_id], references: [id], onDelete: Cascade)
+  from       Phase    @relation("rule_from", fields: [from_id], references: [id], onDelete: Cascade)
   from_id    String
-  to         Phase    @relation("transition_to", fields: [to_id], references: [id], onDelete: Cascade)
+  to         Phase    @relation("rule_to", fields: [to_id], references: [id], onDelete: Cascade)
   to_id      String
 }
 
+model Oracle {
+  id           String       @id @default(uuid())
+  created_at   DateTime     @default(now())
+  updated_at   DateTime     @updatedAt
+  trajectories Trajectory[]
+  actor        Actor        @relation(fields: [actor_id], references: [id], onDelete: Cascade)
+  actor_id     String       @unique
+}
+
 model Trajectory {
-  id         String   @id @default(uuid())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  machine    Machine  @relation(fields: [machine_id], references: [id], onDelete: Cascade)
-  machine_id String
-  states     State[]
-  signals    Signal[]
+  id          String       @id @default(uuid())
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+  machine     Machine      @relation(fields: [machine_id], references: [id], onDelete: Cascade)
+  machine_id  String
+  states      State[]
+  signals     Signal[]
+  transitions Transition[]
+  oracle      Oracle       @relation(fields: [oracle_id], references: [id], onDelete: Cascade)
+  oracle_id   String
 }
 
 model State {
+  id            String       @id @default(uuid())
+  created_at    DateTime     @default(now())
+  updated_at    DateTime     @updatedAt
+  trajectory    Trajectory   @relation(fields: [trajectory_id], references: [id], onDelete: Cascade)
+  trajectory_id String
+  value         String
+  upstream      Transition?  @relation("transition_to")
+  downstream    Transition[] @relation("transition_from")
+  commits       Commit[]
+  signals       Signal[]
+}
+
+model Transition {
   id            String     @id @default(uuid())
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
   trajectory    Trajectory @relation(fields: [trajectory_id], references: [id], onDelete: Cascade)
   trajectory_id String
-  upstream      Signal[]   @relation("signal_to")
-  downstream    Signal[]   @relation("signal_from")
+  from          State      @relation("transition_from", fields: [from_id], references: [id], onDelete: Cascade)
+  from_id       String
+  to            State      @relation("transition_to", fields: [to_id], references: [id], onDelete: Cascade)
+  to_id         String     @unique
 }
 
 model Signal {
   id            String     @id @default(uuid())
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
   trajectory    Trajectory @relation(fields: [trajectory_id], references: [id], onDelete: Cascade)
   trajectory_id String
-  from          State      @relation("signal_from", fields: [from_id], references: [id], onDelete: Cascade)
-  from_id       String
-  to            State      @relation("signal_to", fields: [to_id], references: [id], onDelete: Cascade)
-  to_id         String
+  target        State      @relation(fields: [target_id], references: [id], onDelete: Cascade)
+  target_id     String
+  commit        Commit     @relation(fields: [commit_id], references: [id], onDelete: Cascade)
+  commit_id     String
 }

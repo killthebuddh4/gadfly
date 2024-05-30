@@ -707,3 +707,10 @@ next.js
 
 Every atom can itself be a domain
 
+# 2024-05-30
+
+A repository has a goal
+A branch is a particular approach to solving a goal
+A fork is a a collection of branches
+
+A GHOST
