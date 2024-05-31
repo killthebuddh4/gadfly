@@ -714,3 +714,7 @@ A branch is a particular approach to solving a goal
 A fork is a a collection of branches
 
 A GHOST
+
+# 2024-05-31
+
+I need to figure out the relationship between branches and forks.
