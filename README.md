@@ -718,3 +718,14 @@ A GHOST
 # 2024-05-31
 
 I need to figure out the relationship between branches and forks.
+
+I think the way to think about it is:
+
+- FORK -> a set of alternative approaches (PARALLEL evo)
+- BRANCH -> a single approach (SERIAL evo)
+
+Why would you do parallel? isn't serial strictly better because you by definition have more context?
+
+maybe, but the point with parallel is to _ahead of time_ decide what you're going to try to learn about the system.
+
+Does this matter? I'm not sure, but it seems fundamental. There's vertical and horizontal kinds of splits, and that seems fundamental.
