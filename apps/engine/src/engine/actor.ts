@@ -1,5 +1,6 @@
 export const actor = async ({ goal }: { goal: string }) => {
   const machine = await selectMachine({ goal });
+  const
 };
 
 export const selectMachine = async ({
@@ -18,10 +19,32 @@ export const selectMachine = async ({
   }
 };
 
+
 type Actor = {
-  id: () => Promise<string>;
+  id: string;
 };
 
 type Machine = {
-  id: () => Promise<string>;
+  id: string;
+  boot: () => Promise<Trajectory>;
+  phases: () => Promise<Phase[]>;
+  rules: () => Promise<Rule[]>;
+  trajectories: () => Promise<Trajectory[]>;
+};
+
+type Trajectory = {
+  id: string;
+  initial: () => Promise<Phase>;
+}
+
+type Phase = {
+  id: string;
+  upstream: () => Promise<Rule[]>;
+  downstream: () => Promise<Rule[]>;
+};
+
+type Rule = {
+  id: string;
+  from: () => Promise<Phase>;
+  to: () => Promise<Phase>;
 };

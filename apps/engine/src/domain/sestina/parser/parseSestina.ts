@@ -1,13 +1,8 @@
-import { ParseResult } from "./ParseResult.js";
 import { parseLines } from "./parseLines.js";
 import { parseEndWords } from "./parseEndWords.js";
 import { parsePattern } from "./parsePattern.js";
 
-export const parseSestina = ({
-  text,
-}: {
-  text: string;
-}): ParseResult<{ stanzas: string[][]; tripel: string[] }> => {
+export const parseSestina = ({ text }: { text: string }) => {
   const lines = parseLines({ text });
 
   if (!lines.ok) {

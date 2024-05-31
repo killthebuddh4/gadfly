@@ -15,15 +15,9 @@ export const getInitialPhases = async ({ id }: { id: string }) => {
     throw new Error(`Machine not found: ${id}`);
   }
 
-  const initial = machine.phases.filter((phase) => {
+  return machine.phases.filter((phase) => {
     return machine.rules.every((rule) => {
       return rule.to_id !== phase.id;
     });
   });
-
-  if (initial.length === 0) {
-    throw new Error("No initial phases found");
-  }
-
-  return initial;
 };

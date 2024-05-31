@@ -7,24 +7,6 @@ datasource db {
   url      = env("SUPABASE_CONN_STRING")
 }
 
-model Actor {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  ghost      Ghost?
-  daemon     Daemon?
-  oracle     Oracle?
-}
-
-model Daemon {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  log        Log?
-  actor      Actor    @relation(fields: [actor_id], references: [id], onDelete: Cascade)
-  actor_id   String   @unique
-}
-
 model Log {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
@@ -33,8 +15,6 @@ model Log {
   patches    Patch[]
   forks      Fork[]
   branches   Branch[]
-  daemon     Daemon   @relation(fields: [daemon_id], references: [id], onDelete: Cascade)
-  daemon_id  String   @unique
 }
 
 model Commit {
@@ -90,15 +70,6 @@ model Branch {
   patches    Patch[]
 }
 
-model Ghost {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  machine    Machine?
-  actor      Actor    @relation(fields: [actor_id], references: [id], onDelete: Cascade)
-  actor_id   String   @unique
-}
-
 model Machine {
   id           String       @id @default(uuid())
   created_at   DateTime     @default(now())
@@ -107,8 +78,6 @@ model Machine {
   rules        Rule[]
   trajectories Trajectory[]
   interfaces   Interface[]
-  ghost        Ghost        @relation(fields: [ghost_id], references: [id], onDelete: Cascade)
-  ghost_id     String       @unique
 }
 
 model Interface {
@@ -129,6 +98,7 @@ model Phase {
   machine_id String
   upstream   Rule[]     @relation("rule_to")
   downstream Rule[]     @relation("rule_from")
+  states     State[]
   interface  Interface?
 }
 
@@ -144,15 +114,6 @@ model Rule {
   to_id      String
 }
 
-model Oracle {
-  id           String       @id @default(uuid())
-  created_at   DateTime     @default(now())
-  updated_at   DateTime     @updatedAt
-  trajectories Trajectory[]
-  actor        Actor        @relation(fields: [actor_id], references: [id], onDelete: Cascade)
-  actor_id     String       @unique
-}
-
 model Trajectory {
   id          String       @id @default(uuid())
   created_at  DateTime     @default(now())
@@ -162,8 +123,6 @@ model Trajectory {
   states      State[]
   signals     Signal[]
   transitions Transition[]
-  oracle      Oracle       @relation(fields: [oracle_id], references: [id], onDelete: Cascade)
-  oracle_id   String
 }
 
 model State {
@@ -173,6 +132,8 @@ model State {
   trajectory    Trajectory   @relation(fields: [trajectory_id], references: [id], onDelete: Cascade)
   trajectory_id String
   value         String
+  phase         Phase        @relation(fields: [phase_id], references: [id], onDelete: Cascade)
+  phase_id      String
   upstream      Transition?  @relation("transition_to")
   downstream    Transition[] @relation("transition_from")
   commits       Commit[]
